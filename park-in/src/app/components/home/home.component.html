@@ -1,1 +1,29 @@
-<p>home works!</p>
+<div class="search-container">
+    <mat-form-field appearance="outline">
+        <mat-label>Lieu de stationnement</mat-label>
+        <input matInput placeholder="Saisissez un lieu" [(ngModel)]="location" name="location">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Date début</mat-label>
+        <input matInput [(ngModel)]="dateDebut" [matDatepicker]="pickerDebut" name="dateDebut">
+        <mat-datepicker-toggle matSuffix [for]="pickerDebut"></mat-datepicker-toggle>
+        <mat-datepicker #pickerDebut></mat-datepicker>
+    </mat-form-field>
+   
+    <mat-form-field>
+        <mat-label>Pick a time</mat-label>
+        <input matInput [matTimepicker]="picker">
+        <mat-timepicker-toggle matIconSuffix [for]="picker"/>
+        <mat-timepicker #picker/>
+      </mat-form-field>
+      
+    <mat-form-field appearance="outline">
+        <mat-label>Date fin</mat-label>
+        <input matInput [(ngModel)]="dateFin" [matDatepicker]="pickerFin" name="dateFin">
+        <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
+        <mat-datepicker #pickerFin></mat-datepicker>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" (click)="onSearch()">Rechercher</button>
+</div>
