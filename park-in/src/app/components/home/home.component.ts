@@ -10,24 +10,25 @@ import { MatTimepickerModule } from '@angular/material/timepicker';
 
 
 @Component({
-  selector: 'app-home',
-  standalone: true,
-  imports: [
-    CommonModule,          
-    MatDatepickerModule, 
-    MatInputModule, 
-    MatFormFieldModule, 
-    MatNativeDateModule,
-    FormsModule,
-    MatTimepickerModule
-  ],
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+    selector: 'app-home',
+    imports: [
+        CommonModule,
+        MatDatepickerModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatNativeDateModule,
+        FormsModule,
+        MatTimepickerModule
+    ],
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.css']
 })
 export class HomeComponent { 
   location: string = '';
   dateDebut: Date | null = null;
+  heureDebut : Date | null = null;
   dateFin: Date | null = null;
+  heureFin : Date | null = null;
 
   onSearch() {
     console.log('Lieu de stationnement:', this.location);

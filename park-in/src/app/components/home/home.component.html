@@ -4,14 +4,51 @@
         <input matInput placeholder="Saisissez un lieu" [(ngModel)]="location" name="location">
     </mat-form-field>
 
-    <mat-form-field appearance="outline">
+    <mat-form-field>
+        <mat-label>Date début</mat-label>
+        <input matInput [matDatepicker]="datepickerDebut" [(ngModel)]="dateDebut">
+        <mat-datepicker #datepickerDebut/>
+        <mat-datepicker-toggle [for]="datepickerDebut" matSuffix/>
+      </mat-form-field>
+      
+      <mat-form-field>
+        <mat-label>Heure début</mat-label>
+        <input matInput
+          [matTimepicker]="timepickerDebut"
+          [(ngModel)]="heureDebut"
+          [ngModelOptions]="{updateOn: 'blur'}">
+        <mat-timepicker #timepickerDebut/>
+        <mat-timepicker-toggle [for]="timepickerDebut" matSuffix/>
+      </mat-form-field>
+
+      
+    <mat-form-field>
+        <mat-label>Date fin</mat-label>
+        <input matInput [matDatepicker]="datepickerfin" [(ngModel)]="dateFin">
+        <mat-datepicker #datepickerfin/>
+        <mat-datepicker-toggle [for]="datepickerfin" matSuffix/>
+      </mat-form-field>
+      
+      <mat-form-field>
+        <mat-label>Heure début</mat-label>
+        <input matInput
+          [matTimepicker]="timepickerFin"
+          [(ngModel)]="heureFin"
+          [ngModelOptions]="{updateOn: 'blur'}">
+        <mat-timepicker #timepickerFin/>
+        <mat-timepicker-toggle [for]="timepickerFin" matSuffix/>
+      </mat-form-field>
+      
+      
+
+    <!-- <mat-form-field appearance="outline">
         <mat-label>Date début</mat-label>
         <input matInput [(ngModel)]="dateDebut" [matDatepicker]="pickerDebut" name="dateDebut">
         <mat-datepicker-toggle matSuffix [for]="pickerDebut"></mat-datepicker-toggle>
         <mat-datepicker #pickerDebut></mat-datepicker>
     </mat-form-field>
    
-    <mat-form-field>
+    <mat-form-field appearean="outline">
         <mat-label>Pick a time</mat-label>
         <input matInput [matTimepicker]="picker">
         <mat-timepicker-toggle matIconSuffix [for]="picker"/>
@@ -23,7 +60,7 @@
         <input matInput [(ngModel)]="dateFin" [matDatepicker]="pickerFin" name="dateFin">
         <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
         <mat-datepicker #pickerFin></mat-datepicker>
-    </mat-form-field>
+    </mat-form-field> -->
 
     <button mat-raised-button color="primary" (click)="onSearch()">Rechercher</button>
 </div>
