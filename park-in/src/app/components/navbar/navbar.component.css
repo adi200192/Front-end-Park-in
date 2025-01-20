@@ -1,0 +1,43 @@
+.logo {
+    height: 50px;
+    width: auto;
+    display: block;
+    margin-right: 10px; 
+}
+
+.brand-name {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+}
+
+.spacer {
+    flex: 1 1 auto;
+}
+
+.mat-mdc-raised-button.mat-accent {
+    --mdc-protected-button-container-color: blue;
+    --mdc-protected-button-label-text-color: white;
+    --mat-protected-button-state-layer-color: white;
+    --mat-protected-button-ripple-color: rgba(255, 255, 255, 0.1);
+}
+.mat-toolbar.mat-primary {
+    --mat-toolbar-container-background-color: #2A9134;
+    --mat-toolbar-container-text-color: white;
+}
+
+.navbar-right button {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+
+.navbar-left {
+    display: flex;
+    align-items: center; 
+}
+
+.active-link {
+    font-weight: bold;
+    border-bottom: 2px solid white;
+}

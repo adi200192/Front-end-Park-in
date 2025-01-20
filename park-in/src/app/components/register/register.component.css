@@ -1,0 +1,16 @@
+.register-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.full-width {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.text-center {
+    text-align: center;
+    margin-top: 15px;
+}
