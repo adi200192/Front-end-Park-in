@@ -24,7 +24,7 @@
 
 /* Style du bouton de connexion standard */
 .black-button {
-    background-color: black !important;
+    background-color: green !important;
     color: white !important;
     display: flex;
     align-items: center;
