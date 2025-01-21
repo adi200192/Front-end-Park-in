@@ -10,31 +10,34 @@ import { MatTimepickerModule } from '@angular/material/timepicker';
 import { LOCALE_ID } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
+import {MatGridListModule} from '@angular/material/grid-list';
 
 
 registerLocaleData(localeFr);
 
 @Component({
-    selector: 'app-home',
-    imports: [
-        CommonModule,
-        MatDatepickerModule,
-        MatInputModule,
-        MatFormFieldModule,
-        MatNativeDateModule,
-        FormsModule,
-        MatTimepickerModule,
-        MatIconModule,
-    ],
-    templateUrl: './home.component.html',
-    styleUrls: ['./home.component.css'],
-    providers: [
-      { provide: LOCALE_ID, useValue: 'fr-FR' } 
-    ]
+  selector: 'app-home',
+  imports: [
+    CommonModule,
+    MatDatepickerModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatNativeDateModule,
+    FormsModule,
+    MatTimepickerModule,
+    MatIconModule,
+    MatGridListModule,
+  ],
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css'],
+  standalone: true,
+  providers: [
+    {provide: LOCALE_ID, useValue: 'fr-FR'}
+  ]
 })
 
 
-export class HomeComponent { 
+export class HomeComponent {
   location: string = '';
   Debut: Date | null = null;
   Fin: Date | null = null;

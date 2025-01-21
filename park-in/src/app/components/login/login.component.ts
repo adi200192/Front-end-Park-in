@@ -17,7 +17,8 @@ import { Auth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from 
     MatButtonModule,
     MatIconModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
