@@ -12,10 +12,31 @@
             <input matInput type="password" [(ngModel)]="password" name="password" required>
         </mat-form-field>
 
-        <button mat-raised-button color="primary" class="full-width" type="submit">
-            Se connecter
+        <button mat-raised-button class="black-button full-width" type="submit">
+            <div class="button-content">
+                <img src="assets/lock-icon.jpg" alt="lock" class="social-icon">
+                <span>Se connecter</span>
+            </div>
         </button>
     </form>
+
+    <p class="text-center">Ou connectez-vous avec :</p>
+
+    <div class="social-buttons">
+        <button mat-raised-button class="google-button full-width" (click)="signInWithGoogle()">
+            <div class="button-content">
+                <img src="assets/logogoogle.png" alt="Google" class="social-icon">
+                <span>Google</span>
+            </div>
+        </button>
+
+        <button mat-raised-button class="facebook-button full-width" (click)="signInWithFacebook()">
+            <div class="button-content">
+                <img src="assets/facebook.png" alt="Facebook" class="social-icon">
+                <span>Facebook</span>
+            </div>
+        </button>
+    </div>
 
     <p class="text-center">
         Pas encore de compte ? <a routerLink="/register">S'inscrire</a>
