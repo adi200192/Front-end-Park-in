@@ -1,60 +1,37 @@
+/* Assurer que le footer est collé en bas de la page */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* Conteneur principal qui maintient le footer en bas */
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Le contenu principal prend l'espace restant pour pousser le footer en bas */
+.content {
+    flex: 1;
+}
+
+/* Footer Styling */
 .footer-container {
     background-color: #388E3C; /* Couleur de la navbar */
     color: white;
-    padding: 20px 0;
-    font-size: 14px;
     width: 100%;
     text-align: center;
+    padding: 20px 0;
+    position: relative;
+    bottom: 0;
 }
 
-.footer-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.footer-section {
-    flex: 1;
-    padding: 0 20px;
-}
-
-/* Style des icônes et liens */
-.footer-section h3 {
-    font-size: 18px;
-    margin-bottom: 10px;
-    color: #FFD700; /* Jaune pour contraste */
-}
-
-.footer-section p, 
-.footer-section a {
-    color: white;
-    font-size: 14px;
-    text-decoration: none;
-}
-
-.footer-section a:hover {
-    text-decoration: underline;
-}
-
-/* Icônes sociales */
-.social-icons {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-}
-
-.social-icons img {
-    width: 30px;
-    height: 30px;
-}
-
-/* Bas du footer */
+/* Centrage du texte */
 .footer-bottom {
-    margin-top: 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-    padding-top: 10px;
-    font-size: 12px;
-    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
 }
