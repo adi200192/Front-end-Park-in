@@ -4,10 +4,14 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatNativeDateModule } from '@angular/material/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormGroup, FormsModule } from '@angular/forms';
 import { MatTimepickerModule } from '@angular/material/timepicker';
+import { LOCALE_ID } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
+import { ButtonModule } from 'primeng/button';
 
-
+registerLocaleData(localeFr);
 
 @Component({
     selector: 'app-home',
@@ -18,22 +22,26 @@ import { MatTimepickerModule } from '@angular/material/timepicker';
         MatFormFieldModule,
         MatNativeDateModule,
         FormsModule,
-        MatTimepickerModule
+        MatTimepickerModule,
+        ButtonModule
     ],
     templateUrl: './home.component.html',
-    styleUrls: ['./home.component.css']
+    styleUrls: ['./home.component.css'],
+    providers: [
+      { provide: LOCALE_ID, useValue: 'fr-FR' } 
+    ]
 })
+
+
 export class HomeComponent { 
   location: string = '';
-  dateDebut: Date | null = null;
-  heureDebut : Date | null = null;
-  dateFin: Date | null = null;
-  heureFin : Date | null = null;
+  Debut: Date | null = null;
+  Fin: Date | null = null;
 
   onSearch() {
     console.log('Lieu de stationnement:', this.location);
-    console.log('Date de début:', this.dateDebut);
-    console.log('Date de fin:', this.dateFin);
+    console.log('Date de début:', this.Debut);
+    console.log('Date de fin:', this.Fin);
 }
 }
 
