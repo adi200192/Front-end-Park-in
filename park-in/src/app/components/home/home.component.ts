@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule} from '@angular/material/icon';
 import { MatNativeDateModule } from '@angular/material/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormsModule } from '@angular/forms';
@@ -9,7 +10,7 @@ import { MatTimepickerModule } from '@angular/material/timepicker';
 import { LOCALE_ID } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
-import { ButtonModule } from 'primeng/button';
+
 
 registerLocaleData(localeFr);
 
@@ -23,7 +24,7 @@ registerLocaleData(localeFr);
         MatNativeDateModule,
         FormsModule,
         MatTimepickerModule,
-        ButtonModule
+        MatIconModule,
     ],
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.css'],
