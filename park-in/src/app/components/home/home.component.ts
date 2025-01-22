@@ -1,17 +1,16 @@
 import { Component } from '@angular/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule} from '@angular/material/icon';
-import { MatNativeDateModule } from '@angular/material/core';
-import { CommonModule } from '@angular/common';
-import { FormGroup, FormsModule } from '@angular/forms';
-import { MatTimepickerModule } from '@angular/material/timepicker';
-import { LOCALE_ID } from '@angular/core';
-import { registerLocaleData } from '@angular/common';
-import localeFr from '@angular/common/locales/fr';
-import {MatGridListModule} from '@angular/material/grid-list';
+import { CommonModule, registerLocaleData } from '@angular/common';
+import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 
+import localeFr from '@angular/common/locales/fr';
+
+import { ButtonModule } from 'primeng/button';
+import { CalendarModule } from 'primeng/calendar';
+import { InputTextModule } from 'primeng/inputtext';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { CheckboxModule } from 'primeng/checkbox';
+import {MessageModule} from 'primeng/message';
+import {DropdownModule} from 'primeng/dropdown';
 
 registerLocaleData(localeFr);
 
@@ -19,33 +18,41 @@ registerLocaleData(localeFr);
   selector: 'app-home',
   imports: [
     CommonModule,
-    MatDatepickerModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatNativeDateModule,
-    FormsModule,
-    MatTimepickerModule,
-    MatIconModule,
-    MatGridListModule,
+    ButtonModule,
+    FloatLabelModule,
+    InputTextModule,
+    ReactiveFormsModule,  // Use only ReactiveFormsModule
+    CalendarModule,
+    CheckboxModule,
+    MessageModule,
+    DropdownModule
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
   standalone: true,
-  providers: [
-    {provide: LOCALE_ID, useValue: 'fr-FR'}
-  ]
+  providers: []
 })
 
-
 export class HomeComponent {
-  location: string = '';
-  Debut: Date | null = null;
-  Fin: Date | null = null;
+  searchForm: FormGroup;
+  formSubmitted: boolean = false;
+
+  constructor() {
+    this.searchForm = new FormGroup({
+      location: new FormControl('', Validators.required),
+      dateDebut: new FormControl(null, Validators.required),
+      dateFin: new FormControl(null, Validators.required),
+      isPmr: new FormControl(false),
+      typeVehicule : new FormControl('')
+    });
+  }
 
   onSearch() {
-    console.log('Lieu de stationnement:', this.location);
-    console.log('Date de début:', this.Debut);
-    console.log('Date de fin:', this.Fin);
+    this.formSubmitted = true
+    if (this.searchForm.valid) {
+      console.log('Search Info:', this.searchForm.value);
+    } else {
+      console.log('Form is invalid!');
+    }
+  }
 }
-}
-
