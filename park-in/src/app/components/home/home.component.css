@@ -1,4 +1,10 @@
 /* Search form container styles */
+.search-container {
+  max-width: 1200px;
+  margin: 0 auto; /* Center the whole section */
+  text-align: center; /* Center the text */
+}
+
 .search-form {
   max-width: 1200px;
   margin: 30px auto;
@@ -12,7 +18,13 @@
   flex-wrap: wrap; /* Ensures responsiveness on smaller screens */
 }
 
-/* Large input for Lieu de stationnement */
+.search-container h2 {
+  font-size: 28px;
+  color: white;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
 .input-large {
   flex: 2;  /* Takes more space */
   min-width: 220px;
@@ -29,24 +41,6 @@
   flex: 0;
   min-width: 150px;
 }
-
-/* Ensure input elements take full width */
-.p-calendar, .p-inputtext {
-  width: 100%;
-}
-
-.input-button{
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  border-radius : 27px;
-}
-
-button{
-  border-radius: 25px;
-}
-
-
 
 /* Responsive adjustments */
 @media (max-width: 768px) {

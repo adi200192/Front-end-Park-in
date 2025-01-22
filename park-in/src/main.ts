@@ -6,6 +6,10 @@ import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { environment } from './environments/environment';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import {registerLocaleData} from '@angular/common';
+import localeFr from '@angular/common/locales/fr'
+
+registerLocaleData(localeFr);
 
 bootstrapApplication(AppComponent, {
   providers: [

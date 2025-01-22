@@ -1,14 +1,13 @@
+<div class="search-container">
+<h2>Trouver votre Parking ! </h2>
 <form [formGroup]="searchForm" class="search-form">
-
-  <!-- PrimeNG Floating Label for Input -->
   <p-floatLabel class="input-large">
-    <input pInputText id="lieu" formControlName="location" class="p-inputtext" />
+    <input pInputText id="lieu" formControlName="location" class="p-inputtext"/>
     <label for="lieu">Lieu de stationnement</label>
   </p-floatLabel>
 
-  <!-- PrimeNG Floating Label for Calendar -->
   <p-floatLabel class="input-medium">
-    <p-calendar id="dateDebut" formControlName="dateDebut" [showIcon]="true" [iconDisplay]="'input'" />
+    <p-calendar id="dateDebut" formControlName="dateDebut" [showIcon]="true" [iconDisplay]="'input'" dateFormat="dd/mm/yy" />
     <label for="dateDebut">Date début</label>
   </p-floatLabel>
 
@@ -18,7 +17,7 @@
   </p-floatLabel>
 
   <p-floatLabel class="input-medium">
-    <p-calendar id="dateFin" formControlName="dateFin" [showIcon]="true" [iconDisplay]="'input'" />
+    <p-calendar id="dateFin" formControlName="dateFin" [showIcon]="true" [iconDisplay]="'input'" dateFormat="dd/mm/yy"/>
     <label for="dateFin">Date fin</label>
   </p-floatLabel>
 
@@ -27,19 +26,20 @@
     <label for="heureFin">Heure fin</label>
   </p-floatLabel>
 
-  <p-button label="Rechercher" type="submit" (click)="onSearch()" class="input-button"></p-button>
+  <p-button label="Rechercher" type="submit" (click)="onSearch()" ></p-button>
 
   <p-checkbox label="Places PMR" formControlName="isPmr" [binary]="true"></p-checkbox>
 
-  <mat-form-field appearance="outline" class="input-medium">
-    <mat-label>Type de place</mat-label>
-    <mat-select formControlName="typePlace">
-      <mat-option *ngFor="let place of typePlaces" [value]="place.value">
-        {{ place.label }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+  <p-dropdown [options]="typePlaces" formControlName="typePlace" placeholder="Type de place"></p-dropdown>
+  <p-dropdown [options]="typeParkings" formControlName="typeParking" placeholder="Type de parking"></p-dropdown>
 
-
-
+<!--  <mat-form-field appearance="outline" class="input-small">-->
+<!--    <mat-label>Type de place</mat-label>-->
+<!--    <mat-select formControlName="typePlace">-->
+<!--      <mat-option *ngFor="let place of typePlaces" [value]="place.value">-->
+<!--        {{ place.label }}-->
+<!--      </mat-option>-->
+<!--    </mat-select>-->
+<!--  </mat-form-field>-->
 </form>
+</div>

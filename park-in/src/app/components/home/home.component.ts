@@ -1,9 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule, registerLocaleData } from '@angular/common';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
-
-import localeFr from '@angular/common/locales/fr';
-
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { InputTextModule } from 'primeng/inputtext';
@@ -11,10 +8,10 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { CheckboxModule } from 'primeng/checkbox';
 import {MessageModule} from 'primeng/message';
 import {DropdownModule} from 'primeng/dropdown';
-import {MatFormField, MatLabel, MatOption, MatSelect} from '@angular/material/select';
+import {MatFormField, MatLabel, MatSelect} from '@angular/material/select';
 import {MatOptionModule} from '@angular/material/core';
+import {PrimeNGConfig} from 'primeng/api';
 
-registerLocaleData(localeFr);
 
 @Component({
   selector: 'app-home',
@@ -49,20 +46,37 @@ export class HomeComponent {
     {label : 'Standard', value : 'standard'}
   ]
 
-  typeParking = [
+
+  typeParkings = [
     {label : 'Enclos en surface', valeur : 'enclos_en_surface'},
     {label : 'Ouvrage', valeur : 'ouvrage'}
   ]
-  constructor() {
+  constructor(private primengConfig : PrimeNGConfig) {
     this.searchForm = new FormGroup({
       location: new FormControl('', Validators.required),
       dateDebut: new FormControl(null, Validators.required),
       dateFin: new FormControl(null, Validators.required),
       isPmr: new FormControl(false),
-      typePlace : new FormControl('standard')
+      typePlace : new FormControl('standard'),
+      typeParking : new FormControl()
+    });
+
+    this.primengConfig.setTranslation({
+      firstDayOfWeek: 1,
+      dayNames: ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"],
+      dayNamesShort: ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"],
+      dayNamesMin: ["Di", "Lu", "Ma", "Me", "Je", "Ve", "Sa"],
+      monthNames: [
+        "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
+        "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
+      ],
+      monthNamesShort: ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"],
+      today: "Aujourd'hui",
+      clear: "Effacer",
+      dateFormat: 'dd/mm/yy',
+      weekHeader: 'Sem'
     });
   }
-
   onSearch() {
     this.formSubmitted = true
     if (this.searchForm.valid) {
