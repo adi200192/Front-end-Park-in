@@ -16,7 +16,7 @@
             <button mat-raised-button class="black-button full-width" type="submit">
                 <div class="button-content">
                     <img src="assets/lock-icon.jpg" alt="lock" class="social-icon">
-                    <span>Se connecter</span>
+                    <a mat-button (click)="Seconnecter()">Se connecter</a>
                 </div>
             </button>
         </form>
@@ -40,7 +40,7 @@
         </div>
 
         <p class="text-center">
-            Pas encore de compte ? <a routerLink="/register">S'inscrire</a>
+            Pas encore de compte ? <a mat-button (click)="Sinscrire()">S'inscrirer</a>
         </p>    
     </mat-card>
 </div>

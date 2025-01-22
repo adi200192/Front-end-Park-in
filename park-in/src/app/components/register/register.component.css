@@ -10,6 +10,34 @@
     justify-content: center;
 }
 
+/* Bouton S'inscrire en vert */
+.green-button {
+    background-color: green !important;
+    color: white !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 15px;
+}
+
+.green-button:hover {
+    background-color: darkgreen !important;
+}
+
+
+/* Forcer les champs auto-remplis à apparaître correctement */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+    -webkit-text-fill-color: #000 !important;
+}
+
+
 /* Conteneur du formulaire */
 .register-container {
     max-width: 400px;

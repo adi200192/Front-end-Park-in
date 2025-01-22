@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Auth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from '@angular/fire/auth';
 import { CommonModule } from '@angular/common'; // Ajout de CommonModule
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -29,7 +30,17 @@ export class LoginComponent {
   password: string = '';
   backgroundImage: string = 'assets/park.jpg'; // Assurez-vous que l'image est dans "src/assets/"
 
-  constructor(private auth: Auth) {}
+  constructor(
+    @Inject(Auth) private auth: Auth, 
+    private router: Router
+  ) {}
+
+  Seconnecter(){
+    this.router.navigate(['/'])
+  }
+  Sinscrire(){
+    this.router.navigate(["/register"])
+  }
 
   async signInWithGoogle() {
     const provider = new GoogleAuthProvider();
