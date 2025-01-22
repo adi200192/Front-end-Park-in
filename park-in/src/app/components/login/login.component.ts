@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Auth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from '@angular/fire/auth';
+import { CommonModule } from '@angular/common'; // Ajout de CommonModule
 
 @Component({
   selector: 'app-login',
@@ -17,7 +18,8 @@ import { Auth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from 
     MatButtonModule,
     MatIconModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    CommonModule  // Ajout ici pour permettre l'utilisation de ngStyle
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
@@ -25,10 +27,10 @@ import { Auth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from 
 export class LoginComponent {
   email: string = '';
   password: string = '';
+  backgroundImage: string = 'assets/park.jpg'; // Assurez-vous que l'image est dans "src/assets/"
 
   constructor(private auth: Auth) {}
 
-  // Connexion via Google
   async signInWithGoogle() {
     const provider = new GoogleAuthProvider();
     try {
@@ -40,7 +42,6 @@ export class LoginComponent {
     }
   }
 
-  // Connexion via Facebook
   async signInWithFacebook() {
     const provider = new FacebookAuthProvider();
     try {

@@ -1,28 +1,53 @@
-.login-container {
-    max-width: 400px;
-    margin: 50px auto;
-    padding: 20px;
-    text-align: center;
+/* Ajouter un background sur toute la page sauf le footer et la navbar */
+.login-page {
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
+/* Conteneur du formulaire */
+.login-container {
+    max-width: 400px;
+    padding: 20px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.9); /* Arrière-plan blanc semi-transparent */
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Boutons de connexion */
 .full-width {
     width: 100%;
     margin-top: 10px;
 }
 
+/* Centrage des textes */
 .text-center {
     text-align: center;
     margin-top: 15px;
 }
 
-.social-buttons {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+/* Style des icônes sociales */
+.social-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
 }
 
-/* Style du bouton de connexion standard */
+/* Contenu du bouton */
+.button-content {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+/* Bouton de connexion standard */
 .black-button {
     background-color: green !important;
     color: white !important;
@@ -34,7 +59,7 @@
 
 /* Bouton Google rouge */
 .google-button {
-    background-color: #DB4437 !important; /* Rouge Google */
+    background-color: #DB4437 !important;
     color: white !important;
     display: flex;
     align-items: center;
@@ -44,24 +69,10 @@
 
 /* Bouton Facebook bleu */
 .facebook-button {
-    background-color: #1877F2 !important; /* Bleu Facebook */
+    background-color: #1877F2 !important;
     color: white !important;
     display: flex;
     align-items: center;
     justify-content: flex-start;
     text-transform: uppercase;
-}
-
-/* Style des icônes sociales */
-.social-icon {
-    width: 24px;
-    height: 24px;
-    margin-right: 10px;
-}
-
-.button-content {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    width: 100%;
 }
