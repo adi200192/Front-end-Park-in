@@ -1,19 +1,45 @@
 <form [formGroup]="searchForm" class="search-form">
+
+  <!-- PrimeNG Floating Label for Input -->
   <p-floatLabel class="input-large">
     <input pInputText id="lieu" formControlName="location" class="p-inputtext" />
     <label for="lieu">Lieu de stationnement</label>
   </p-floatLabel>
 
-  <p-calendar formControlName="dateDebut" [showIcon]="true" [iconDisplay]="'input'" class="input-medium" placeholder="Date début"></p-calendar>
+  <!-- PrimeNG Floating Label for Calendar -->
+  <p-floatLabel class="input-medium">
+    <p-calendar id="dateDebut" formControlName="dateDebut" [showIcon]="true" [iconDisplay]="'input'" />
+    <label for="dateDebut">Date début</label>
+  </p-floatLabel>
 
-  <p-calendar formControlName="dateDebut" [showIcon]="true" [iconDisplay]="'input'" [timeOnly]="true" class="input-small" placeholder="Heure début"></p-calendar>
+  <p-floatLabel class="input-small">
+    <p-calendar id="heureDebut" formControlName="dateDebut" [showIcon]="true" [iconDisplay]="'input'" [timeOnly]="true" />
+    <label for="heureDebut">Heure début</label>
+  </p-floatLabel>
 
-  <p-calendar formControlName="dateFin" [showIcon]="true" [iconDisplay]="'input'" class="input-medium" placeholder="Date fin"></p-calendar>
+  <p-floatLabel class="input-medium">
+    <p-calendar id="dateFin" formControlName="dateFin" [showIcon]="true" [iconDisplay]="'input'" />
+    <label for="dateFin">Date fin</label>
+  </p-floatLabel>
 
-  <p-calendar formControlName="dateFin" [showIcon]="true" [iconDisplay]="'input'" [timeOnly]="true" class="input-small" placeholder="Heure Fin"></p-calendar>
+  <p-floatLabel class="input-small">
+    <p-calendar id="heureFin" formControlName="dateFin" [showIcon]="true" [iconDisplay]="'input'" [timeOnly]="true" />
+    <label for="heureFin">Heure fin</label>
+  </p-floatLabel>
 
-  <p-button label="Rechercher" type="submit" (onClick)="onSearch()" class="input-button"></p-button>
-  <p-checkbox label="Places PMR"  [binary]="true" name="pmr"></p-checkbox>
-  <p-dropdown formControlName=""></p-dropdown>
+  <p-button label="Rechercher" type="submit" (click)="onSearch()" class="input-button"></p-button>
+
+  <p-checkbox label="Places PMR" formControlName="isPmr" [binary]="true"></p-checkbox>
+
+  <mat-form-field appearance="outline" class="input-medium">
+    <mat-label>Type de place</mat-label>
+    <mat-select formControlName="typePlace">
+      <mat-option *ngFor="let place of typePlaces" [value]="place.value">
+        {{ place.label }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+
 
 </form>

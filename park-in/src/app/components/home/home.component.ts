@@ -11,6 +11,8 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { CheckboxModule } from 'primeng/checkbox';
 import {MessageModule} from 'primeng/message';
 import {DropdownModule} from 'primeng/dropdown';
+import {MatFormField, MatLabel, MatOption, MatSelect} from '@angular/material/select';
+import {MatOptionModule} from '@angular/material/core';
 
 registerLocaleData(localeFr);
 
@@ -25,7 +27,11 @@ registerLocaleData(localeFr);
     CalendarModule,
     CheckboxModule,
     MessageModule,
-    DropdownModule
+    DropdownModule,
+    MatSelect,
+    MatLabel,
+    MatOptionModule,
+    MatFormField
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
@@ -36,14 +42,24 @@ registerLocaleData(localeFr);
 export class HomeComponent {
   searchForm: FormGroup;
   formSubmitted: boolean = false;
+  typePlaces = [
+    {label : 'Deux roues', value: 'deux_roues'},
+    {label : 'Deux roues électriques', value : 'deux_roues_electrique' },
+    {label : 'Electrique', value: 'electrique'},
+    {label : 'Standard', value : 'standard'}
+  ]
 
+  typeParking = [
+    {label : 'Enclos en surface', valeur : 'enclos_en_surface'},
+    {label : 'Ouvrage', valeur : 'ouvrage'}
+  ]
   constructor() {
     this.searchForm = new FormGroup({
       location: new FormControl('', Validators.required),
       dateDebut: new FormControl(null, Validators.required),
       dateFin: new FormControl(null, Validators.required),
       isPmr: new FormControl(false),
-      typeVehicule : new FormControl('')
+      typePlace : new FormControl('standard')
     });
   }
 
