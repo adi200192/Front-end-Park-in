@@ -1,47 +1,80 @@
 <div class="search-container">
-<h2>Trouver votre Parking ! </h2>
-<form [formGroup]="searchForm" class="search-form">
-  <p-floatLabel class="input-large">
-    <input pInputText id="lieu" formControlName="location" class="p-inputtext"/>
-    <label for="lieu">Lieu de stationnement</label>
-  </p-floatLabel>
+  <h2>Trouver votre Parking !</h2>
+  <form [formGroup]="searchForm" class="search-form">
 
-  <p-floatLabel class="input-medium">
-    <p-calendar id="dateDebut" formControlName="dateDebut" [showIcon]="true" [iconDisplay]="'input'" dateFormat="dd/mm/yy" />
-    <label for="dateDebut">Date début</label>
-  </p-floatLabel>
+    <!-- Row 1: Lieu de stationnement -->
+    <div class="form-row">
+      <mat-form-field class="input-large" appearance="outline">
+        <mat-label>Lieu de stationnement</mat-label>
+        <input #autoCompleteInput matInput id="lieu" formControlName="location">
+      </mat-form-field>
+    </div>
 
-  <p-floatLabel class="input-small">
-    <p-calendar id="heureDebut" formControlName="dateDebut" [showIcon]="true" [iconDisplay]="'input'" [timeOnly]="true" />
-    <label for="heureDebut">Heure début</label>
-  </p-floatLabel>
+    <!-- Row 2: Date début and Heure début -->
+    <div class="form-row">
+      <mat-form-field class="input-medium" appearance="outline">
+        <mat-label>Date début</mat-label>
+        <input matInput [matDatepicker]="startDate" formControlName="dateDebut">
+        <mat-datepicker-toggle matIconSuffix [for]="startDate"></mat-datepicker-toggle>
+        <mat-datepicker #startDate></mat-datepicker>
+      </mat-form-field>
 
-  <p-floatLabel class="input-medium">
-    <p-calendar id="dateFin" formControlName="dateFin" [showIcon]="true" [iconDisplay]="'input'" dateFormat="dd/mm/yy"/>
-    <label for="dateFin">Date fin</label>
-  </p-floatLabel>
+      <mat-form-field class="input-small" appearance="outline">
+        <mat-label>Heure début</mat-label>
+        <input matInput [matTimepicker]="startTime" formControlName="dateDebut">
+        <mat-timepicker-toggle matIconSuffix [for]="startTime"></mat-timepicker-toggle>
+        <mat-timepicker #startTime timeOnly></mat-timepicker>
+      </mat-form-field>
+    </div>
 
-  <p-floatLabel class="input-small">
-    <p-calendar id="heureFin" formControlName="dateFin" [showIcon]="true" [iconDisplay]="'input'" [timeOnly]="true" />
-    <label for="heureFin">Heure fin</label>
-  </p-floatLabel>
+    <!-- Row 3: Date fin and Heure fin -->
+    <div class="form-row">
+      <mat-form-field class="input-medium" appearance="outline">
+        <mat-label>Date fin</mat-label>
+        <input matInput [matDatepicker]="endDate" formControlName="dateFin">
+        <mat-datepicker-toggle matIconSuffix [for]="endDate"></mat-datepicker-toggle>
+        <mat-datepicker #endDate></mat-datepicker>
+      </mat-form-field>
 
-  <p-button label="Rechercher" type="submit" (click)="onSearch()" ></p-button>
+      <mat-form-field class="input-small" appearance="outline">
+        <mat-label>Heure fin</mat-label>
+        <input matInput [matTimepicker]="endTime" formControlName="dateFin">
+        <mat-timepicker-toggle matIconSuffix [for]="endTime"></mat-timepicker-toggle>
+        <mat-timepicker #endTime interval></mat-timepicker>
+      </mat-form-field>
+    </div>
 
-  <p-checkbox label="Places PMR" formControlName="isPmr" [binary]="true"></p-checkbox>
+    <div class="form-row">
+      <mat-checkbox formControlName="isPmr">Places PMR</mat-checkbox>
 
-  <p-dropdown [options]="typePlaces" formControlName="typePlace" placeholder="Type de place"></p-dropdown>
-  <p-dropdown [options]="typeParkings" formControlName="typeParking" placeholder="Type de parking"></p-dropdown>
+      <mat-form-field class="input-small" appearance="outline">
+        <mat-label>Hauteur</mat-label>
+        <input matInput formControlName="hauteur">
+      </mat-form-field>
 
-<!--  <mat-form-field appearance="outline" class="input-small">-->
-<!--    <mat-label>Type de place</mat-label>-->
-<!--    <mat-select formControlName="typePlace">-->
-<!--      <mat-option *ngFor="let place of typePlaces" [value]="place.value">-->
-<!--        {{ place.label }}-->
-<!--      </mat-option>-->
-<!--    </mat-select>-->
-<!--  </mat-form-field>-->
-</form>
+      <mat-form-field class="input-medium" appearance="outline">
+        <mat-label>Type de place</mat-label>
+        <mat-select formControlName="typePlace">
+          <mat-option *ngFor="let place of typePlaces" [value]="place.value">
+            {{ place.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="input-medium" appearance="outline">
+        <mat-label>Type de parking</mat-label>
+        <mat-select formControlName="typeParking">
+          <mat-option *ngFor="let parking of typeParkings" [value]="parking.value">
+            {{ parking.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- Row 5: Submit Button -->
+    <div class="form-row center">
+      <button mat-raised-button class="custom-button" type="submit" (click)="onSearch()">Rechercher</button>
+    </div>
+
+  </form>
 </div>
-
-<!--<button (click)="testGeocoding()">Test Geocoding API</button>-->

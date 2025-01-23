@@ -1,8 +1,8 @@
-/* Search form container styles */
+/* Form container styling */
 .search-container {
   max-width: 1200px;
-  margin: 0 auto; /* Center the whole section */
-  text-align: center; /* Center the text */
+  margin: 0 auto; /* Center the form */
+  text-align: center; /* Center heading text */
 }
 
 .search-form {
@@ -12,43 +12,59 @@
   padding: 20px;
   border-radius: 20px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Define row layout */
+.form-row {
   display: flex;
-  align-items: center;
-  gap: 15px; /* Space between inputs */
-  flex-wrap: wrap; /* Ensures responsiveness on smaller screens */
+  justify-content: space-between;
+  gap: 20px; /* Space between elements */
+  margin-bottom: 15px; /* Space between rows */
 }
 
-.search-container h2 {
-  font-size: 28px;
-  color: white;
-  margin-bottom: 20px;
-  font-weight: bold;
+/* Center the button row */
+.center {
+  justify-content: center;
 }
 
+/* Flexible input sizes */
 .input-large {
-  flex: 2;  /* Takes more space */
+  flex: 2;
+  min-width: 300px;
+}
+
+.input-medium {
+  flex: 1;
   min-width: 220px;
 }
 
-/* Medium input for Date début and Date fin */
-.input-medium {
-  flex: 1;  /* Medium size */
-  min-width: 200px;
-}
-
-/* Small input for Heure début and Heure fin */
 .input-small {
-  flex: 0;
+  flex: 0.5;
   min-width: 150px;
 }
 
-/* Responsive adjustments */
+/* Responsive Design */
 @media (max-width: 768px) {
-  .search-form {
-    flex-direction: column; /* Stack items on smaller screens */
+  .form-row {
+    flex-direction: column; /* Stack inputs on smaller screens */
   }
 
   .input-large, .input-medium, .input-small {
-    width: 100%; /* Full width for all elements on smaller screens */
+    width: 100%; /* Full width for mobile view */
   }
+}
+
+/* Custom button styles */
+.custom-button {
+  background-color: #007bff !important; /* Custom blue color */
+  color: white !important;
+  padding: 12px 30px !important;
+  border-radius: 8px !important;
+  font-size: 18px;
+  font-weight: bold;
+  transition: all 0.3s ease-in-out;
+}
+
+.custom-button:hover {
+  background-color: #0056b3 !important; /* Darker on hover */
 }
