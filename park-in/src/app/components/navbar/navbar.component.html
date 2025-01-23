@@ -5,8 +5,8 @@
     </div>
     <span class="spacer"></span>
     <div class="navbar-right">
-        <a mat-button routerLink="/" routerLinkActive="active-link">Accueil</a>
-        <a mat-button routerLink="/login" routerLinkActive="active-link">Se connecter</a>
-        <a mat-raised-button color="accent" routerLink="/register">S'inscrire</a>
+        <a mat-button (click)="Accueil()">Accueil</a>
+        <a mat-button (click)="Seconnecter()">Se connecter</a>
+        <a mat-raised-button color="accent" (click)="Sinscrire()">S'inscrire</a>
     </div>
 </mat-toolbar>

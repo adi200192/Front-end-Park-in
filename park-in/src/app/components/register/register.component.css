@@ -1,15 +1,60 @@
-.register-container {
-    max-width: 400px;
-    margin: 50px auto;
-    padding: 20px;
-    text-align: center;
+/* Ajout du fond d'écran pour la page d'inscription */
+.register-page {
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
+/* Bouton S'inscrire en vert */
+.green-button {
+    background-color: green !important;
+    color: white !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 15px;
+}
+
+.green-button:hover {
+    background-color: darkgreen !important;
+}
+
+
+/* Forcer les champs auto-remplis à apparaître correctement */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+    -webkit-text-fill-color: #000 !important;
+}
+
+
+/* Conteneur du formulaire */
+.register-container {
+    max-width: 400px;
+    padding: 20px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.9); /* Arrière-plan blanc semi-transparent */
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Champs de formulaire pleine largeur */
 .full-width {
     width: 100%;
     margin-top: 10px;
 }
 
+/* Centrage des textes */
 .text-center {
     text-align: center;
     margin-top: 15px;
