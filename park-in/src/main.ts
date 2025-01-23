@@ -13,7 +13,8 @@ bootstrapApplication(AppComponent, {
     provideAnimationsAsync(),
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
-    provideRouter(routes)
+    provideRouter(routes),
+    provideAnimationsAsync()
   ]
 }).catch(err => console.error(err));
 

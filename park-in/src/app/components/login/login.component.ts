@@ -21,6 +21,7 @@ import { Router } from '@angular/router';
     FormsModule,
     ReactiveFormsModule,
     CommonModule  // Ajout ici pour permettre l'utilisation de ngStyle
+
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']

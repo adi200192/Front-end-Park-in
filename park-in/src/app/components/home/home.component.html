@@ -1,54 +1,58 @@
-<div class="search-container">
-  <form class="search-form">
-    <div class="row">
-    <div class="col-md-2">
-    <mat-form-field appearance="outline">
-      <mat-label>Lieu de stationnement</mat-label>
-      <input matInput placeholder="Saisissez un lieu" [(ngModel)]="location" name="location">
-    </mat-form-field>
-  </div>
-    
-    <div class="col-md-4">
-    <div class="date-time-group">
-      <mat-form-field appearance="outline">
+<form class="search-form">
+  <mat-grid-list cols="12" rowHeight="80px" gutterSize="20px">
+    <mat-grid-tile [colspan]="3">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Lieu de stationnement</mat-label>
+        <input matInput [(ngModel)]="location" name="location">
+      </mat-form-field>
+    </mat-grid-tile>
+
+    <!-- Date début -->
+    <mat-grid-tile [colspan]="2">
+      <mat-form-field appearance="outline" class="full-width">
         <mat-label>Date début</mat-label>
         <input matInput [matDatepicker]="datepickerDebut" [(ngModel)]="Debut" name="DebutDate">
         <mat-datepicker #datepickerDebut></mat-datepicker>
         <mat-datepicker-toggle [for]="datepickerDebut" matSuffix></mat-datepicker-toggle>
       </mat-form-field>
+    </mat-grid-tile>
 
-      <mat-form-field appearance="outline">
+    <!-- Heure début -->
+    <mat-grid-tile [colspan]="2">
+      <mat-form-field appearance="outline" class="full-width">
         <mat-label>Heure début</mat-label>
-        <input matInput [matTimepicker]="timepickerDebut" [(ngModel)]="Debut" name="DebutTime" [ngModelOptions]="{updateOn: 'blur'}">
+        <input matInput [matTimepicker]="timepickerDebut" [(ngModel)]="Debut" name="DebutTime">
         <mat-timepicker #timepickerDebut></mat-timepicker>
         <mat-timepicker-toggle [for]="timepickerDebut" matSuffix></mat-timepicker-toggle>
       </mat-form-field>
-    </div>
-  </div>
+    </mat-grid-tile>
 
-    <div class="col-md-4">
-    <div class="date-time-group" >
-      <mat-form-field appearance="outline">
+    <!-- Date fin -->
+    <mat-grid-tile [colspan]="2">
+      <mat-form-field appearance="outline" class="full-width">
         <mat-label>Date fin</mat-label>
         <input matInput [matDatepicker]="datepickerFin" [(ngModel)]="Fin" name="FinDate">
         <mat-datepicker #datepickerFin></mat-datepicker>
         <mat-datepicker-toggle [for]="datepickerFin" matSuffix></mat-datepicker-toggle>
       </mat-form-field>
- 
-      <mat-form-field appearance="outline">
+    </mat-grid-tile>
+
+    <!-- Heure fin -->
+    <mat-grid-tile [colspan]="2">
+      <mat-form-field appearance="outline" class="full-width">
         <mat-label>Heure fin</mat-label>
-        <input matInput [matTimepicker]="timepickerFin" [(ngModel)]="Fin" name="FinTime" [ngModelOptions]="{updateOn: 'blur'}">
+        <input matInput [matTimepicker]="timepickerFin" [(ngModel)]="Fin" name="FinTime">
         <mat-timepicker #timepickerFin></mat-timepicker>
         <mat-timepicker-toggle [for]="timepickerFin" matSuffix></mat-timepicker-toggle>
       </mat-form-field>
-    </div>
-  </div>
+    </mat-grid-tile>
 
-    <div class="col-md-2">
-    <button mat-raised-button color="primary" type="submit" (click)="onSearch()">
-      <mat-icon>search</mat-icon> RECHERCHER
-    </button>
-   </div>
-  </div>
-  </form>
-</div>
+    <!-- Search Button -->
+    <mat-grid-tile [colspan]="2">
+      <button mat-raised-button color="primary" class="full-width" type="submit" (click)="onSearch()">
+        Rechercher
+      </button>
+    </mat-grid-tile>
+  </mat-grid-list>
+</form>
+
