@@ -45,7 +45,7 @@
     </div>
 
     <div class="form-row">
-      <mat-checkbox formControlName="isPmr">Places PMR</mat-checkbox>
+      <mat-checkbox formControlName="pmr">Places PMR</mat-checkbox>
 
       <mat-form-field class="input-small" appearance="outline">
         <mat-label>Hauteur</mat-label>
@@ -54,7 +54,7 @@
 
       <mat-form-field class="input-medium" appearance="outline">
         <mat-label>Type de place</mat-label>
-        <mat-select formControlName="typePlace">
+        <mat-select formControlName="type">
           <mat-option *ngFor="let place of typePlaces" [value]="place.value">
             {{ place.label }}
           </mat-option>
@@ -63,7 +63,7 @@
 
       <mat-form-field class="input-medium" appearance="outline">
         <mat-label>Type de parking</mat-label>
-        <mat-select formControlName="typeParking">
+        <mat-select formControlName="typeOuvrage">
           <mat-option *ngFor="let parking of typeParkings" [value]="parking.value">
             {{ parking.label }}
           </mat-option>
