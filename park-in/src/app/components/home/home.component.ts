@@ -11,6 +11,7 @@ import {DropdownModule} from 'primeng/dropdown';
 import {MatFormField, MatLabel, MatSelect} from '@angular/material/select';
 import {MatOptionModule} from '@angular/material/core';
 import {PrimeNGConfig} from 'primeng/api';
+import {ApiService} from '../../services/api.service';
 
 
 @Component({
@@ -39,6 +40,7 @@ import {PrimeNGConfig} from 'primeng/api';
 export class HomeComponent {
   searchForm: FormGroup;
   formSubmitted: boolean = false;
+  coordinates: { lat: number; lng: number } | null = null;
   typePlaces = [
     {label : 'Deux roues', value: 'deux_roues'},
     {label : 'Deux roues électriques', value : 'deux_roues_electrique' },
@@ -51,7 +53,7 @@ export class HomeComponent {
     {label : 'Enclos en surface', valeur : 'enclos_en_surface'},
     {label : 'Ouvrage', valeur : 'ouvrage'}
   ]
-  constructor(private primengConfig : PrimeNGConfig) {
+  constructor(private primengConfig : PrimeNGConfig, private apiService : ApiService) {
     this.searchForm = new FormGroup({
       location: new FormControl('', Validators.required),
       dateDebut: new FormControl(null, Validators.required),
@@ -77,12 +79,29 @@ export class HomeComponent {
       weekHeader: 'Sem'
     });
   }
-  onSearch() {
-    this.formSubmitted = true
-    if (this.searchForm.valid) {
-      console.log('Search Info:', this.searchForm.value);
-    } else {
-      console.log('Form is invalid!');
-    }
+
+  testGeocoding(testAddress : any) {
+    // const testAddress = 'Paris';
+
+    this.apiService.getCoordinates(testAddress).subscribe(
+      (response) => {
+        // console.log('Geocoding API Response:', response);
+        this.searchForm.get('location')?.setValue(response);
+        console.log(this.searchForm.value)
+      },
+      (error) => {
+        console.error('Error calling Geocoding API:', error);
+      }
+    );
   }
+  async onSearch() {
+    this.formSubmitted = true
+    this.testGeocoding(this.searchForm.get('location')?.value)
+    // if (this.searchForm.valid) {
+    //   console.log('Search Info:', this.searchForm.value);
+    // } else {
+    //   console.log('Form is invalid!');
+    // }
+  }
+
 }
