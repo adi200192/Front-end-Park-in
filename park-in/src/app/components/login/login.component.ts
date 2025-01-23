@@ -4,7 +4,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Auth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from '@angular/fire/auth';
 import { CommonModule } from '@angular/common'; // Ajout de CommonModule
 import { Router } from '@angular/router';
@@ -28,15 +28,26 @@ import { Router } from '@angular/router';
 export class LoginComponent {
   email: string = '';
   password: string = '';
-  backgroundImage: string = 'assets/park.jpg'; // Assurez-vous que l'image est dans "src/assets/"
+  backgroundImage: string = 'assets/park.jpg'; 
+  connexion : FormGroup;// Assurez-vous que l'image est dans "src/assets/"
+
+
 
   constructor(
     @Inject(Auth) private auth: Auth, 
     private router: Router
-  ) {}
+  ) {
+this.connexion = new FormGroup({
+  email:new FormControl('', Validators.required),
+  mdp:new FormControl('', Validators.required)
+})
+  }
 
   Seconnecter(){
-    this.router.navigate(['/'])
+    if(this.connexion.valid)
+    {
+      this.router.navigate(['/'])
+    }
   }
   Sinscrire(){
     this.router.navigate(["/register"])
