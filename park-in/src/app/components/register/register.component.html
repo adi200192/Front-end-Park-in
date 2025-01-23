@@ -2,29 +2,31 @@
     <mat-card class="register-container">
         <mat-card-title>Inscription</mat-card-title>
 
-        <form (ngSubmit)="onRegister()">
+        <form [formGroup]="inscription">
             <mat-form-field class="full-width">
                 <mat-label>Nom</mat-label>
-                <input matInput type="text" [(ngModel)]="name" name="name" required>
+                <input matInput type="text" formControlName="name" name="name" required>
             </mat-form-field>
 
             <mat-form-field class="full-width">
                 <mat-label>Email</mat-label>
-                <input matInput type="email" [(ngModel)]="email" name="email" required>
+                <input matInput type="email" formControlName="email" name="email" required>
             </mat-form-field>
 
             <mat-form-field class="full-width">
                 <mat-label>Mot de passe</mat-label>
-                <input matInput type="password" [(ngModel)]="password" name="password" required>
+                <input matInput type="password" formControlName="password" name="password" required>
             </mat-form-field>
 
             <button mat-raised-button class="green-button full-width" type="submit">
-                S'inscrire
+                <div class="button-content">
+                    <a mat-button (click)="Sinscrire()">S'inscrire</a>
+                </div>            
             </button>            
         </form>
 
         <p class="text-center">
-            Vous avez déjà un compte ? <a routerLink="/login">Se connecter</a>
+            Vous avez déjà un compte ? <a mat-button (click)="Seconnecter()">Se connecter</a>
         </p>
     </mat-card>
 </div>

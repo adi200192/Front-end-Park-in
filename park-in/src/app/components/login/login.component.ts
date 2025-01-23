@@ -30,7 +30,7 @@ export class LoginComponent {
   email: string = '';
   password: string = '';
   backgroundImage: string = 'assets/park.jpg'; 
-  connexion : FormGroup;// Assurez-vous que l'image est dans "src/assets/"
+  connexion : FormGroup;
 
 
 
