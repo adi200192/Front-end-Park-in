@@ -21,7 +21,7 @@
         [disabled]="isCancellationDisabled(parking.reservationDate)">
         Annuler
       </button>
-      <p *ngIf="canCancel(parking) === false" class="error-text">
+      <p *ngIf="isCancellationDisabled(parking.reservationDate)" class="error-text">
         La réservation ne peut pas être annulée si elle est inferieur a 48h.
       </p>    
     </div>

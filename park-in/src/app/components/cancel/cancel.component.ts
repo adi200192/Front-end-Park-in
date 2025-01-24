@@ -67,29 +67,14 @@ export class CancelComponent {
     }
   ];
 
-  // Fonction pour calculer le temps restant en heures
   getRemainingTime(reservationDate: Date): number {
     const now = new Date();
     const diffMs = new Date(reservationDate).getTime() - now.getTime();
-    return Math.floor(diffMs / (1000 * 60 * 60)); // Convertir en heures
+    return Math.floor(diffMs / (1000 * 60 * 60)); 
   }
 
   isCancellationDisabled(reservationDate: Date): boolean {
     return this.getRemainingTime(reservationDate) < 48;
-  }
-  canCancel(parking: any): boolean {
-    const now = new Date();
-    const reservationTime = new Date(parking.dateReservation);
-  
-    if (isNaN(reservationTime.getTime())) {
-      console.error(`Invalid date for reservation: ${parking.nom}`);
-      return false;
-    }
-  
-    const diffInMilliseconds = reservationTime.getTime() - now.getTime();
-    const diffInHours = diffInMilliseconds / (1000 * 60 * 60);
-  
-    return diffInHours >= 48;
   }
   
 }
