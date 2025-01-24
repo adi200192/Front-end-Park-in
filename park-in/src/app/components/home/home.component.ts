@@ -59,8 +59,8 @@ export class HomeComponent implements AfterViewInit{
       longitude: new FormControl(null),
       dateFin: new FormControl(null, Validators.required),
       pmr: new FormControl(false),
-      type : new FormControl('standard'),
-      typeOuvrage : new FormControl('enclos_en_surface'),
+      type : new FormControl('STANDARD'),
+      typeOuvrage : new FormControl('ENCLOS_EN_SURFACE'),
       hauteur : new FormControl(1.90)
     });
 
@@ -95,7 +95,12 @@ export class HomeComponent implements AfterViewInit{
   async onSearch() {
     if (this.searchForm.valid) {
       this.formSubmitted = true
+      this.searchForm.patchValue({
+        dateDebut: new Date(this.searchForm.get('dateDebut')?.value).toISOString(),
+        dateFin: new Date(this.searchForm.get('dateFin')?.value).toISOString()
+      });
       this.testGeocoding(this.searchForm.get('location')?.value)
+      console.log(this.searchForm.value)
       this.router.navigate(['/search'])
     } else {
       console.log('Form is invalid!');
