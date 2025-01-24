@@ -3,102 +3,100 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 40px;
+  gap: 20px;
   padding: 40px;
-  font-family: Arial, sans-serif;
+  font-family: 'Poppins', sans-serif;
+  background: #f4f4f4;
+  width: 100%;
+  max-width: 100vw; /* Utilise toute la largeur de l'écran */
+  margin: 0; /* Supprime les marges latérales */
 }
 
 /* Left section styles */
 .left-section {
   flex: 1;
+  max-width: 50%;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   display: flex;
-  gap: 20px;
+  flex-direction: column;
   align-items: center;
 }
 
-.parking-image {
-  width: 300px;
-  height: auto;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Parking info text */
-.parking-info {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.parking-title {
-  font-size: 24px;
-  font-weight: bold;
-  color: #333;
-}
-
-.parking-address, .parking-price, .parking-website {
-  font-size: 16px;
-  color: #555;
-  margin: 5px 0;
-}
-
-.parking-price {
-  font-weight: bold;
-  margin-top: 10px;
-}
-
-.parking-website a {
-  color: #007bff;
-  text-decoration: none;
-}
-
-.parking-website a:hover {
-  text-decoration: underline;
-}
-
-/* Right section booking card */
+/* Right section styles */
 .right-section {
   flex: 1;
+  max-width: 50%;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.booking-card {
+/* Parking image adjustments */
+.parking-image {
   width: 100%;
-  padding: 10px;
+  max-width: 500px;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
+/* Parking plan image */
+.plan-image {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
 
+/* Form inputs container */
 .input-container {
   display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  padding-top : 15px;
+  gap: 15px;
+  padding-top: 15px;
 }
 
-/* Uniform width for all input fields */
+/* Input fields */
 .input-field {
   flex: 1;
-  max-width: 200px;  /* Set fixed max width for uniformity */
+  max-width: 200px;
 }
 
-/* Button style */
+/* Button styling */
 .full-width {
   width: 100%;
   margin-top: 20px;
+  padding: 12px;
+  font-size: 18px;
+  background-color: #007bff;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease-in-out;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
+.full-width:hover {
+  background-color: #0056b3;
+}
+
+/* Responsive design */
+@media (max-width: 1200px) {
   .booking-container {
     flex-direction: column;
-    gap: 20px;
+    align-items: center;
   }
 
-  .input-container {
-    flex-direction: column;
-    gap: 15px;
+  .left-section,
+  .right-section {
+    max-width: 100%;
   }
 
-  .input-field {
+  .parking-image,
+  .plan-image {
     max-width: 100%;
   }
 }

@@ -49,7 +49,7 @@
 
 /* Bouton de connexion standard */
 .black-button {
-    background-color: green !important;
+    background-color: #3e9247 !important;
     color: white !important;
     display: flex;
     align-items: center;
@@ -69,7 +69,7 @@
 
 /* Bouton Facebook bleu */
 .facebook-button {
-    background-color: #1877F2 !important;
+    background-color: #2B77C4 !important;
     color: white !important;
     display: flex;
     align-items: center;
