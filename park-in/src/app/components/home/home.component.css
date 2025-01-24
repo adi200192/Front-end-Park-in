@@ -1,30 +1,71 @@
+/* Form container styling */
+.search-container {
+  max-width: 1200px;
+  margin: 0 auto; /* Center the form */
+  text-align: center; /* Center heading text */
+
+}
+
 .search-form {
   max-width: 1200px;
-  margin: auto;
+  margin: 30px auto;
   background: #fff;
   padding: 20px;
   border-radius: 20px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* Ensure form fields take full width inside grid */
-.full-width {
-  width: 100%;
+/* Define row layout */
+.form-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px; /* Space between elements */
+  margin-bottom: 15px; /* Space between rows */
 }
 
-button {
-  white-space: nowrap;
-  padding: 12px 30px;
-  background-color: #2A9134;
-  color: white;
+/* Center the button row */
+.center {
+  justify-content: center;
+}
+
+/* Flexible input sizes */
+.input-large {
+  flex: 2;
+  min-width: 300px;
+}
+
+.input-medium {
+  flex: 1;
+  min-width: 220px;
+}
+
+.input-small {
+  flex: 0.5;
+  min-width: 150px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .form-row {
+    flex-direction: column; /* Stack inputs on smaller screens */
+  }
+
+  .input-large, .input-medium, .input-small {
+    width: 100%; /* Full width for mobile view */
+  }
+}
+
+/* Custom button styles */
+.custom-button {
+  background-color: #007bff !important; /* Custom blue color */
+  color: white !important;
+  padding: 12px 30px !important;
+  border-radius: 8px !important;
+  font-size: 18px;
   font-weight: bold;
-  border: none;
-  cursor: pointer;
   transition: all 0.3s ease-in-out;
-  border-radius: 5px;
 }
 
-button:hover {
-  background-color: #217A29;
-  transform: scale(1.05);
+.custom-button:hover {
+  background-color: #0056b3 !important; /* Darker on hover */
 }

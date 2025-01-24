@@ -1,58 +1,80 @@
-<form class="search-form">
-  <mat-grid-list cols="12" rowHeight="80px" gutterSize="20px">
-    <mat-grid-tile [colspan]="3">
-      <mat-form-field appearance="outline" class="full-width">
+<div class="search-container">
+  <h2>Trouver votre Parking !</h2>
+  <form [formGroup]="searchForm" class="search-form">
+
+    <!-- Row 1: Lieu de stationnement -->
+    <div class="form-row">
+      <mat-form-field class="input-large" appearance="outline">
         <mat-label>Lieu de stationnement</mat-label>
-        <input matInput [(ngModel)]="location" name="location">
+        <input #autoCompleteInput matInput id="lieu" formControlName="location">
       </mat-form-field>
-    </mat-grid-tile>
+    </div>
 
-    <!-- Date début -->
-    <mat-grid-tile [colspan]="2">
-      <mat-form-field appearance="outline" class="full-width">
+    <!-- Row 2: Date début and Heure début -->
+    <div class="form-row">
+      <mat-form-field class="input-medium" appearance="outline">
         <mat-label>Date début</mat-label>
-        <input matInput [matDatepicker]="datepickerDebut" [(ngModel)]="Debut" name="DebutDate">
-        <mat-datepicker #datepickerDebut></mat-datepicker>
-        <mat-datepicker-toggle [for]="datepickerDebut" matSuffix></mat-datepicker-toggle>
+        <input matInput [matDatepicker]="startDate" formControlName="dateDebut">
+        <mat-datepicker-toggle matIconSuffix [for]="startDate"></mat-datepicker-toggle>
+        <mat-datepicker #startDate></mat-datepicker>
       </mat-form-field>
-    </mat-grid-tile>
 
-    <!-- Heure début -->
-    <mat-grid-tile [colspan]="2">
-      <mat-form-field appearance="outline" class="full-width">
+      <mat-form-field class="input-small" appearance="outline">
         <mat-label>Heure début</mat-label>
-        <input matInput [matTimepicker]="timepickerDebut" [(ngModel)]="Debut" name="DebutTime">
-        <mat-timepicker #timepickerDebut></mat-timepicker>
-        <mat-timepicker-toggle [for]="timepickerDebut" matSuffix></mat-timepicker-toggle>
+        <input matInput [matTimepicker]="startTime" formControlName="dateDebut">
+        <mat-timepicker-toggle matIconSuffix [for]="startTime"></mat-timepicker-toggle>
+        <mat-timepicker #startTime timeOnly></mat-timepicker>
       </mat-form-field>
-    </mat-grid-tile>
+    </div>
 
-    <!-- Date fin -->
-    <mat-grid-tile [colspan]="2">
-      <mat-form-field appearance="outline" class="full-width">
+    <!-- Row 3: Date fin and Heure fin -->
+    <div class="form-row">
+      <mat-form-field class="input-medium" appearance="outline">
         <mat-label>Date fin</mat-label>
-        <input matInput [matDatepicker]="datepickerFin" [(ngModel)]="Fin" name="FinDate">
-        <mat-datepicker #datepickerFin></mat-datepicker>
-        <mat-datepicker-toggle [for]="datepickerFin" matSuffix></mat-datepicker-toggle>
+        <input matInput [matDatepicker]="endDate" formControlName="dateFin">
+        <mat-datepicker-toggle matIconSuffix [for]="endDate"></mat-datepicker-toggle>
+        <mat-datepicker #endDate></mat-datepicker>
       </mat-form-field>
-    </mat-grid-tile>
 
-    <!-- Heure fin -->
-    <mat-grid-tile [colspan]="2">
-      <mat-form-field appearance="outline" class="full-width">
+      <mat-form-field class="input-small" appearance="outline">
         <mat-label>Heure fin</mat-label>
-        <input matInput [matTimepicker]="timepickerFin" [(ngModel)]="Fin" name="FinTime">
-        <mat-timepicker #timepickerFin></mat-timepicker>
-        <mat-timepicker-toggle [for]="timepickerFin" matSuffix></mat-timepicker-toggle>
+        <input matInput [matTimepicker]="endTime" formControlName="dateFin">
+        <mat-timepicker-toggle matIconSuffix [for]="endTime"></mat-timepicker-toggle>
+        <mat-timepicker #endTime interval></mat-timepicker>
       </mat-form-field>
-    </mat-grid-tile>
+    </div>
 
-    <!-- Search Button -->
-    <mat-grid-tile [colspan]="2">
-      <button mat-raised-button color="primary" class="full-width" type="submit" (click)="onSearch()">
-        Rechercher
-      </button>
-    </mat-grid-tile>
-  </mat-grid-list>
-</form>
+    <div class="form-row">
+      <mat-checkbox formControlName="pmr">Places PMR</mat-checkbox>
 
+      <mat-form-field class="input-small" appearance="outline">
+        <mat-label>Hauteur</mat-label>
+        <input matInput formControlName="hauteur">
+      </mat-form-field>
+
+      <mat-form-field class="input-medium" appearance="outline">
+        <mat-label>Type de place</mat-label>
+        <mat-select formControlName="type">
+          <mat-option *ngFor="let place of typePlaces" [value]="place.value">
+            {{ place.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="input-medium" appearance="outline">
+        <mat-label>Type de parking</mat-label>
+        <mat-select formControlName="typeOuvrage">
+          <mat-option *ngFor="let parking of typeParkings" [value]="parking.value">
+            {{ parking.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- Row 5: Submit Button -->
+    <div class="form-row center">
+      <button mat-raised-button class="custom-button" type="submit" (click)="onSearch()">Rechercher</button>
+    </div>
+
+  </form>
+</div>

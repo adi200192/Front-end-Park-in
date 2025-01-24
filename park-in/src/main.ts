@@ -6,6 +6,12 @@ import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { environment } from './environments/environment';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import {registerLocaleData} from '@angular/common';
+import localeFr from '@angular/common/locales/fr'
+import {appConfig} from './app/app.config';
+import {provideHttpClient} from '@angular/common/http';
+
+registerLocaleData(localeFr);
 
 
 bootstrapApplication(AppComponent, {
@@ -14,7 +20,9 @@ bootstrapApplication(AppComponent, {
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideRouter(routes),
-    provideAnimationsAsync()
+    provideAnimationsAsync(),
+    provideHttpClient(),
+    ...appConfig.providers
   ]
 }).catch(err => console.error(err));
 
