@@ -1,11 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Auth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from '@angular/fire/auth';
+import { CommonModule } from '@angular/common'; // Ajout de CommonModule
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -18,6 +20,7 @@ import { Auth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from 
     MatIconModule,
     FormsModule,
     ReactiveFormsModule,
+    CommonModule  // Ajout ici pour permettre l'utilisation de ngStyle
 
   ],
   templateUrl: './login.component.html',
@@ -26,10 +29,31 @@ import { Auth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from 
 export class LoginComponent {
   email: string = '';
   password: string = '';
+  backgroundImage: string = 'assets/park.jpg'; 
+  connexion : FormGroup;
 
-  constructor(private auth: Auth) {}
 
-  // Connexion via Google
+
+  constructor(
+    @Inject(Auth) private auth: Auth, 
+    private router: Router
+  ) {
+this.connexion = new FormGroup({
+  email:new FormControl('', Validators.required),
+  mdp:new FormControl('', Validators.required)
+})
+  }
+
+  Seconnecter(){
+    if(this.connexion.valid)
+    {
+      this.router.navigate(['/'])
+    }
+  }
+  Sinscrire(){
+    this.router.navigate(["/register"])
+  }
+
   async signInWithGoogle() {
     const provider = new GoogleAuthProvider();
     try {
@@ -41,7 +65,6 @@ export class LoginComponent {
     }
   }
 
-  // Connexion via Facebook
   async signInWithFacebook() {
     const provider = new FacebookAuthProvider();
     try {

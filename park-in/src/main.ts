@@ -13,8 +13,10 @@ import {provideHttpClient} from '@angular/common/http';
 
 registerLocaleData(localeFr);
 
+
 bootstrapApplication(AppComponent, {
   providers: [
+    provideAnimationsAsync(),
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideRouter(routes),
