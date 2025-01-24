@@ -1,4 +1,4 @@
-<h1>List de parking</h1>
+<h1>Liste de parking</h1>
 <div class="parking-list">
   <div *ngFor="let parking of parkings" class="parking-card">
     <img [src]="parking.imageUrl" alt="Parking image" class="parking-image">
@@ -12,10 +12,10 @@
 
       <div class="parking-features">
         <div *ngIf="parking.pmr" class="pmr">
-          <img src="assets/icons/pmr.jpg" class="icon" alt="Handicap accessible">
+          <img src="../../../assets/icons/pmr.jpg" class="icon" alt="Handicap accessible">
         </div>
         <div class="height">
-          <img src="assets/icons/height.png" class="icon" alt="Height restriction">
+          <img src="../../../assets/icons/height.png" class="icon" alt="Height restriction">
           <span>{{ parking.hauteur }} m</span>
         </div>
       </div>
@@ -24,7 +24,7 @@
 
     <div class="parking-actions">
       <p class="price">{{ parking.tarif }} €/heure</p>
-      <button class="btn btn-primary">LOUER</button>
+      <button class="btn btn-primary" (click)="search()">LOUER</button>
     </div>
   </div>
 </div>

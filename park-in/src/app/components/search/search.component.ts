@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {CommonModule} from '@angular/common';
+import {Router} from '@angular/router';
 @Component({
   selector: 'app-search',
   standalone: true,
@@ -61,5 +62,11 @@ export class SearchComponent {
       hauteur: 1.80
     }
   ]
+
+ constructor(private router : Router) {}
+
+  search(){
+    this.router.navigate(['/booking'])
+  }
 
 }
