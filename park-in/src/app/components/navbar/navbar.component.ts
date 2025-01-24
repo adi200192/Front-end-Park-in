@@ -14,6 +14,10 @@ export class NavbarComponent {
 
   constructor(private router: Router) {}
 
+  Mesresa(){
+    this.router.navigate(['/cancel'])
+  }
+
   Seconnecter(){
     this.router.navigate(['/login'])
   }
