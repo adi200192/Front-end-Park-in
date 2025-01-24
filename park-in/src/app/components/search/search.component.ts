@@ -16,6 +16,7 @@ export class SearchComponent {
       type : "Couvert",
       adresse : "Neyrpic 123, Av Ismail",
       distance : "20km",
+      url : "http://realpark.fr/parking/baudoyer.html",
       tarif : 4.50,
       pmr : true,
       hauteur : 1.90
@@ -25,6 +26,7 @@ export class SearchComponent {
       nom : "Parking Grand Place",
       type : "Ouvert",
       adresse : "18 GP, avenue",
+      url : "http://realpark.fr/parking/baudoyer.html",
       distance : "10km",
       tarif : 4.50,
       pmr : false,
@@ -36,6 +38,7 @@ export class SearchComponent {
       nom: "Parking Central Station",
       type: "Couvert",
       adresse: "45 Rue de la Gare, 75001 Paris",
+      url : "http://realpark.fr/parking/baudoyer.html",
       distance: "5km",
       tarif: 6.00,
       pmr: true,
@@ -62,11 +65,21 @@ export class SearchComponent {
       hauteur: 1.80
     }
   ]
+ constructor(private router : Router) {
+ }
 
- constructor(private router : Router) {}
 
-  search(){
-    this.router.navigate(['/booking'])
+  search(parking: any) {
+    this.router.navigate(['/booking'], {
+      queryParams: {
+        imageUrl: parking.imageUrl,
+        nom: parking.nom,
+        tarif: parking.tarif,
+        adresse: parking.adresse,
+        url : parking.url,
+      }
+    });
   }
+
 
 }

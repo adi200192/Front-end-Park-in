@@ -1,2 +1,52 @@
-<h1>Photo parking</h1>
+<div class="booking-container">
+  <!-- Left Section: Parking Details -->
+  <div class="left-section">
+    <img [src]="selectedParking.imageUrl" alt="Parking image" class="parking-image">
+    <div class="parking-info">
+      <h1 class="parking-title">{{ selectedParking.nom }}</h1>
+      <p class="parking-address">{{ selectedParking.adresse }}</p>
+      <p class="parking-price">Tarif: <strong>{{ selectedParking.tarif }} €/heure</strong></p>
+      <p class="parking-website">
+        Site web:
+        <a [href]="selectedParking.url" target="_blank">{{ selectedParking.url }}</a>
+      </p>
+    </div>
+  </div>
 
+  <!-- Right Section: Booking Form -->
+  <div class="right-section">
+    <mat-card class="booking-card">
+      <mat-card-header>
+        <mat-card-title>Sélectionnez votre place</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="input-container">
+          <mat-form-field appearance="outline" class="input-field">
+            <mat-label>Étage</mat-label>
+            <mat-select>
+              <mat-option *ngFor="let etage of etages" [value]="etage">{{ etage }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="input-field">
+            <mat-label>Bloc</mat-label>
+            <mat-select>
+              <mat-option *ngFor="let bloc of blocs" [value]="bloc">{{ bloc }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="input-field">
+            <mat-label>Aile</mat-label>
+            <mat-select>
+              <mat-option *ngFor="let aile of ailes" [value]="aile">{{ aile }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-checkbox></mat-checkbox>
+        </div>
+
+        <button mat-raised-button color="primary" class="full-width">Réserver</button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

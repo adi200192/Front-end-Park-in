@@ -1,0 +1,104 @@
+/* Container layout */
+.booking-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 40px;
+  padding: 40px;
+  font-family: Arial, sans-serif;
+}
+
+/* Left section styles */
+.left-section {
+  flex: 1;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.parking-image {
+  width: 300px;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Parking info text */
+.parking-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.parking-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.parking-address, .parking-price, .parking-website {
+  font-size: 16px;
+  color: #555;
+  margin: 5px 0;
+}
+
+.parking-price {
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.parking-website a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.parking-website a:hover {
+  text-decoration: underline;
+}
+
+/* Right section booking card */
+.right-section {
+  flex: 1;
+}
+
+.booking-card {
+  width: 100%;
+  padding: 10px;
+}
+
+
+.input-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding-top : 15px;
+}
+
+/* Uniform width for all input fields */
+.input-field {
+  flex: 1;
+  max-width: 200px;  /* Set fixed max width for uniformity */
+}
+
+/* Button style */
+.full-width {
+  width: 100%;
+  margin-top: 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .booking-container {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .input-container {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .input-field {
+    max-width: 100%;
+  }
+}
