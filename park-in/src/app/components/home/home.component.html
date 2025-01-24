@@ -1,9 +1,8 @@
 <div class="search-container">
   <h2>Trouver votre Parking !</h2>
   <form [formGroup]="searchForm" class="search-form">
-    <!-- Lieu de stationnement -->
     <div class="form-row">
-      <mat-form-field class="input-large" appearance="outline">
+      <mat-form-field class="input-medium" appearance="outline">
         <mat-label>Lieu de stationnement</mat-label>
         <input #autoCompleteInput matInput id="lieu" formControlName="location">
       </mat-form-field>
@@ -11,7 +10,7 @@
 
     <!-- Date et heure de début -->
     <div class="form-row">
-      <mat-form-field class="input-medium" appearance="outline">
+      <mat-form-field class="input-small" appearance="outline">
         <mat-label>Date début</mat-label>
         <input matInput [matDatepicker]="startDate" formControlName="dateDebut">
         <mat-datepicker-toggle matIconSuffix [for]="startDate"></mat-datepicker-toggle>
@@ -22,13 +21,13 @@
         <mat-label>Heure début</mat-label>
         <input matInput [matTimepicker]="startTime" formControlName="dateDebut">
         <mat-timepicker-toggle matIconSuffix [for]="startTime"></mat-timepicker-toggle>
-        <mat-timepicker #startTime timeOnly></mat-timepicker>
+        <mat-timepicker #startTime interval="10m"></mat-timepicker>
       </mat-form-field>
     </div>
 
     <!-- Date et heure de fin -->
     <div class="form-row">
-      <mat-form-field class="input-medium" appearance="outline">
+      <mat-form-field class="input-small" appearance="outline">
         <mat-label>Date fin</mat-label>
         <input matInput [matDatepicker]="endDate" formControlName="dateFin">
         <mat-datepicker-toggle matIconSuffix [for]="endDate"></mat-datepicker-toggle>
@@ -39,20 +38,18 @@
         <mat-label>Heure fin</mat-label>
         <input matInput [matTimepicker]="endTime" formControlName="dateFin">
         <mat-timepicker-toggle matIconSuffix [for]="endTime"></mat-timepicker-toggle>
-        <mat-timepicker #endTime interval></mat-timepicker>
+        <mat-timepicker #endTime interval="10m"></mat-timepicker>
       </mat-form-field>
     </div>
 
     <!-- Autres options -->
     <div class="form-row">
-      <mat-checkbox formControlName="pmr">Places PMR</mat-checkbox>
-
-      <mat-form-field class="input-small" appearance="outline">
-        <mat-label>Hauteur</mat-label>
+      <mat-form-field style="width: 150px;" appearance="outline">
+        <mat-label>Hauteur(m)</mat-label>
         <input matInput formControlName="hauteur">
       </mat-form-field>
 
-      <mat-form-field class="input-medium" appearance="outline">
+      <mat-form-field style="width: 250px;" appearance="outline">
         <mat-label>Type de place</mat-label>
         <mat-select formControlName="type">
           <mat-option *ngFor="let place of typePlaces" [value]="place.value">
@@ -61,7 +58,7 @@
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field class="input-medium" appearance="outline">
+      <mat-form-field  style="width: 250px;"appearance="outline">
         <mat-label>Type de parking</mat-label>
         <mat-select formControlName="typeOuvrage">
           <mat-option *ngFor="let parking of typeParkings" [value]="parking.value">
@@ -69,12 +66,10 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
+
+      <mat-checkbox class="custom-checkbox" formControlName="pmr">Places PMR</mat-checkbox>
     </div>
 
-    <!-- Bouton de soumission -->
-    <div class="form-row center">
-      <button mat-raised-button class="custom-button" type="submit" (click)="onSearch()">Rechercher</button>
-    </div>
-
+    <button mat-raised-button class="custom-button" type="submit" (click)="onSearch()">Rechercher</button>
   </form>
 </div>

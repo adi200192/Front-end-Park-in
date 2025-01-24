@@ -4,7 +4,7 @@ import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angula
 import {MatFormField, MatLabel, MatSelect} from '@angular/material/select';
 import {MatNativeDateModule, MatOptionModule} from '@angular/material/core';
 import {ApiService} from '../../services/api.service';
-import {MatDatepicker, MatDatepickerModule} from '@angular/material/datepicker';
+import { MatDatepickerModule} from '@angular/material/datepicker';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatInputModule} from '@angular/material/input';
 import {MatTimepickerModule} from '@angular/material/timepicker';
@@ -68,10 +68,12 @@ export class HomeComponent implements AfterViewInit{
  autocomplete : google.maps.places.Autocomplete | undefined
   ngAfterViewInit() {
     this.autocomplete = new google.maps.places.Autocomplete(this.autoCompleteInput.nativeElement, { componentRestrictions: { country: 'fr' }});
-
+    // this.autoCompleteInput.nativeElement.setAttribute('placeholder', 'Saisissez votre adresse');
     this.autocomplete.addListener('place_changed', ()=> {
       const place = this.autocomplete?.getPlace();
-      console.log(place);
+      if (place) {
+        this.testGeocoding(place.formatted_address);
+      }
     })
 
   }
@@ -80,12 +82,11 @@ export class HomeComponent implements AfterViewInit{
     this.apiService.getCoordinates(testAddress).subscribe(
       (response) => {
         const { lat, lng } = response.results[0].geometry.location;
+        console.log(response);
         this.searchForm.patchValue({
           latitude: lat,
           longitude: lng
         });
-        // this.searchForm.removeControl('location');
-        console.log(this.searchForm.value)
       },
       (error) => {
         console.error('Error calling Geocoding API:', error);
@@ -97,11 +98,11 @@ export class HomeComponent implements AfterViewInit{
       this.formSubmitted = true
       this.searchForm.patchValue({
         dateDebut: new Date(this.searchForm.get('dateDebut')?.value).toISOString(),
-        dateFin: new Date(this.searchForm.get('dateFin')?.value).toISOString()
+        dateFin: new Date(this.searchForm.get('dateFin')?.value).toISOString(),
+        hauteur : parseFloat(this.searchForm.get('hauteur')?.value)
       });
-      this.testGeocoding(this.searchForm.get('location')?.value)
       console.log(this.searchForm.value)
-      this.router.navigate(['/search'])
+      // this.router.navigate(['/search'])
     } else {
       console.log('Form is invalid!');
     }
