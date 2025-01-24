@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/components/footer/footer.component.css"],
+  "sourcesContent": ["/* Assurer que le footer est coll\u00E9 en bas de la page */\r\nhtml, body {\r\n    height: 100%;\r\n    margin: 0;\r\n    padding: 0;\r\n}\r\n\r\n/* Conteneur principal qui maintient le footer en bas */\r\n.content-wrapper {\r\n    display: flex;\r\n    flex-direction: column;\r\n    min-height: 100vh;\r\n}\r\n\r\n/* Le contenu principal prend l'espace restant pour pousser le footer en bas */\r\n.content {\r\n    flex: 1;\r\n}\r\n\r\n/* Footer Styling */\r\n.footer-container {\r\n    background-color: #388E3C; /* Couleur de la navbar */\r\n    color: white;\r\n    width: 100%;\r\n    text-align: center;\r\n    padding: 20px 0;\r\n    position: relative;\r\n    bottom: 0;\r\n}\r\n\r\n/* Centrage du texte */\r\n.footer-bottom {\r\n    font-size: 16px;\r\n    font-weight: bold;\r\n    text-align: center;\r\n    width: 100%;\r\n}\r\n"],
+  "mappings": ";AACA;AAAM;AACF,UAAQ;AACR,UAAQ;AACR,WAAS;AACb;AAGA,CAAC;AACG,WAAS;AACT,kBAAgB;AAChB,cAAY;AAChB;AAGA,CAAC;AACG,QAAM;AACV;AAGA,CAAC;AACG,oBAAkB;AAClB,SAAO;AACP,SAAO;AACP,cAAY;AACZ,WAAS,KAAK;AACd,YAAU;AACV,UAAQ;AACZ;AAGA,CAAC;AACG,aAAW;AACX,eAAa;AACb,cAAY;AACZ,SAAO;AACX;",
+  "names": []
+}

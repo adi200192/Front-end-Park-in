@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/components/navbar/navbar.component.css"],
+  "sourcesContent": [".logo {\r\n    height: 50px;\r\n    width: auto;\r\n    display: block;\r\n    margin-right: 10px; \r\n}\r\n\r\n.brand-name {\r\n    font-size: 24px;\r\n    font-weight: bold;\r\n    color: white;\r\n}\r\n\r\n.spacer {\r\n    flex: 1 1 auto;\r\n}\r\n\r\n.mat-mdc-raised-button.mat-accent {\r\n    --mdc-protected-button-container-color: blue;\r\n    --mdc-protected-button-label-text-color: white;\r\n    --mat-protected-button-state-layer-color: white;\r\n    --mat-protected-button-ripple-color: rgba(255, 255, 255, 0.1);\r\n}\r\n.mat-toolbar.mat-primary {\r\n    --mat-toolbar-container-background-color: #2A9134;\r\n    --mat-toolbar-container-text-color: white;\r\n}\r\n\r\n.navbar-right button {\r\n    font-size: 16px;\r\n    font-weight: bold;\r\n}\r\n\r\n\r\n.navbar-left {\r\n    display: flex;\r\n    align-items: center; \r\n}\r\n\r\n/*.active-link {\r\n    font-weight: bold;\r\n    border-bottom: 2px solid white;\r\n}*/\r\n.active-link {\r\n    font-weight: bold;\r\n    color: #ffffff;\r\n}\r\n\r\n"],
+  "mappings": ";AAAA,CAAC;AACG,UAAQ;AACR,SAAO;AACP,WAAS;AACT,gBAAc;AAClB;AAEA,CAAC;AACG,aAAW;AACX,eAAa;AACb,SAAO;AACX;AAEA,CAAC;AACG,QAAM,EAAE,EAAE;AACd;AAEA,CAAC,qBAAqB,CAAC;AACnB,0CAAwC;AACxC,2CAAyC;AACzC,4CAA0C;AAC1C,uCAAqC,KAAK,GAAG,EAAE,GAAG,EAAE,GAAG,EAAE;AAC7D;AACA,CAAC,WAAW,CAAC;AACT,4CAA0C;AAC1C,sCAAoC;AACxC;AAEA,CAAC,aAAa;AACV,aAAW;AACX,eAAa;AACjB;AAGA,CAAC;AACG,WAAS;AACT,eAAa;AACjB;AAMA,CAAC;AACG,eAAa;AACb,SAAO;AACX;",
+  "names": []
+}

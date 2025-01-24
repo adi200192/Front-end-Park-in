@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/app.component.css"],
+  "sourcesContent": ["/* Assurer que le corps prend toute la hauteur de l'\u00E9cran */\r\nhtml, body {\r\n    height: 100%;\r\n    margin: 0;\r\n    padding: 0;\r\n}\r\n\r\n/* Wrapper principal qui prend toute la hauteur */\r\n.content-wrapper {\r\n    display: flex;\r\n    flex-direction: column;\r\n    min-height: 100vh;\r\n}\r\n\r\n/* Contenu principal qui prend l'espace restant */\r\n.content {\r\n    flex: 1;\r\n}\r\n"],
+  "mappings": ";AACA;AAAM;AACF,UAAQ;AACR,UAAQ;AACR,WAAS;AACb;AAGA,CAAC;AACG,WAAS;AACT,kBAAgB;AAChB,cAAY;AAChB;AAGA,CAAC;AACG,QAAM;AACV;",
+  "names": []
+}
