@@ -74,7 +74,6 @@ export class CancelComponent {
     return Math.floor(diffMs / (1000 * 60 * 60)); // Convertir en heures
   }
 
-  // Fonction pour désactiver le bouton si moins de 48 heures restantes
   isCancellationDisabled(reservationDate: Date): boolean {
     return this.getRemainingTime(reservationDate) < 48;
   }

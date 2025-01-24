@@ -58,7 +58,7 @@
 
 /* Custom button styles */
 .custom-button {
-  background-color: #007bff !important; /* Custom blue color */
+  background-color: #2B77C4 !important; /* Custom blue color */
   color: white !important;
   padding: 12px 30px !important;
   border-radius: 8px !important;
@@ -68,5 +68,5 @@
 }
 
 .custom-button:hover {
-  background-color: #0056b3 !important; /* Darker on hover */
+  background-color: #2B77C4 !important; /* Darker on hover */
 }

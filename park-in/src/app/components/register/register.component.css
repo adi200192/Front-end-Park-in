@@ -12,7 +12,7 @@
 
 /* Bouton S'inscrire en vert */
 .green-button {
-    background-color: green !important;
+    background-color: #3e9247 !important;
     color: white !important;
     display: flex;
     align-items: center;
@@ -24,7 +24,7 @@
 }
 
 .green-button:hover {
-    background-color: darkgreen !important;
+    background-color: #3e9247 !important;
 }
 
 
