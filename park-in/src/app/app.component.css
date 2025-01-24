@@ -1,0 +1,18 @@
+/* Assurer que le corps prend toute la hauteur de l'écran */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* Wrapper principal qui prend toute la hauteur */
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Contenu principal qui prend l'espace restant */
+.content {
+    flex: 1;
+}

@@ -1,0 +1,37 @@
+/* Assurer que le footer est collé en bas de la page */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* Conteneur principal qui maintient le footer en bas */
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Le contenu principal prend l'espace restant pour pousser le footer en bas */
+.content {
+    flex: 1;
+}
+
+/* Footer Styling */
+.footer-container {
+    background-color: #388E3C; /* Couleur de la navbar */
+    color: white;
+    width: 100%;
+    text-align: center;
+    padding: 20px 0;
+    position: relative;
+    bottom: 0;
+}
+
+/* Centrage du texte */
+.footer-bottom {
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+}
