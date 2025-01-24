@@ -1,83 +1,80 @@
-.parking-list {
+.title {
+    text-align: center;
+    font-size: 2em;
+    margin-top: 20px;
+    color: #333;
+  }
+  
+  .parking-list {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    padding: 20px;
   }
   
   .parking-card {
     display: flex;
-    align-items: center;
     border: 1px solid #ddd;
     border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    background: #fff;
     padding: 15px;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    background: #f9f9f9;
+  }
+
+  .btn-disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    color: #666;
   }
   
+  
   .parking-image {
-    width: 250px;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-right: 15px;
+    width: 150px;
+    height: auto;
+    border-radius: 10px;
   }
   
   .parking-info {
     flex: 1;
+    margin-left: 20px;
   }
   
-  h2 {
-    font-size: 20px;
-    margin: 0 0 5px;
-    color: #333;
+  .reservation-date {
+    font-weight: bold;
+    margin-top: 10px;
   }
   
-  .parking-type {
-    font-size: 16px;
-    color: gray;
-  }
-  
-  .address {
-    margin: 5px 0;
-    color: #666;
-    font-size: 14px;
-  }
-  
-  .distance {
-    color: #555;
-    font-size: 14px;
-    margin-bottom: 5px;
-  }
-  
-  .height {
+  .parking-actions {
     display: flex;
+    flex-direction: column;
     align-items: center;
   }
   
-  .height span {
-    font-size: 14px;
-    color: #444;
-    margin-left: 5px;
-  }
-  
-  /* Actions area (price and button) */
-  .parking-actions {
-    text-align: right;
-  }
-  
-  
   .btn {
-    padding: 10px 20px;
+    width: 100%;
+    padding: 10px;
     border: none;
-    border-radius: 5px;
     cursor: pointer;
-    color: #fff;
-    background-color: #007bff;
     font-size: 16px;
+    text-transform: uppercase;
+    border-radius: 5px;
   }
   
-  .btn:hover {
-    background-color: #0056b3;
+  .btn-primary {
+    background-color: green;
+    color: white;
   }
+  
+  .btn-disabled {
+    background-color: grey;
+    color: white;
+    cursor: not-allowed;
+  }
+  
+  .error-text {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+    text-align: center;
+  }
+  

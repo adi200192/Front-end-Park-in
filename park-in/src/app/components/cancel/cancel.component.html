@@ -8,12 +8,22 @@
       <p class="address">{{ parking.adresse }}</p>
       <div class="distance">
         Distance {{ parking.distance }}
+        <p class="reservation-time">
+            Date et heure de debut de reservation : {{ parking.reservationDate}} 
+          </p>
       </div>
-
     </div>
 
     <div class="parking-actions">
-      <button class="btn btn-primary">Annuler</button>
+      <button 
+        class="btn btn-primary"
+        [ngClass]="{'btn-disabled': isCancellationDisabled(parking.reservationDate)}"
+        [disabled]="isCancellationDisabled(parking.reservationDate)">
+        Annuler
+      </button>
+      <p *ngIf="canCancel(parking) === false" class="error-text">
+        La réservation ne peut pas être annulée si elle est inferieur a 48h.
+      </p>    
     </div>
   </div>
 </div>
