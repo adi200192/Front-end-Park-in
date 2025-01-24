@@ -1,8 +1,7 @@
 <div class="search-container">
   <h2>Trouver votre Parking !</h2>
   <form [formGroup]="searchForm" class="search-form">
-
-    <!-- Row 1: Lieu de stationnement -->
+    <!-- Lieu de stationnement -->
     <div class="form-row">
       <mat-form-field class="input-large" appearance="outline">
         <mat-label>Lieu de stationnement</mat-label>
@@ -10,7 +9,7 @@
       </mat-form-field>
     </div>
 
-    <!-- Row 2: Date début and Heure début -->
+    <!-- Date et heure de début -->
     <div class="form-row">
       <mat-form-field class="input-medium" appearance="outline">
         <mat-label>Date début</mat-label>
@@ -27,7 +26,7 @@
       </mat-form-field>
     </div>
 
-    <!-- Row 3: Date fin and Heure fin -->
+    <!-- Date et heure de fin -->
     <div class="form-row">
       <mat-form-field class="input-medium" appearance="outline">
         <mat-label>Date fin</mat-label>
@@ -44,6 +43,7 @@
       </mat-form-field>
     </div>
 
+    <!-- Autres options -->
     <div class="form-row">
       <mat-checkbox formControlName="pmr">Places PMR</mat-checkbox>
 
@@ -71,7 +71,7 @@
       </mat-form-field>
     </div>
 
-    <!-- Row 5: Submit Button -->
+    <!-- Bouton de soumission -->
     <div class="form-row center">
       <button mat-raised-button class="custom-button" type="submit" (click)="onSearch()">Rechercher</button>
     </div>
