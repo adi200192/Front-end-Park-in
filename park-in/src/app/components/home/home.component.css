@@ -1,12 +1,12 @@
-/* Form container styling */
+.search-container h2{
+  padding-top : 20px;
+}
 .search-container {
   max-width: 1200px;
   margin: 0 auto; /* Center the form */
   text-align: center; /* Center heading text */
 
 }
-
-
 .search-form {
   max-width: 1200px;
   margin: 30px auto;
@@ -19,7 +19,6 @@
 /* Define row layout */
 .form-row {
   display: flex;
-  justify-content: space-between;
   gap: 20px; /* Space between elements */
   margin-bottom: 15px; /* Space between rows */
 }
@@ -37,7 +36,8 @@
 
 .input-medium {
   flex: 1;
-  min-width: 220px;
+  min-width: 150px;
+  max-width : 500px;
 }
 
 .input-small {
@@ -50,7 +50,6 @@
   .form-row {
     flex-direction: column; /* Stack inputs on smaller screens */
   }
-
   .input-large, .input-medium, .input-small {
     width: 100%; /* Full width for mobile view */
   }
@@ -63,8 +62,8 @@
   padding: 12px 30px !important;
   border-radius: 8px !important;
   font-size: 18px;
-  font-weight: bold;
   transition: all 0.3s ease-in-out;
+  width : 300px;
 }
 
 .custom-button:hover {

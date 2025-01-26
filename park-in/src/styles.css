@@ -1,8 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&display=swap');
+
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Open Sans', sans-serif;
+    font-weight : 600;
     margin: 0;
     padding: 0;
-
 }
 
 .full-width {
@@ -13,3 +15,4 @@ body {
     text-align: center;
     padding: 50px;
 }
+
