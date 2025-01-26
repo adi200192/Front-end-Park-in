@@ -10,6 +10,7 @@ import {registerLocaleData} from '@angular/common';
 import localeFr from '@angular/common/locales/fr'
 import {appConfig} from './app/app.config';
 import {provideHttpClient} from '@angular/common/http';
+import {MAT_DATE_LOCALE} from '@angular/material/core';
 
 registerLocaleData(localeFr);
 
@@ -22,6 +23,7 @@ bootstrapApplication(AppComponent, {
     provideRouter(routes),
     provideAnimationsAsync(),
     provideHttpClient(),
+    { provide: MAT_DATE_LOCALE, useValue: 'fr-FR' },
     ...appConfig.providers
   ]
 }).catch(err => console.error(err));
