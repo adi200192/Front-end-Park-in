@@ -87,6 +87,7 @@ export class HomeComponent implements AfterViewInit{
           latitude: lat,
           longitude: lng
         });
+
         this.searchForm.removeControl('location');
         console.log(this.searchForm.value)
       },
