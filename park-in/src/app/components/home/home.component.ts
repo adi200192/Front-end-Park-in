@@ -10,6 +10,8 @@ import {MatInputModule} from '@angular/material/input';
 import {MatTimepickerModule} from '@angular/material/timepicker';
 import {MatButtonModule} from '@angular/material/button';
 import {Router} from '@angular/router';
+import { ParkingRequest } from '../../model/parkingRequest';
+import { ParkingService } from '../../services/parking.service';
 
 
 @Component({
@@ -51,7 +53,7 @@ export class HomeComponent implements AfterViewInit{
     {label : 'Enclos en surface', value : 'ENCLOS_EN_SURFACE'},
     {label : 'Ouvrage', value : 'TYPE_OUVRAGE'}
   ]
-  constructor(private apiService : ApiService, private router : Router) {
+  constructor(private apiService : ApiService, private parkingService : ParkingService, private router : Router) {
     this.searchForm = new FormGroup({
       location: new FormControl('', Validators.required),
       dateDebut: new FormControl(null, Validators.required),
@@ -93,7 +95,7 @@ export class HomeComponent implements AfterViewInit{
       }
     );
   }
-  async onSearch() {
+  /*async onSearch() {
     if (this.searchForm.valid) {
       this.formSubmitted = true
       this.searchForm.patchValue({
@@ -102,10 +104,43 @@ export class HomeComponent implements AfterViewInit{
         hauteur : parseFloat(this.searchForm.get('hauteur')?.value)
       });
       console.log(this.searchForm.value)
-      // this.router.navigate(['/search'])
+      this.router.navigate(['/search'])
     } else {
       console.log('Form is invalid!');
     }
-  }
+  }*/
+
+    async onSearch() {
+      if (this.searchForm.valid) {
+        this.formSubmitted = true;
+  
+        // Convert form values into ParkingRequest format
+        const parkingRequest: ParkingRequest = {
+          latitude: this.searchForm.get('latitude')?.value,
+          longitude: this.searchForm.get('longitude')?.value,
+          dateDebut: new Date(this.searchForm.get('dateDebut')?.value).toISOString(),
+          dateFin: new Date(this.searchForm.get('dateFin')?.value).toISOString(),
+          pmr: this.searchForm.get('pmr')?.value,
+          type: this.searchForm.get('type')?.value,
+          hauteur: this.searchForm.get('hauteur')?.value,
+          typeOuvrage: this.searchForm.get('typeOuvrage')?.value
+        };
+  
+        console.log('Search ParkingRequest:', parkingRequest);
+  
+        // Call the API service to search parking
+        this.parkingService.getAvailableParking(parkingRequest).subscribe({
+          next: (result) => {
+            console.log('Search results:', result);
+            //this.router.navigate(['/search-results'], { state: { results: result } });
+          },
+          error: (err) => {
+            console.error('Error fetching parking data', err);
+          }
+        });
+      } else {
+        console.log('Form is invalid!');
+      }
+    }
 
 }
