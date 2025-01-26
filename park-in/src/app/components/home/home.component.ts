@@ -49,7 +49,7 @@ export class HomeComponent implements AfterViewInit{
 
   typeParkings = [
     {label : 'Enclos en surface', value : 'ENCLOS_EN_SURFACE'},
-    {label : 'Ouvrage', value : 'TYPE_OUVRAGE'}
+    {label : 'Ouvrage', value : 'ouvrage'}
   ]
   constructor(private apiService : ApiService, private router : Router) {
     this.searchForm = new FormGroup({
@@ -87,6 +87,10 @@ export class HomeComponent implements AfterViewInit{
           latitude: lat,
           longitude: lng
         });
+
+        this.searchForm.removeControl('location');
+        console.log(this.searchForm.value)
+
       },
       (error) => {
         console.error('Error calling Geocoding API:', error);
