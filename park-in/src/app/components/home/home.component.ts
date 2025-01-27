@@ -10,6 +10,9 @@ import {MatInputModule} from '@angular/material/input';
 import {MatTimepickerModule} from '@angular/material/timepicker';
 import {MatButtonModule} from '@angular/material/button';
 import {Router} from '@angular/router';
+import {ParkingRequest} from '../../model/parkingRequest';
+import {ParkingService} from '../../services/parking.service';
+import {DataService} from '../../services/data.service';
 
 
 @Component({
@@ -26,7 +29,7 @@ import {Router} from '@angular/router';
     MatLabel,
     MatInputModule,
     MatOptionModule,
-    MatFormField
+    MatFormField,
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
@@ -36,6 +39,7 @@ import {Router} from '@angular/router';
 export class HomeComponent implements AfterViewInit{
   searchForm: FormGroup;
   formSubmitted: boolean = false;
+  minDate : Date = new Date();
 
   @ViewChild('autoCompleteInput') autoCompleteInput!:ElementRef
 
@@ -48,19 +52,21 @@ export class HomeComponent implements AfterViewInit{
   ]
 
   typeParkings = [
-    {label : 'Enclos en surface', value : 'enclos-en-surface'},
+
+    {label : 'Enclos en surface', value : 'enclos_en_surface'},
+
     {label : 'Ouvrage', value : 'ouvrage'}
   ]
-  constructor(private apiService : ApiService, private router : Router) {
+  constructor(private apiService : ApiService, private router : Router, private parkingService : ParkingService, private dataService: DataService) {
     this.searchForm = new FormGroup({
-      location: new FormControl('', Validators.required),
-      dateDebut: new FormControl(null, Validators.required),
+      location: new FormControl('', ), // Validators.required
+      dateDebut: new FormControl(null, ), // Validators.required
       latitude: new FormControl(null),
       longitude: new FormControl(null),
-      dateFin: new FormControl(null, Validators.required),
+      dateFin: new FormControl(null, ), // Validators.required
       pmr: new FormControl(false),
       type : new FormControl('STANDARD'),
-      typeOuvrage : new FormControl('ENCLOS_EN_SURFACE'),
+      typeOuvrage : new FormControl('ouvrage'),
       hauteur : new FormControl(1.90)
     });
 
@@ -68,7 +74,7 @@ export class HomeComponent implements AfterViewInit{
  autocomplete : google.maps.places.Autocomplete | undefined
   ngAfterViewInit() {
     this.autocomplete = new google.maps.places.Autocomplete(this.autoCompleteInput.nativeElement, { componentRestrictions: { country: 'fr' }});
-    // this.autoCompleteInput.nativeElement.setAttribute('placeholder', 'Saisissez votre adresse');
+    this.autoCompleteInput.nativeElement.setAttribute('placeholder', 'Saisissez votre adresse');
     this.autocomplete.addListener('place_changed', ()=> {
       const place = this.autocomplete?.getPlace();
       if (place) {
@@ -77,7 +83,6 @@ export class HomeComponent implements AfterViewInit{
     })
 
   }
-
   testGeocoding(testAddress : any) {
     this.apiService.getCoordinates(testAddress).subscribe(
       (response) => {
@@ -87,8 +92,6 @@ export class HomeComponent implements AfterViewInit{
           latitude: lat,
           longitude: lng
         });
-
-        this.searchForm.removeControl('location');
         console.log(this.searchForm.value)
       },
       (error) => {
@@ -98,14 +101,36 @@ export class HomeComponent implements AfterViewInit{
   }
   async onSearch() {
     if (this.searchForm.valid) {
-      this.formSubmitted = true
-      this.searchForm.patchValue({
+      this.formSubmitted = true;
+
+      // Convert form values into ParkingRequest format
+      const parkingRequest: ParkingRequest = {
+        latitude: this.searchForm.get('latitude')?.value,
+        longitude: this.searchForm.get('longitude')?.value,
         dateDebut: new Date(this.searchForm.get('dateDebut')?.value).toISOString(),
         dateFin: new Date(this.searchForm.get('dateFin')?.value).toISOString(),
-        hauteur : parseFloat(this.searchForm.get('hauteur')?.value)
+        pmr: this.searchForm.get('pmr')?.value,
+        type: this.searchForm.get('type')?.value,
+        hauteur: this.searchForm.get('hauteur')?.value,
+        typeOuvrage: this.searchForm.get('typeOuvrage')?.value
+      };
+
+      console.log('Search ParkingRequest:', parkingRequest);
+
+      // Call the API service to search parking
+      this.parkingService.getAvailableParking(parkingRequest).subscribe({
+        next: (result) => {
+          console.log('Search results:', result);
+          this.dataService.setMessage(result);
+          this.router.navigate(['/search'])
+        },
+        error: (err) => {
+          console.error('Error fetching parking data', err);
+        }
       });
       console.log(this.searchForm.value)
       //this.router.navigate(['/search'])
+
     } else {
       console.log('Form is invalid!');
     }

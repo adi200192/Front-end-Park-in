@@ -4,26 +4,26 @@
     <img [src]="parking.imageUrl" alt="Parking image" class="parking-image">
 
     <div class="parking-info">
-      <h2>{{ parking.nom }} <span class="parking-type">({{ parking.type }})</span></h2>
-      <p class="address">{{ parking.adresse }}</p>
+      <h2>{{ parking.name }} <span class="parking-type">({{ parking.typeOuvrage.replaceAll('_',' ')}})</span></h2>
+      <p class="address">{{ parking.address }}</p>
       <div class="distance">
-        Distance {{ parking.distance }}
+        Distance : {{ parking.distance }}m
       </div>
 
       <div class="parking-features">
-        <div *ngIf="parking.pmr" class="pmr">
+        <div *ngIf="parking.nbPMR>0" class="pmr">
           <img src="../../../assets/icons/pmr.jpg" class="icon" alt="Handicap accessible">
         </div>
         <div class="height">
           <img src="../../../assets/icons/height.png" class="icon" alt="Height restriction">
-          <span>{{ parking.hauteur }} m</span>
+          <span>{{ parking.hauteurMax }} m</span>
         </div>
       </div>
 
     </div>
 
     <div class="parking-actions">
-      <p class="price">{{ parking.tarif }} €/heure</p>
+      <p class="price">{{ parking.tarif1h }} €/heure</p>
       <button class="btn btn-primary" (click)="search(parking)">LOUER</button>
     </div>
   </div>

@@ -12,7 +12,7 @@
     <div class="form-row">
       <mat-form-field class="input-small" appearance="outline">
         <mat-label>Date début</mat-label>
-        <input matInput [matDatepicker]="startDate" formControlName="dateDebut">
+        <input matInput [matDatepicker]="startDate" formControlName="dateDebut" [min]="minDate">
         <mat-datepicker-toggle matIconSuffix [for]="startDate"></mat-datepicker-toggle>
         <mat-datepicker #startDate></mat-datepicker>
       </mat-form-field>
@@ -29,7 +29,7 @@
     <div class="form-row">
       <mat-form-field class="input-small" appearance="outline">
         <mat-label>Date fin</mat-label>
-        <input matInput [matDatepicker]="endDate" formControlName="dateFin">
+        <input matInput [matDatepicker]="endDate" formControlName="dateFin" [min]="searchForm.get('dateDebut')?.value">
         <mat-datepicker-toggle matIconSuffix [for]="endDate"></mat-datepicker-toggle>
         <mat-datepicker #endDate></mat-datepicker>
       </mat-form-field>
@@ -73,3 +73,4 @@
     <button mat-raised-button class="custom-button" type="submit" (click)="onSearch()">Rechercher</button>
   </form>
 </div>
+
