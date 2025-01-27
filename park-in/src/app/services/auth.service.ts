@@ -49,21 +49,9 @@ export class AuthService {
     this.token = null;
   }
 
-  sendUserDataToBackend(uid: string, token: string) {
-    const userData = {
-      uid: uid,
-      token: token
-    };
-  
-    this.http.post('http://localhost:2200/inscription', userData)
-      .subscribe({
-        next: (response) => {
-          console.log('UID et token envoyés au backend avec succès:', response);
-        },
-        error: (error) => {
-          console.error("Erreur lors de l'envoi des données au backend:", error);
-        }
-      });
+  sendUserDataToBackend(uid: string): Observable<any> {
+    return this.http.post('http://localhost:2200/conducteur/connexion', { uid });
   }
+  
   
 }

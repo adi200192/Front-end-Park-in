@@ -50,12 +50,16 @@ export class LoginComponent {
       try {
         const userCredential = await signInWithEmailAndPassword(this.auth, email, mdp);
         const user = userCredential.user;
-        const token = await user.getIdToken();
-  
-        this.authService.sendUserDataToBackend(user.uid, token);
-  
-        alert('Connexion réussie !');
-        this.router.navigate(['/']);
+        this.authService.sendUserDataToBackend(user.uid).subscribe({
+          next: (response) => {
+            alert('Connexion réussie !');
+            this.router.navigate(['/']);
+          },
+          error: (error) => {
+            alert('Erreur lors de l\'envoi des données au backend: ' + error.message);
+          }
+        });
+
       } catch (error: any) {
         alert('Erreur lors de la connexion: ' + error.message);
       }
@@ -73,9 +77,8 @@ export class LoginComponent {
     try {
       const result = await signInWithPopup(this.auth, provider);
       const user = result.user;
-      const token = await user.getIdToken();
 
-      this.http.post('http://localhost:2200/connexion', { uid: user.uid, token })
+      this.http.post('http://localhost:2200/conducteur/connexion', { uid: user.uid })
         .subscribe(response => {
           console.log('Connexion Google backend:', response);
           alert('Connexion réussie avec Google !');
@@ -92,9 +95,8 @@ export class LoginComponent {
     try {
       const result = await signInWithPopup(this.auth, provider);
       const user = result.user;
-      const token = await user.getIdToken();
 
-      this.http.post('http://localhost:2200/connexion', { uid: user.uid, token })
+      this.http.post('http://localhost:2200/connexion', { uid: user.uid })
         .subscribe(response => {
           console.log('Connexion Facebook backend:', response);
           alert('Connexion réussie avec Facebook !');
