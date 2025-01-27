@@ -8,6 +8,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -20,7 +22,8 @@ import { MatIconModule } from '@angular/material/icon';
     MatFormFieldModule, 
     MatInputModule, 
     MatButtonModule, 
-    MatIconModule
+    MatIconModule,
+    HttpClientModule
   ],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
@@ -30,7 +33,9 @@ export class RegisterComponent {
 
   constructor(
       @Inject(Auth) private auth: Auth, 
-      private router: Router
+      private router: Router,
+      private http: HttpClient,
+      private authService: AuthService
   ){
     this.inscription = new FormGroup({
       name: new FormControl('', Validators.required),
@@ -43,7 +48,12 @@ export class RegisterComponent {
     if (this.inscription.valid) {
       const { email, password } = this.inscription.value;
       try {
-        await createUserWithEmailAndPassword(this.auth, email, password);
+        const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
+        const user = userCredential.user;
+        const token = await user.getIdToken();
+  
+        this.authService.sendUserDataToBackend(user.uid, token);
+  
         alert('Inscription réussie ! Vous pouvez maintenant vous connecter.');
         this.router.navigate(['/login']);
       } catch (error: any) {
@@ -56,9 +66,15 @@ export class RegisterComponent {
     const provider = new GoogleAuthProvider();
     try {
       const result = await signInWithPopup(this.auth, provider);
-      console.log('Utilisateur inscrit avec Google:', result.user);
-      alert('Inscription réussie avec Google !');
-      this.router.navigate(['/']);
+      const user = result.user;
+      const token = await user.getIdToken();
+
+      this.http.post('http://localhost:2200/inscription', { uid: user.uid, token })
+        .subscribe(response => {
+          console.log('Inscription Google backend:', response);
+          alert('Inscription réussie avec Google !');
+          this.router.navigate(['/']);
+        });
     } catch (error: any) {
       console.error('Erreur Google:', error.message);
     }
@@ -68,9 +84,15 @@ export class RegisterComponent {
     const provider = new FacebookAuthProvider();
     try {
       const result = await signInWithPopup(this.auth, provider);
-      console.log('Utilisateur inscrit avec Facebook:', result.user);
-      alert('Inscription réussie avec Facebook !');
-      this.router.navigate(['/']);
+      const user = result.user;
+      const token = await user.getIdToken();
+
+      this.http.post('http://localhost:2200/inscription', { uid: user.uid, token })
+        .subscribe(response => {
+          console.log('Inscription Facebook backend:', response);
+          alert('Inscription réussie avec Facebook !');
+          this.router.navigate(['/']);
+        });
     } catch (error: any) {
       console.error('Erreur Facebook:', error.message);
     }

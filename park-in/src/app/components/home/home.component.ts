@@ -105,7 +105,7 @@ export class HomeComponent implements AfterViewInit{
         hauteur : parseFloat(this.searchForm.get('hauteur')?.value)
       });
       console.log(this.searchForm.value)
-      this.router.navigate(['/search'])
+      //this.router.navigate(['/search'])
     } else {
       console.log('Form is invalid!');
     }

@@ -8,6 +8,8 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { Auth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from '@angular/fire/auth';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -20,7 +22,8 @@ import { Router } from '@angular/router';
     MatIconModule,
     FormsModule,
     ReactiveFormsModule,
-    CommonModule  
+    CommonModule,
+    HttpClientModule  
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
@@ -31,7 +34,9 @@ export class LoginComponent {
 
   constructor(
     @Inject(Auth) private auth: Auth, 
-    private router: Router
+    private router: Router,
+    private http: HttpClient,
+    private authService: AuthService
   ) {
     this.connexion = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
@@ -43,7 +48,12 @@ export class LoginComponent {
     if (this.connexion.valid) {
       const { email, mdp } = this.connexion.value;
       try {
-        await signInWithEmailAndPassword(this.auth, email, mdp);
+        const userCredential = await signInWithEmailAndPassword(this.auth, email, mdp);
+        const user = userCredential.user;
+        const token = await user.getIdToken();
+  
+        this.authService.sendUserDataToBackend(user.uid, token);
+  
         alert('Connexion réussie !');
         this.router.navigate(['/']);
       } catch (error: any) {
@@ -62,9 +72,16 @@ export class LoginComponent {
     const provider = new GoogleAuthProvider();
     try {
       const result = await signInWithPopup(this.auth, provider);
-      console.log('Utilisateur connecté:', result.user);
-      alert('Connexion réussie avec Google !');
-      this.router.navigate(['/']);
+      const user = result.user;
+      const token = await user.getIdToken();
+
+      this.http.post('http://localhost:2200/connexion', { uid: user.uid, token })
+        .subscribe(response => {
+          console.log('Connexion Google backend:', response);
+          alert('Connexion réussie avec Google !');
+          this.router.navigate(['/']);
+        });
+
     } catch (error) {
       console.error('Erreur Google:', error);
     }
@@ -74,9 +91,16 @@ export class LoginComponent {
     const provider = new FacebookAuthProvider();
     try {
       const result = await signInWithPopup(this.auth, provider);
-      console.log('Utilisateur connecté:', result.user);
-      alert('Connexion réussie avec Facebook !');
-      this.router.navigate(['/']);
+      const user = result.user;
+      const token = await user.getIdToken();
+
+      this.http.post('http://localhost:2200/connexion', { uid: user.uid, token })
+        .subscribe(response => {
+          console.log('Connexion Facebook backend:', response);
+          alert('Connexion réussie avec Facebook !');
+          this.router.navigate(['/']);
+        });
+
     } catch (error) {
       console.error('Erreur Facebook:', error);
     }
