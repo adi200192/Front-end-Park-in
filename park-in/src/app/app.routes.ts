@@ -3,7 +3,6 @@ import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { CancelComponent } from './components/cancel/cancel.component';
-import {SearchComponent} from './components/search/search.component';
 import {BookingComponent} from './components/booking/booking.component';
 import { SearchComponent } from './components/search/search.component';
 
