@@ -39,6 +39,7 @@ import {DataService} from '../../services/data.service';
 export class HomeComponent implements AfterViewInit{
   searchForm: FormGroup;
   formSubmitted: boolean = false;
+  minDate : Date = new Date();
 
   @ViewChild('autoCompleteInput') autoCompleteInput!:ElementRef
 
@@ -51,7 +52,7 @@ export class HomeComponent implements AfterViewInit{
   ]
 
   typeParkings = [
-    {label : 'Enclos en surface', value : 'ENCLOS_EN_SURFACE'},
+    {label : 'Enclos en surface', value : 'enclos_en_surface'},
     {label : 'Ouvrage', value : 'ouvrage'}
   ]
   constructor(private apiService : ApiService, private router : Router, private parkingService : ParkingService, private dataService: DataService) {
@@ -63,7 +64,7 @@ export class HomeComponent implements AfterViewInit{
       dateFin: new FormControl(null, ), // Validators.required
       pmr: new FormControl(false),
       type : new FormControl('STANDARD'),
-      typeOuvrage : new FormControl('ENCLOS_EN_SURFACE'),
+      typeOuvrage : new FormControl('ouvrage'),
       hauteur : new FormControl(1.90)
     });
 
@@ -71,7 +72,7 @@ export class HomeComponent implements AfterViewInit{
  autocomplete : google.maps.places.Autocomplete | undefined
   ngAfterViewInit() {
     this.autocomplete = new google.maps.places.Autocomplete(this.autoCompleteInput.nativeElement, { componentRestrictions: { country: 'fr' }});
-    // this.autoCompleteInput.nativeElement.setAttribute('placeholder', 'Saisissez votre adresse');
+    this.autoCompleteInput.nativeElement.setAttribute('placeholder', 'Saisissez votre adresse');
     this.autocomplete.addListener('place_changed', ()=> {
       const place = this.autocomplete?.getPlace();
       if (place) {
@@ -89,16 +90,13 @@ export class HomeComponent implements AfterViewInit{
           latitude: lat,
           longitude: lng
         });
-        // this.searchForm.removeControl('location');
         console.log(this.searchForm.value)
-
       },
       (error) => {
         console.error('Error calling Geocoding API:', error);
       }
     );
   }
-
   async onSearch() {
     if (this.searchForm.valid) {
       this.formSubmitted = true;

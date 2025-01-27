@@ -1,17 +1,17 @@
 <h1>Liste de parking</h1>
 <div class="parking-list">
   <div *ngFor="let parking of parkings" class="parking-card">
-    <img src="assets/park1.jpg" alt="Parking image" class="parking-image">
+    <img [src]="parking.imageUrl" alt="Parking image" class="parking-image">
 
     <div class="parking-info">
-      <h2>{{ parking.name }} <span class="parking-type">({{ parking.typeOuvrage }})</span></h2>
+      <h2>{{ parking.name }} <span class="parking-type">({{ parking.typeOuvrage.replaceAll('_',' ')}})</span></h2>
       <p class="address">{{ parking.address }}</p>
       <div class="distance">
-        Distance {{ parking.distance }}
+        Distance : {{ parking.distance }}m
       </div>
 
       <div class="parking-features">
-        <div *ngIf="parking.nbPmr" class="pmr">
+        <div *ngIf="parking.nbPMR>0" class="pmr">
           <img src="../../../assets/icons/pmr.jpg" class="icon" alt="Handicap accessible">
         </div>
         <div class="height">

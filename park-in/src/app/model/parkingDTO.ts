@@ -8,7 +8,8 @@ export interface ParkingDTO {
   distance : number;
   typeOuvrage: string;
   hauteurMax : number;
-  nbPmr : number;
+  nbPMR : number;
   tarif1h : number;
   url : string;
+  imageUrl : string;
 }
