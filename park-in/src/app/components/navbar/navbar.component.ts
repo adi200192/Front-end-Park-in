@@ -2,29 +2,47 @@ import { Component } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
+import { Auth, signOut, onAuthStateChanged, User } from '@angular/fire/auth';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [MatToolbarModule, MatButtonModule],
+  imports: [MatToolbarModule, MatButtonModule, CommonModule],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
+  user: User | null = null;
 
-  constructor(private router: Router) {}
-
-  Mesresa(){
-    this.router.navigate(['/cancel'])
+  constructor(private router: Router, private auth: Auth) {
+    onAuthStateChanged(this.auth, (user) => {
+      this.user = user;
+    });
   }
 
-  Seconnecter(){
-    this.router.navigate(['/login'])
+  Mesresa() {
+    this.router.navigate(['/cancel']);
   }
-  Sinscrire(){
-    this.router.navigate(["/register"])
+
+  Seconnecter() {
+    this.router.navigate(['/login']);
   }
-  Accueil(){
-    this.router.navigate(["/"])
+
+  Sinscrire() {
+    this.router.navigate(['/register']);
+  }
+
+  Accueil() {
+    this.router.navigate(['/']);
+  }
+
+  async SeDeconnecter() {
+    try {
+      await signOut(this.auth);
+      this.router.navigate(['/login']);
+    } catch (error) {
+      console.error('Erreur de déconnexion', error);
+    }
   }
 }

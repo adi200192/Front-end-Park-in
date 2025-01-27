@@ -52,7 +52,9 @@ export class HomeComponent implements AfterViewInit{
   ]
 
   typeParkings = [
+
     {label : 'Enclos en surface', value : 'enclos_en_surface'},
+
     {label : 'Ouvrage', value : 'ouvrage'}
   ]
   constructor(private apiService : ApiService, private router : Router, private parkingService : ParkingService, private dataService: DataService) {
@@ -126,6 +128,9 @@ export class HomeComponent implements AfterViewInit{
           console.error('Error fetching parking data', err);
         }
       });
+      console.log(this.searchForm.value)
+      //this.router.navigate(['/search'])
+
     } else {
       console.log('Form is invalid!');
     }

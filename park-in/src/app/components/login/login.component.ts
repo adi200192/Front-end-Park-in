@@ -5,9 +5,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Auth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from '@angular/fire/auth';
-import { CommonModule } from '@angular/common'; // Ajout de CommonModule
+import { Auth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from '@angular/fire/auth';
+import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -20,46 +22,66 @@ import { Router } from '@angular/router';
     MatIconModule,
     FormsModule,
     ReactiveFormsModule,
-    CommonModule  // Ajout ici pour permettre l'utilisation de ngStyle
-
+    CommonModule,
+    HttpClientModule  
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  email: string = '';
-  password: string = '';
+  connexion: FormGroup;
   backgroundImage: string = 'assets/park.jpg'; 
-  connexion : FormGroup;
-
-
 
   constructor(
     @Inject(Auth) private auth: Auth, 
-    private router: Router
+    private router: Router,
+    private http: HttpClient,
+    private authService: AuthService
   ) {
-this.connexion = new FormGroup({
-  email:new FormControl('', Validators.required),
-  mdp:new FormControl('', Validators.required)
-})
+    this.connexion = new FormGroup({
+      email: new FormControl('', [Validators.required, Validators.email]),
+      mdp: new FormControl('', [Validators.required, Validators.minLength(6)])
+    });
   }
 
-  Seconnecter(){
-    if(this.connexion.valid)
-    {
-      this.router.navigate(['/'])
+  async Seconnecter() {
+    if (this.connexion.valid) {
+      const { email, mdp } = this.connexion.value;
+      try {
+        const userCredential = await signInWithEmailAndPassword(this.auth, email, mdp);
+        const user = userCredential.user;
+        const token = await user.getIdToken();
+  
+        this.authService.sendUserDataToBackend(user.uid, token);
+  
+        alert('Connexion réussie !');
+        this.router.navigate(['/']);
+      } catch (error: any) {
+        alert('Erreur lors de la connexion: ' + error.message);
+      }
+    } else {
+      alert('Veuillez remplir tous les champs correctement.');
     }
   }
-  Sinscrire(){
-    this.router.navigate(["/register"])
+
+  Sinscrire() {
+    this.router.navigate(["/register"]);
   }
 
   async signInWithGoogle() {
     const provider = new GoogleAuthProvider();
     try {
       const result = await signInWithPopup(this.auth, provider);
-      console.log('Utilisateur connecté:', result.user);
-      alert('Connexion réussie avec Google !');
+      const user = result.user;
+      const token = await user.getIdToken();
+
+      this.http.post('http://localhost:2200/connexion', { uid: user.uid, token })
+        .subscribe(response => {
+          console.log('Connexion Google backend:', response);
+          alert('Connexion réussie avec Google !');
+          this.router.navigate(['/']);
+        });
+
     } catch (error) {
       console.error('Erreur Google:', error);
     }
@@ -69,15 +91,18 @@ this.connexion = new FormGroup({
     const provider = new FacebookAuthProvider();
     try {
       const result = await signInWithPopup(this.auth, provider);
-      console.log('Utilisateur connecté:', result.user);
-      alert('Connexion réussie avec Facebook !');
+      const user = result.user;
+      const token = await user.getIdToken();
+
+      this.http.post('http://localhost:2200/connexion', { uid: user.uid, token })
+        .subscribe(response => {
+          console.log('Connexion Facebook backend:', response);
+          alert('Connexion réussie avec Facebook !');
+          this.router.navigate(['/']);
+        });
+
     } catch (error) {
       console.error('Erreur Facebook:', error);
     }
-  }
-
-  onSubmit() {
-    console.log('Email:', this.email);
-    console.log('Password:', this.password);
   }
 }

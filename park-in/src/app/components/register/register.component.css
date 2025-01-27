@@ -1,4 +1,4 @@
-/* Ajout du fond d'écran pour la page d'inscription */
+/* Ajouter un background sur toute la page sauf le footer et la navbar */
 .register-page {
     background-size: cover;
     background-position: center;
@@ -9,34 +9,6 @@
     align-items: center;
     justify-content: center;
 }
-
-/* Bouton S'inscrire en vert */
-.green-button {
-    background-color: #3e9247 !important;
-    color: white !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-transform: uppercase;
-    font-weight: bold;
-    border-radius: 5px;
-    padding: 15px;
-}
-
-.green-button:hover {
-    background-color: #3e9247 !important;
-}
-
-
-/* Forcer les champs auto-remplis à apparaître correctement */
-input:-webkit-autofill,
-input:-webkit-autofill:hover, 
-input:-webkit-autofill:focus, 
-input:-webkit-autofill:active {
-    transition: background-color 5000s ease-in-out 0s;
-    -webkit-text-fill-color: #000 !important;
-}
-
 
 /* Conteneur du formulaire */
 .register-container {
@@ -58,4 +30,49 @@ input:-webkit-autofill:active {
 .text-center {
     text-align: center;
     margin-top: 15px;
+}
+
+/* Style des icônes sociales */
+.social-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+}
+
+/* Contenu du bouton */
+.button-content {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+/* Bouton d'inscription standard */
+.black-button {
+    background-color: #3e9247 !important;
+    color: white !important;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    text-transform: uppercase;
+}
+
+/* Bouton Google rouge */
+.google-button {
+    background-color: #DB4437 !important;
+    color: white !important;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    text-transform: uppercase;
+}
+
+/* Bouton Facebook bleu */
+.facebook-button {
+    background-color: #2B77C4 !important;
+    color: white !important;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    text-transform: uppercase;
 }
