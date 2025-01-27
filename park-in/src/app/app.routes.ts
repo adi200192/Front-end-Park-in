@@ -10,9 +10,10 @@ export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-    {path: 'search', component: SearchComponent},
+  {path: 'search', component: SearchComponent},
   { path: 'cancel', component: CancelComponent },
   {path: 'booking', component: BookingComponent},
-  { path: '**', redirectTo: '' }  // Redirection pour les routes non définies
+  { path: '**', redirectTo: '' }
+
 
 ];
