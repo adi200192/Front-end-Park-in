@@ -49,16 +49,16 @@ export class SearchComponent implements OnInit {
     console.log(this.parkings)
 }
 
-// search(parking: ParkingDTO) {
-//   this.router.navigate(['/booking'], {
-//     queryParams: {
-//       imageUrl: parking.imageUrl,
-//       nom: parking.nom,
-//       tarif: parking.tarif,
-//       adresse: parking.adresse,
-//       url : parking.url,
-//     }
-//   });
-// }
+search(parking: ParkingDTO) {
+  this.router.navigate(['/booking'], {
+    queryParams: {
+      imageUrl: parking.imageUrl,
+      nom: parking.name,
+      tarif: parking.tarif1h,
+      adresse: parking.address,
+      url : parking.url,
+    }
+  });
+}
 
 }
