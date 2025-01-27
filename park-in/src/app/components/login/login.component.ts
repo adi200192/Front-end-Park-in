@@ -5,8 +5,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Auth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from '@angular/fire/auth';
-import { CommonModule } from '@angular/common'; // Ajout de CommonModule
+import { Auth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from '@angular/fire/auth';
+import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
 @Component({
@@ -20,38 +20,42 @@ import { Router } from '@angular/router';
     MatIconModule,
     FormsModule,
     ReactiveFormsModule,
-    CommonModule  // Ajout ici pour permettre l'utilisation de ngStyle
-
+    CommonModule  
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  email: string = '';
-  password: string = '';
+  connexion: FormGroup;
   backgroundImage: string = 'assets/park.jpg'; 
-  connexion : FormGroup;
-
-
 
   constructor(
     @Inject(Auth) private auth: Auth, 
     private router: Router
   ) {
-this.connexion = new FormGroup({
-  email:new FormControl('', Validators.required),
-  mdp:new FormControl('', Validators.required)
-})
+    this.connexion = new FormGroup({
+      email: new FormControl('', [Validators.required, Validators.email]),
+      mdp: new FormControl('', [Validators.required, Validators.minLength(6)])
+    });
   }
 
-  Seconnecter(){
-    if(this.connexion.valid)
-    {
-      this.router.navigate(['/'])
+  async Seconnecter() {
+    if (this.connexion.valid) {
+      const { email, mdp } = this.connexion.value;
+      try {
+        await signInWithEmailAndPassword(this.auth, email, mdp);
+        alert('Connexion réussie !');
+        this.router.navigate(['/']);
+      } catch (error: any) {
+        alert('Erreur lors de la connexion: ' + error.message);
+      }
+    } else {
+      alert('Veuillez remplir tous les champs correctement.');
     }
   }
-  Sinscrire(){
-    this.router.navigate(["/register"])
+
+  Sinscrire() {
+    this.router.navigate(["/register"]);
   }
 
   async signInWithGoogle() {
@@ -60,6 +64,7 @@ this.connexion = new FormGroup({
       const result = await signInWithPopup(this.auth, provider);
       console.log('Utilisateur connecté:', result.user);
       alert('Connexion réussie avec Google !');
+      this.router.navigate(['/']);
     } catch (error) {
       console.error('Erreur Google:', error);
     }
@@ -71,13 +76,9 @@ this.connexion = new FormGroup({
       const result = await signInWithPopup(this.auth, provider);
       console.log('Utilisateur connecté:', result.user);
       alert('Connexion réussie avec Facebook !');
+      this.router.navigate(['/']);
     } catch (error) {
       console.error('Erreur Facebook:', error);
     }
-  }
-
-  onSubmit() {
-    console.log('Email:', this.email);
-    console.log('Password:', this.password);
   }
 }

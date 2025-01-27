@@ -1,13 +1,20 @@
 <mat-toolbar color="primary">
     <div class="navbar-left">
-        <img src="assets/logo.png" alt="Park-In Logo" class="logo">
-        <span class="brand-name">Park-In</span>
+      <img src="assets/logo.png" alt="Park-In Logo" class="logo">
+      <span class="brand-name">Park-In</span>
     </div>
     <span class="spacer"></span>
     <div class="navbar-right">
-        <a mat-button class="navbar-button" (click)="Accueil()">Accueil</a>
-        <a mat-button class="navbar-button" (click)="Mesresa()">Mes réservations</a>
+      <a mat-button class="navbar-button" (click)="Accueil()">Accueil</a>
+      <a mat-button class="navbar-button" (click)="Mesresa()">Mes réservations</a>
+  
+      <ng-container *ngIf="user; else notLoggedIn">
+        <a mat-button class="navbar-button" (click)="SeDeconnecter()">Se déconnecter</a>
+      </ng-container>
+      <ng-template #notLoggedIn>
         <a mat-button class="navbar-button" (click)="Seconnecter()">Se connecter</a>
         <a mat-button class="navbar-button" (click)="Sinscrire()">S'inscrire</a>
+      </ng-template>
     </div>
-</mat-toolbar>
+  </mat-toolbar>
+  
