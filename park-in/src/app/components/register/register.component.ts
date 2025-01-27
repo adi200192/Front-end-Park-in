@@ -67,7 +67,7 @@ export class RegisterComponent {
       const result = await signInWithPopup(this.auth, provider);
       const user = result.user;
 
-      this.http.post('http://localhost:2200/inscription', { uid: user.uid })
+      this.http.post('http://localhost:2200/conducteur/inscription', { uid: user.uid })
         .subscribe(response => {
           console.log('Inscription Google backend:', response);
           alert('Inscription réussie avec Google !');

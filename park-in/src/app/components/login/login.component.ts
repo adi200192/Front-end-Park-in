@@ -78,7 +78,7 @@ export class LoginComponent {
       const result = await signInWithPopup(this.auth, provider);
       const user = result.user;
 
-      this.http.post('http://localhost:2200/conducteur/connexion', { uid: user.uid })
+      this.http.post('http://localhost:2200/conducteur/inscription', { uid: user.uid })
         .subscribe(response => {
           console.log('Connexion Google backend:', response);
           alert('Connexion réussie avec Google !');
