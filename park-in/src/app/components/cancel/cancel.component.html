@@ -1,29 +1,36 @@
-<h1>Mes reservations</h1>
+<h1>Mes Réservations</h1>
 <div class="parking-list">
   <div *ngFor="let parking of parkings" class="parking-card">
     <img [src]="parking.imageUrl" alt="Parking image" class="parking-image">
 
     <div class="parking-info">
-      <h2>{{ parking.nom }} <span class="parking-type">({{ parking.type }})</span></h2>
+      <h2>{{ parking.nom }} <span class="parking-type">({{ parking.type.replaceAll('_', ' ') }})</span></h2>
       <p class="address">{{ parking.adresse }}</p>
-      <div class="distance">
-        Distance {{ parking.distance }}
-        <p class="reservation-time">
-            Date et heure de debut de reservation : {{ parking.reservationDate}} 
-          </p>
+
+      <p class="reservation-time">
+        <strong>Réservation du : </strong> {{ parking.dateDebut | date:'dd/MM/yyyy HH:mm' }} au {{ parking.dateFin | date:'dd/MM/yyyy HH:mm' }}<br>
+      </p>
+      <div class="parking-features">
+        <div *ngIf="parking.pmr" class="pmr">
+          <img src="../../../assets/icons/pmr.jpg" class="icon" alt="Handicap accessible">
+        </div>
+        <div class="height">
+          <img src="../../../assets/icons/height.png" class="icon" alt="Height restriction">
+          <span>{{ parking.hauteur }} m</span>
+        </div>
       </div>
     </div>
 
     <div class="parking-actions">
-      <button 
+      <button
         class="btn btn-primary"
-        [ngClass]="{'btn-disabled': isCancellationDisabled(parking.reservationDate)}"
-        [disabled]="isCancellationDisabled(parking.reservationDate)">
+        [ngClass]="{'btn-disabled': isCancellationDisabled(parking.dateDebut)}"
+        [disabled]="isCancellationDisabled(parking.dateDebut)">
         Annuler
       </button>
-      <p *ngIf="isCancellationDisabled(parking.reservationDate)" class="error-text">
-        La réservation ne peut pas être annulée si elle est inferieur a 48h.
-      </p>    
+      <p *ngIf="isCancellationDisabled(parking.dateDebut)" class="error-text">
+        La réservation ne peut pas être annulée car elle est inférieure à 48h.
+      </p>
     </div>
   </div>
 </div>
