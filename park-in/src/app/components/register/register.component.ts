@@ -51,7 +51,15 @@ export class RegisterComponent {
         const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
         const user = userCredential.user;
   
-        this.authService.sendUserDataToBackend(user.uid);
+        this.authService.sendUserDataToBackend(user.uid).subscribe({
+          next: (response) => {
+            alert('insctiption réussie !');
+            this.router.navigate(['/']);
+          },
+          error: (error) => {
+            alert('Erreur lors de l\'envoi des données au backend: ' + error.message);
+          }
+        });
   
         alert('Inscription réussie ! Vous pouvez maintenant vous connecter.');
         this.router.navigate(['/login']);
