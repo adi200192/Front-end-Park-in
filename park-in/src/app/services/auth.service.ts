@@ -49,8 +49,8 @@ export class AuthService {
     this.token = null;
   }
 
-  sendUserDataToBackend(uid: string): Observable<any> {
-    return this.http.post('http://localhost:2200/conducteur/inscription', { uid });
+  sendUserDataToBackend(id: string): Observable<any> {
+    return this.http.post('http://localhost:2200/conducteur/inscription', { id });
   }
   
   
