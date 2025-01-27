@@ -48,7 +48,7 @@ export class HomeComponent implements AfterViewInit{
   ]
 
   typeParkings = [
-    {label : 'Enclos en surface', value : 'ENCLOS_EN_SURFACE'},
+    {label : 'Enclos en surface', value : 'enclos-en-surface'},
     {label : 'Ouvrage', value : 'ouvrage'}
   ]
   constructor(private apiService : ApiService, private router : Router) {
