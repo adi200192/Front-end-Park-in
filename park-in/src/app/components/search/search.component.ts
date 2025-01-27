@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {Router} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import {ActivatedRoute, Router} from '@angular/router';
+import { ParkingDTO } from '../../model/parkingDTO';
+
 @Component({
   selector: 'app-search',
   standalone: true,
@@ -8,7 +10,8 @@ import {Router} from '@angular/router';
   templateUrl: './search.component.html',
   styleUrl: './search.component.css'
 })
-export class SearchComponent {
+export class SearchComponent implements OnInit {
+  // parkings: ParkingDTO[] = [];
   parkings = [
     {
       imageUrl: 'assets/park1.jpg',
@@ -64,22 +67,52 @@ export class SearchComponent {
       pmr: true,
       hauteur: 1.80
     }
-  ]
- constructor(private router : Router) {
- }
+  ];
+  //
+  constructor(private router: Router,private route : ActivatedRoute) {}
+  //
+  ngOnInit() {
+  //   // Retrieve navigation state
+  //   const navigation = this.router.getCurrentNavigation();
+  //   console.log(navigation?.extras.state);
+  //   if (navigation?.extras?.state && navigation.extras.state['results']) {
+  //     const rawResults = navigation.extras.state['results'];
+  //
+  //     // Filter and extract only the required properties for ParkingDTO
+  //     this.parkings = rawResults.map((result: any) => ({
+  //       id: result.id,
+  //       name: result.name,
+  //       address: result.address,
+  //       lat: result.lat,
+  //       lng: result.lng,
+  //       nbPlaces: result.nbPlaces,
+  //       distance: result.distance,
+  //       typeOuvrage: result.typeOuvrage,
+  //       hauteurMax: result.hauteurMax,
+  //       nbPmr: result.nbPmr,
+  //       tarif1h: result.tarif1h,
+  //       url: result.url,
+  //       imageUrl : 'assets/park1.jpg'
+  //     }));
+  //
+  //     console.log('Filtered parking data:', this.parkings);
+  //   } else {
+  //     console.warn('No parking data found, using mock data');
+  //   }
 
-
-  search(parking: any) {
-    this.router.navigate(['/booking'], {
-      queryParams: {
-        imageUrl: parking.imageUrl,
-        nom: parking.nom,
-        tarif: parking.tarif,
-        adresse: parking.adresse,
-        url : parking.url,
-      }
-    });
   }
 
 
+
+  search(parking: ParkingDTO) {
+    this.router.navigate(['/booking'], {
+      queryParams: {
+        id: parking.id,
+        name: parking.name,
+        tarif: parking.tarif1h,
+        address: parking.address,
+        url: parking.url,
+      }
+    });
+  }
 }

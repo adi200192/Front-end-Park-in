@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 })
 export class ParkingService {
 
-  private baseUrl = 'http://localhost:2200/parking';  // Replace with your actual backend URL
+  private baseUrl = 'http://localhost:2200/search';  // Replace with your actual backend URL
 
   constructor(private http: HttpClient) { }
 

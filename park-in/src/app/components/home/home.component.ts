@@ -51,7 +51,7 @@ export class HomeComponent implements AfterViewInit{
 
   typeParkings = [
     {label : 'Enclos en surface', value : 'ENCLOS_EN_SURFACE'},
-    {label : 'Ouvrage', value : 'TYPE_OUVRAGE'}
+    {label : 'Ouvrage', value : 'ouvrage'}
   ]
   constructor(private apiService : ApiService, private parkingService : ParkingService, private router : Router) {
     this.searchForm = new FormGroup({
@@ -113,7 +113,7 @@ export class HomeComponent implements AfterViewInit{
     async onSearch() {
       if (this.searchForm.valid) {
         this.formSubmitted = true;
-  
+
         // Convert form values into ParkingRequest format
         const parkingRequest: ParkingRequest = {
           latitude: this.searchForm.get('latitude')?.value,
@@ -125,14 +125,14 @@ export class HomeComponent implements AfterViewInit{
           hauteur: this.searchForm.get('hauteur')?.value,
           typeOuvrage: this.searchForm.get('typeOuvrage')?.value
         };
-  
+
         console.log('Search ParkingRequest:', parkingRequest);
-  
+
         // Call the API service to search parking
         this.parkingService.getAvailableParking(parkingRequest).subscribe({
           next: (result) => {
             console.log('Search results:', result);
-            //this.router.navigate(['/search-results'], { state: { results: result } });
+            this.router.navigateByUrl('/search', { state: { results: result } });
           },
           error: (err) => {
             console.error('Error fetching parking data', err);
