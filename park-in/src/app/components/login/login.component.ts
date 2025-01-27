@@ -1,41 +1,37 @@
 import { Component, Inject } from '@angular/core';
+import { FormGroup, FormControl, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Auth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from '@angular/fire/auth';
+import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Auth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from '@angular/fire/auth';
-import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule,
+    CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    CommonModule,
-    HttpClientModule  
+    MatCardModule,        // Assurez-vous que ce module est bien ajouté ici
+    MatFormFieldModule, 
+    MatInputModule, 
+    MatButtonModule, 
+    MatIconModule
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
   connexion: FormGroup;
-  backgroundImage: string = 'assets/park.jpg'; 
 
   constructor(
     @Inject(Auth) private auth: Auth, 
     private router: Router,
-    private http: HttpClient,
     private authService: AuthService
   ) {
     this.connexion = new FormGroup({
@@ -50,12 +46,16 @@ export class LoginComponent {
       try {
         const userCredential = await signInWithEmailAndPassword(this.auth, email, mdp);
         const user = userCredential.user;
-        const token = await user.getIdToken();
-  
-        this.authService.sendUserDataToBackend(user.uid, token);
-  
-        alert('Connexion réussie !');
-        this.router.navigate(['/']);
+        this.authService.sendUserDataToBackend(user.uid).subscribe({
+          next: (response) => {
+            alert('Connexion réussie !');
+            this.router.navigate(['/']);
+          },
+          error: (error) => {
+            alert('Erreur lors de l\'envoi des données au backend: ' + error.message);
+          }
+        });
+
       } catch (error: any) {
         alert('Erreur lors de la connexion: ' + error.message);
       }
@@ -73,17 +73,13 @@ export class LoginComponent {
     try {
       const result = await signInWithPopup(this.auth, provider);
       const user = result.user;
-      const token = await user.getIdToken();
-
-      this.http.post('http://localhost:2200/connexion', { uid: user.uid, token })
-        .subscribe(response => {
-          console.log('Connexion Google backend:', response);
-          alert('Connexion réussie avec Google !');
-          this.router.navigate(['/']);
-        });
-
-    } catch (error) {
-      console.error('Erreur Google:', error);
+      if (user) {
+        this.authService.sendUserDataToBackend(user.uid);
+        alert('Connexion réussie avec Google !');
+        this.router.navigate(['/']);
+      }
+    } catch (error: any) {
+      console.error('Erreur Google:', error.message);
     }
   }
 
@@ -92,17 +88,13 @@ export class LoginComponent {
     try {
       const result = await signInWithPopup(this.auth, provider);
       const user = result.user;
-      const token = await user.getIdToken();
-
-      this.http.post('http://localhost:2200/connexion', { uid: user.uid, token })
-        .subscribe(response => {
-          console.log('Connexion Facebook backend:', response);
-          alert('Connexion réussie avec Facebook !');
-          this.router.navigate(['/']);
-        });
-
-    } catch (error) {
-      console.error('Erreur Facebook:', error);
+      if (user) {
+        this.authService.sendUserDataToBackend(user.uid);
+        alert('Connexion réussie avec Facebook !');
+        this.router.navigate(['/']);
+      }
+    } catch (error: any) {
+      console.error('Erreur Facebook:', error.message);
     }
   }
 }

@@ -8,7 +8,6 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class AuthService {
   private currentUser = new BehaviorSubject<User | null>(null);
-  private token: string | null = null;
 
   constructor(
     @Inject(Auth) private auth: Auth,
@@ -19,14 +18,8 @@ export class AuthService {
 
   private initializeAuthState() {
     const authInstance = getAuth();
-    onAuthStateChanged(authInstance, async (user) => {
-      if (user) {
-        this.currentUser.next(user);
-        this.token = await user.getIdToken();
-      } else {
-        this.currentUser.next(null);
-        this.token = null;
-      }
+    onAuthStateChanged(authInstance, (user) => {
+      this.currentUser.next(user ? user : null);
     });
   }
 
@@ -34,36 +27,12 @@ export class AuthService {
     return this.currentUser.asObservable();
   }
 
-  async getToken(): Promise<string | null> {
-    const user = this.auth.currentUser;
-    if (user) {
-      this.token = await user.getIdToken();
-      return this.token;
-    }
-    return null;
-  }
-
   logout() {
     this.auth.signOut();
     this.currentUser.next(null);
-    this.token = null;
   }
 
-  sendUserDataToBackend(uid: string, token: string) {
-    const userData = {
-      uid: uid,
-      token: token
-    };
-  
-    this.http.post('http://localhost:2200/inscription', userData)
-      .subscribe({
-        next: (response) => {
-          console.log('UID et token envoyés au backend avec succès:', response);
-        },
-        error: (error) => {
-          console.error("Erreur lors de l'envoi des données au backend:", error);
-        }
-      });
+  sendUserDataToBackend(uid: string): Observable<any> {
+    return this.http.post('http://localhost:2200/inscription', { uid });
   }
-  
 }
