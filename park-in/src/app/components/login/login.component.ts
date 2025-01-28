@@ -105,9 +105,4 @@ export class LoginComponent {
       console.error('Erreur Facebook:', error);
     }
   }
-
-  onSubmit() {
-    console.log('Email:', this.email);
-    console.log('Password:', this.password);
-  }
 }
