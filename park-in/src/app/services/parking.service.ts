@@ -13,7 +13,6 @@ export class ParkingService {
 
   constructor(private http: HttpClient) { }
 
-  // API call to fetch available parkings based on user search
   getAvailableParking(parkingRequest: ParkingRequest): Observable<ParkingDTO[]> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.post<ParkingDTO[]>(

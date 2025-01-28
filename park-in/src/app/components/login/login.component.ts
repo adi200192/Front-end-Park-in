@@ -23,17 +23,17 @@ import { AuthService } from '../../services/auth.service';
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
-    HttpClientModule  
+    HttpClientModule
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
   connexion: FormGroup;
-  backgroundImage: string = 'assets/park.jpg'; 
+  backgroundImage: string = 'assets/park.jpg';
 
   constructor(
-    @Inject(Auth) private auth: Auth, 
+    @Inject(Auth) private auth: Auth,
     private router: Router,
     private http: HttpClient,
     private authService: AuthService
@@ -51,9 +51,9 @@ export class LoginComponent {
         const userCredential = await signInWithEmailAndPassword(this.auth, email, mdp);
         const user = userCredential.user;
         const token = await user.getIdToken();
-  
+
         this.authService.sendUserDataToBackend(user.uid, token);
-  
+
         alert('Connexion réussie !');
         this.router.navigate(['/']);
       } catch (error: any) {
@@ -104,5 +104,10 @@ export class LoginComponent {
     } catch (error) {
       console.error('Erreur Facebook:', error);
     }
+  }
+
+  onSubmit() {
+    console.log('Email:', this.email);
+    console.log('Password:', this.password);
   }
 }
