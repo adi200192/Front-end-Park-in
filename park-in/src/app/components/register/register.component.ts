@@ -50,9 +50,16 @@ export class RegisterComponent {
       try {
         const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
         const user = userCredential.user;
-        const token = await user.getIdToken();
   
-        this.authService.sendUserDataToBackend(user.uid, token);
+        this.authService.sendUserDataToBackend(user.uid).subscribe({
+          next: (response) => {
+            alert('insctiption réussie !');
+            this.router.navigate(['/']);
+          },
+          error: (error) => {
+            alert('Erreur lors de l\'envoi des données au backend: ' + error.message);
+          }
+        });
   
         alert('Inscription réussie ! Vous pouvez maintenant vous connecter.');
         this.router.navigate(['/login']);
@@ -67,9 +74,8 @@ export class RegisterComponent {
     try {
       const result = await signInWithPopup(this.auth, provider);
       const user = result.user;
-      const token = await user.getIdToken();
 
-      this.http.post('http://localhost:2200/inscription', { uid: user.uid, token })
+      this.http.post('http://localhost:2200/conducteur/inscription', { uid: user.uid })
         .subscribe(response => {
           console.log('Inscription Google backend:', response);
           alert('Inscription réussie avec Google !');
@@ -85,9 +91,8 @@ export class RegisterComponent {
     try {
       const result = await signInWithPopup(this.auth, provider);
       const user = result.user;
-      const token = await user.getIdToken();
 
-      this.http.post('http://localhost:2200/inscription', { uid: user.uid, token })
+      this.http.post('http://localhost:2200/inscription', { uid: user.uid })
         .subscribe(response => {
           console.log('Inscription Facebook backend:', response);
           alert('Inscription réussie avec Facebook !');
