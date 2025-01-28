@@ -51,7 +51,7 @@ export class LoginComponent {
         const userCredential = await signInWithEmailAndPassword(this.auth, email, mdp);
         const user = userCredential.user;
 
-        this.authService.sendUserDataToBackend(user.uid).subscribe({
+        this.authService.sendUserDataToBackendConnexion(user.uid).subscribe({
           next: (response) => {
             alert('Connexion réussie !');
             this.router.navigate(['/']);
@@ -106,10 +106,5 @@ export class LoginComponent {
     } catch (error) {
       console.error('Erreur Facebook:', error);
     }
-  }
-
-  onSubmit() {
-    console.log('Email:', this.email);
-    console.log('Password:', this.password);
   }
 }
