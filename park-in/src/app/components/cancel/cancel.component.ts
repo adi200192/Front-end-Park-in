@@ -13,9 +13,8 @@ import {Observable} from 'rxjs';
 })
 export class CancelComponent implements OnInit{
   reservations : ReservationDTO[] = [];
-  userId : string = "rch"
   reservationRequest = {
-    id : "rch",
+    id :  sessionStorage.getItem('userId') || '',
     abonne : false
   }
   constructor(private reservationService : ReservationService) {}
@@ -27,6 +26,7 @@ export class CancelComponent implements OnInit{
           imageUrl:  this.getRandomImage()
         }));
         console.log('Réservations récupérées:', this.reservations);
+        console.log(this.reservationRequest)
       },
       error: (err) => {
         console.error('Erreur lors de la récupération des réservations:', err);
@@ -34,8 +34,8 @@ export class CancelComponent implements OnInit{
     });
   }
 
-  cancelReservation(reservationId : number): void {
-  this.reservationService.cancelReservation(reservationId).subscribe({
+  cancelReservation(reservationId : number, reservationState : string): void {
+  this.reservationService.cancelReservation(reservationId,reservationState).subscribe({
     next : (updatedReservation) => {
       console.log('Réservation annulée:', updatedReservation);
     }

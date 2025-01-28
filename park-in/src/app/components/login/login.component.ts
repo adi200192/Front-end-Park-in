@@ -51,6 +51,8 @@ export class LoginComponent {
         const userCredential = await signInWithEmailAndPassword(this.auth, email, mdp);
         const user = userCredential.user;
 
+        sessionStorage.setItem('userId', user.uid);
+
         this.authService.sendUserDataToBackend(user.uid).subscribe({
           next: (response) => {
             alert('Connexion réussie !');
@@ -78,6 +80,8 @@ export class LoginComponent {
       const result = await signInWithPopup(this.auth, provider);
       const user = result.user;
 
+      sessionStorage.setItem('userId', user.uid);
+
       this.http.post('http://localhost:2200/conducteur/inscription', { uid: user.uid })
         .subscribe(response => {
           console.log('Connexion Google backend:', response);
@@ -95,6 +99,8 @@ export class LoginComponent {
     try {
       const result = await signInWithPopup(this.auth, provider);
       const user = result.user;
+
+      sessionStorage.setItem('userId', user.uid);
 
       this.http.post('http://localhost:2200/connexion', { uid: user.uid })
         .subscribe(response => {

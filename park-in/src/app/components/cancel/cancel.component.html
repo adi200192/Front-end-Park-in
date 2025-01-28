@@ -26,7 +26,7 @@
         class="btn btn-primary"
         [ngClass]="{'btn-disabled': isCancellationDisabled(reservation.dateDebut)}"
         [disabled]="isCancellationDisabled(reservation.dateDebut)"
-         (click)="cancelReservation(reservation.id)">
+         (click)="cancelReservation(reservation.id,'CANCELLED')">
         Annuler
       </button>
       <p *ngIf="isCancellationDisabled(reservation.dateDebut)"class="error-text">
