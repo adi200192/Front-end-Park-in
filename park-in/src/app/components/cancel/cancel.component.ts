@@ -35,16 +35,17 @@ export class CancelComponent implements OnInit{
   }
 
   cancelReservation(reservationId : number, reservationState : string): void {
-    console.log(reservationId,reservationState);
+    this.reservations = this.reservations.map((reservation) =>
+      reservation.id === reservationId
+        ? { ...reservation, etat: reservationState } // Modify the reservation locally
+        : reservation
+    );
   this.reservationService.cancelReservation(reservationId,reservationState).subscribe({
     next : (updatedReservation) => {
       console.log('Réservation annulée:', updatedReservation);
     }
   })
 }
-
-
-
   // Function to calculate the remaining time in hours
   getRemainingTime(reservationDate: Date): number {
     const now = new Date();

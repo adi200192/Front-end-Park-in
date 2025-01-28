@@ -24,13 +24,17 @@
     <div class="parking-actions">
       <button
         class="btn btn-primary"
+        *ngIf="reservation.etat != 'CANCELLED'"
         [ngClass]="{'btn-disabled': isCancellationDisabled(reservation.dateDebut)}"
         [disabled]="isCancellationDisabled(reservation.dateDebut)"
          (click)="cancelReservation(reservation.id,'CANCELLED')">
         Annuler
       </button>
-      <p *ngIf="isCancellationDisabled(reservation.dateDebut)"class="error-text">
+      <p *ngIf="isCancellationDisabled(reservation.dateDebut) "class="error-text">
         La réservation ne peut pas être annulée car elle est inférieure à 48h.
+      </p>
+      <p *ngIf="reservation.etat === 'CANCELLED'" class="success-text">
+        Réservation annulée
       </p>
     </div>
   </div>
