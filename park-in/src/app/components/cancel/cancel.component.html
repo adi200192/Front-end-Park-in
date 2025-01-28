@@ -1,34 +1,35 @@
 <h1>Mes Réservations</h1>
 <div class="parking-list">
-  <div *ngFor="let parking of parkings" class="parking-card">
-    <img [src]="parking.imageUrl" alt="Parking image" class="parking-image">
+  <div *ngFor="let reservation of reservations" class="parking-card">
+    <img [src]="reservation.imageUrl" alt="Parking image" class="parking-image">
 
     <div class="parking-info">
-      <h2>{{ parking.nom }} <span class="parking-type">({{ parking.type.replaceAll('_', ' ') }})</span></h2>
-      <p class="address">{{ parking.adresse }}</p>
+      <h2>{{ reservation.place.parking.name }}</h2>
+      <p class="address">{{ reservation.place.parking.address}}</p>
 
       <p class="reservation-time">
-        <strong>Réservation du : </strong> {{ parking.dateDebut | date:'dd/MM/yyyy HH:mm' }} au {{ parking.dateFin | date:'dd/MM/yyyy HH:mm' }}<br>
+        <strong>Réservation du : </strong> {{ reservation.dateDebut| date:'dd/MM/yyyy HH:mm' }} au {{ reservation.dateFin | date:'dd/MM/yyyy HH:mm' }}<br>
       </p>
       <div class="parking-features">
-        <div *ngIf="parking.pmr" class="pmr">
+        <div *ngIf="reservation.place.pmr" class="pmr">
           <img src="../../../assets/icons/pmr.jpg" class="icon" alt="Handicap accessible">
         </div>
-        <div class="height">
-          <img src="../../../assets/icons/height.png" class="icon" alt="Height restriction">
-          <span>{{ parking.hauteur }} m</span>
-        </div>
+<!--        <div class="height">-->
+<!--          <img src="../../../assets/icons/height.png" class="icon" alt="Height restriction">-->
+<!--          <span>{{ reservation.hauteur }} m</span>-->
+<!--        </div>-->
       </div>
     </div>
 
     <div class="parking-actions">
       <button
         class="btn btn-primary"
-        [ngClass]="{'btn-disabled': isCancellationDisabled(parking.dateDebut)}"
-        [disabled]="isCancellationDisabled(parking.dateDebut)">
+        [ngClass]="{'btn-disabled': isCancellationDisabled(reservation.dateDebut)}"
+        [disabled]="isCancellationDisabled(reservation.dateDebut)"
+         (click)="cancelReservation(reservation.id)">
         Annuler
       </button>
-      <p *ngIf="isCancellationDisabled(parking.dateDebut)" class="error-text">
+      <p *ngIf="isCancellationDisabled(reservation.dateDebut)"class="error-text">
         La réservation ne peut pas être annulée car elle est inférieure à 48h.
       </p>
     </div>

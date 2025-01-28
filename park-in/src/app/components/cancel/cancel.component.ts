@@ -1,5 +1,8 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
+import {ReservationService} from '../../services/reservation.service';
+import {ReservationDTO} from '../../model/reservationDTO';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-cancel',
@@ -8,31 +11,38 @@ import { CommonModule } from '@angular/common';
   templateUrl: './cancel.component.html',
   styleUrl: './cancel.component.css'
 })
-export class CancelComponent {
-  parkings = [
-    {
-      imageUrl: 'assets/park1.jpg',
-      nom: "Parking Neyrpic",
-      type: "Couvert",
-      adresse: "Neyrpic 123, Av Ismail",
-      tarif: 4.50,
-      pmr: true,
-      hauteur: 1.90,
-      dateDebut: new Date(new Date().getTime() + 3 * 24 * 60 * 60 * 1000),// 3 days later
-      dateFin : new Date(new Date().getTime())
-    },
-    {
-      imageUrl: 'assets/park2.jpg',
-      nom: "Parking Grand Place",
-      type: "Ouvert",
-      adresse: "18 GP, avenue",
-      tarif: 4.50,
-      pmr: false,
-      hauteur: 250,
-      dateDebut : new Date(new Date().getTime() + 1 * 24 * 60 * 60 * 1000), // 1 day later
-      dateFin : new Date(new Date().getTime())
+export class CancelComponent implements OnInit{
+  reservations : ReservationDTO[] = [];
+  userId : string = "rch"
+  reservationRequest = {
+    id : "rch",
+    abonne : false
+  }
+  constructor(private reservationService : ReservationService) {}
+  ngOnInit() {
+    this.reservationService.getReservations(this.reservationRequest).subscribe({
+      next: (data) => {
+        this.reservations = data.map((reservation) => ({
+          ...reservation,
+          imageUrl:  this.getRandomImage()
+        }));
+        console.log('Réservations récupérées:', this.reservations);
+      },
+      error: (err) => {
+        console.error('Erreur lors de la récupération des réservations:', err);
+      }
+    });
+  }
+
+  cancelReservation(reservationId : number): void {
+  this.reservationService.cancelReservation(reservationId).subscribe({
+    next : (updatedReservation) => {
+      console.log('Réservation annulée:', updatedReservation);
     }
-  ];
+  })
+}
+
+
 
   // Function to calculate the remaining time in hours
   getRemainingTime(reservationDate: Date): number {
@@ -45,4 +55,38 @@ export class CancelComponent {
   isCancellationDisabled(reservationDate: Date): boolean {
     return this.getRemainingTime(reservationDate) < 48;
   }
+
+  getRandomImage(): string {
+    const images = [
+      './assets/park1.jpg',
+      './assets/park2.jpg',
+      './assets/park3.png'
+    ];
+    return images[Math.floor(Math.random() * images.length)];
+  }
+
+  // parkings = [
+  //   {
+  //     imageUrl: 'assets/park1.jpg',
+  //     nom: "Parking Neyrpic",
+  //     type: "Couvert",
+  //     adresse: "Neyrpic 123, Av Ismail",
+  //     tarif: 4.50,
+  //     pmr: true,
+  //     hauteur: 1.90,
+  //     dateDebut: new Date(new Date().getTime() + 3 * 24 * 60 * 60 * 1000),// 3 days later
+  //     dateFin : new Date(new Date().getTime())
+  //   },
+  //   {
+  //     imageUrl: 'assets/park2.jpg',
+  //     nom: "Parking Grand Place",
+  //     type: "Ouvert",
+  //     adresse: "18 GP, avenue",
+  //     tarif: 4.50,
+  //     pmr: false,
+  //     hauteur: 250,
+  //     dateDebut : new Date(new Date().getTime() + 1 * 24 * 60 * 60 * 1000), // 1 day later
+  //     dateFin : new Date(new Date().getTime())
+  //   }
+  // ];
 }
