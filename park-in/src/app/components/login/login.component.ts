@@ -29,13 +29,13 @@ import { Router } from '@angular/router';
 export class LoginComponent {
   email: string = '';
   password: string = '';
-  backgroundImage: string = 'assets/park.jpg'; 
+  backgroundImage: string = 'assets/park.jpg';
   connexion : FormGroup;
 
 
 
   constructor(
-    @Inject(Auth) private auth: Auth, 
+    @Inject(Auth) private auth: Auth,
     private router: Router
   ) {
 this.connexion = new FormGroup({
