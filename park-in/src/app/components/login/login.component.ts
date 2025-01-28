@@ -23,17 +23,17 @@ import { AuthService } from '../../services/auth.service';
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
-    HttpClientModule  
+    HttpClientModule
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
   connexion: FormGroup;
-  backgroundImage: string = 'assets/park.jpg'; 
+  backgroundImage: string = 'assets/park.jpg';
 
   constructor(
-    @Inject(Auth) private auth: Auth, 
+    @Inject(Auth) private auth: Auth,
     private router: Router,
     private http: HttpClient,
     private authService: AuthService
@@ -50,6 +50,7 @@ export class LoginComponent {
       try {
         const userCredential = await signInWithEmailAndPassword(this.auth, email, mdp);
         const user = userCredential.user;
+
         this.authService.sendUserDataToBackend(user.uid).subscribe({
           next: (response) => {
             alert('Connexion réussie !');
@@ -59,7 +60,6 @@ export class LoginComponent {
             alert('Erreur lors de l\'envoi des données au backend: ' + error.message);
           }
         });
-
       } catch (error: any) {
         alert('Erreur lors de la connexion: ' + error.message);
       }
@@ -106,5 +106,10 @@ export class LoginComponent {
     } catch (error) {
       console.error('Erreur Facebook:', error);
     }
+  }
+
+  onSubmit() {
+    console.log('Email:', this.email);
+    console.log('Password:', this.password);
   }
 }
