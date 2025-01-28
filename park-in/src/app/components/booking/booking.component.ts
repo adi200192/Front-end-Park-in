@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-booking',
@@ -38,7 +39,7 @@ export class BookingComponent implements OnInit {
 
   availability: string = 'Disponible';
 
-  constructor(private route: ActivatedRoute, private dialog: MatDialog) {}
+  constructor(private route: ActivatedRoute, private dialog: MatDialog, private authService: AuthService) {}
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -72,13 +73,33 @@ export class BookingComponent implements OnInit {
   getRandomItem(array: string[]): string {
     return array[Math.floor(Math.random() * array.length)];
   }
-  
 
   bookParking() {
     if (!this.autoAssign && (!this.selectedEtage || !this.selectedBloc || !this.selectedAile)) {
       this.openDialog("Veuillez sélectionner toutes les options pour réserver.");
       return;
     }
+
+    // Définir l'heure actuelle
+    const now = new Date();
+
+    // Durée du stationnement (exemple : 1 heure)
+    const durationInMinutes = 60;
+    const endTime = new Date(now.getTime() + durationInMinutes * 60000);
+
+    // Programmer la notification 10 minutes avant la fin
+    const notificationTime = new Date(endTime.getTime() - 10 * 60000);
+    const timeUntilNotification = notificationTime.getTime() - now.getTime();
+
+    console.log(`Notification programmée dans ${timeUntilNotification / 1000} secondes`);
+
+    setTimeout(() => {
+      this.authService.getUser().subscribe(user => {
+        if (user) {
+          this.authService.sendWebNotification("🚗 Votre stationnement se termine bientôt !");
+        }
+      });
+    }, timeUntilNotification);
 
     this.openDialog(`✅ Votre réservation est confirmée pour ${this.selectedParking.nom}, ${this.selectedEtage}, ${this.selectedBloc}, ${this.selectedAile}`);
   }
