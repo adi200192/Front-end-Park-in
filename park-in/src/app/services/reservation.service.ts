@@ -31,10 +31,11 @@ export class ReservationService {
     });
     return this.http.patch<ReservationDTO>(
       `${this.baseUrl}/validateOrCancel`,
+      null,
       {
         headers,
         params: {
-          id: reservationId.toString(),
+          id: reservationId,
           etat: reservationState
         }
       }

@@ -35,6 +35,7 @@ export class CancelComponent implements OnInit{
   }
 
   cancelReservation(reservationId : number, reservationState : string): void {
+    console.log(reservationId,reservationState);
   this.reservationService.cancelReservation(reservationId,reservationState).subscribe({
     next : (updatedReservation) => {
       console.log('Réservation annulée:', updatedReservation);
