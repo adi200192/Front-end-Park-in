@@ -194,11 +194,24 @@ export class BookingComponent implements OnInit {
     return array[Math.floor(Math.random() * array.length)];
   }
 
+
+  bookParking() {
+    // 🔹 Vérifier si l'utilisateur est connecté
+    this.authService.getUser().subscribe(user => {
+      if (!user) {
+        console.warn("🚨 Utilisateur non connecté !");
+        this.openDialog("⚠️ Vous devez être connecté pour réserver un parking.");
+
+        this.router.navigate(['/login'], { queryParams: { returnUrl: this.router.url } });
+        return;
+      }
+
   confirmSelection() {
     if (!this.selectedBloc || !this.selectedEtage || !this.selectedAile || !this.selectedPlace) {
       console.warn("⚠️ Please select a valid place!");
       return;
     }
+
 
     if (!this.id) {
       console.error("❌ Error: No driver ID found in session!");
@@ -219,6 +232,33 @@ export class BookingComponent implements OnInit {
 
     console.log("✅ Reservation Confirmed:", reservationData);
 
+
+
+
+  openDialog(message: string): void {
+    this.dialog.open(DialogContentComponent, { data: { message } });
+  }
+}
+
+
+@Component({
+  selector: 'dialog-content',
+  standalone: true,
+  imports: [MatDialogModule, MatButtonModule],
+  template: `
+    <h2 mat-dialog-title>Confirmation</h2>
+    <mat-dialog-content>
+      <p>{{ data.message }}</p>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close>OK</button>
+    </mat-dialog-actions>
+  `,
+})
+export class DialogContentComponent {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { message: string }) {}
+}
+
     this.reservationService.addReservation(reservationData).subscribe({next: (response) => {
         console.log("🎉 Reservation successful:", response);
       },
@@ -227,3 +267,4 @@ export class BookingComponent implements OnInit {
       }})
   }
 }
+
