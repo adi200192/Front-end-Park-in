@@ -133,7 +133,8 @@ export class HomeComponent implements AfterViewInit {
           
           // ✅ Correction ici : Transmission de `dateFin` avec `queryParams`
           this.router.navigate(['/search'], {
-            queryParams: { dateFin: parkingRequest.dateFin }
+            queryParams: { 
+              dateFin: parkingRequest.dateFin }
           });
         },
         error: (err) => {
