@@ -5,5 +5,4 @@ export interface ReservationRequest{
        facture : number,
        place : string,
        conducteur : string,
-       // qrCode : string
 }
