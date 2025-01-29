@@ -122,7 +122,6 @@ export class BookingComponent implements OnInit {
         console.warn("🚨 Utilisateur non connecté !");
         this.openDialog("⚠️ Vous devez être connecté pour réserver un parking.");
 
-        // 🔹 Rediriger vers la connexion en gardant la page actuelle en mémoire
         this.router.navigate(['/login'], { queryParams: { returnUrl: this.router.url } });
         return;
       }
@@ -150,28 +149,14 @@ export class BookingComponent implements OnInit {
   }
 
 
-  // addReservation(){
-  //   const reservationRequest = {
-  //     dateDebut : this.selectedParking.dateDebut,
-  //     dateFin : this.selectedParking.dateFin,
-  //     facture : 0,
-  //     place : {
-  //       id : "PLACE123",
-  //       type : "STANDARD",
-  //       pmr : false,
-  //       parking : {name : 'VICTOR HUGO', address : ''}
-  //     },
-  //     conducteur : this.id
-  //   }
-  //   this.reservationService.addReservation(reservationRequest)
-  // }
+
 
   openDialog(message: string): void {
     this.dialog.open(DialogContentComponent, { data: { message } });
   }
 }
 
-// ✅ **Ajout du composant de dialogue `DialogContentComponent`**
+
 @Component({
   selector: 'dialog-content',
   standalone: true,
