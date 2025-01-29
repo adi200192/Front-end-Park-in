@@ -66,7 +66,7 @@ export class HomeComponent implements AfterViewInit {
       dateDebut: new FormControl(null, Validators.required),
       latitude: new FormControl(null),
       longitude: new FormControl(null),
-      dateFin: new FormControl(null, Validators.required), 
+      dateFin: new FormControl(null, Validators.required),
       pmr: new FormControl(false),
       type: new FormControl('STANDARD'),
       typeOuvrage: new FormControl('ouvrage'),
@@ -132,7 +132,6 @@ export class HomeComponent implements AfterViewInit {
           this.dataService.setType(parkingRequest.type)
           this.dataService.setPmr(parkingRequest.pmr)
           this.dataService.setMessage(result);
-
           this.dataService.setDateDebut(new Date(this.searchForm.get('dateDebut')?.value).toISOString());
           this.dataService.setDateFin(new Date(this.searchForm.get('dateFin')?.value).toISOString());
           this.router.navigate(['/search'], {

@@ -8,7 +8,7 @@ import { PlaceRequest } from '../model/placeRequest';
   providedIn: 'root'
 })
 export class PlaceService {
-  private baseUrl = 'http://localhost:2200/place';
+  private baseUrl = 'http://localhost:2200/api/places';
 
   constructor(private http: HttpClient) {}
 
@@ -18,7 +18,7 @@ export class PlaceService {
     });
 
     return this.http.post<PlaceDTO[]>(
-      `${this.baseUrl}/getPlacesDisponible`,
+      `${this.baseUrl}/disponible`,
       placeRequest,
       { headers }
     );
