@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
-import { MAT_DIALOG_DATA, MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCardModule } from '@angular/material/card';
@@ -32,6 +32,7 @@ import {PlaceService} from '../../services/place.service';
 })
 export class BookingComponent implements OnInit {
   selectedParking: any;
+  dateFin: string | null = null;
   etages = ['1er étage', '2ème étage', '3ème étage'];
   blocs = ['Bloc A', 'Bloc B', 'Bloc C'];
   ailes = ['Aile 1', 'Aile 2', 'Aile 3'];
@@ -47,23 +48,30 @@ export class BookingComponent implements OnInit {
   selectedAile: string = '';
   autoAssign: boolean = false;
 
+
   availability: string = 'Disponible';
 
 
 
   constructor(private route: ActivatedRoute, private dialog: MatDialog, private authService: AuthService, private reservationService : ReservationService, private dataService : DataService, private placeService : PlaceService) {}
 
+
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
+      this.dateFin = params['dateFin'] || null;
+      console.log("📌 DateFin reçue dans BookingComponent:", this.dateFin);
+
       this.selectedParking = {
         id : params['id'],
         imageUrl: params['imageUrl'],
         nom: params['nom'],
         tarif: params['tarif'],
         adresse: params['adresse'],
+
         url: params['url'],
         dateDebut : params['dateDebut'],
         dateFin : params['dateFin']
+
       };
     });
     console.log(this.selectedParking)
@@ -108,33 +116,29 @@ export class BookingComponent implements OnInit {
   }
 
   bookParking() {
-    if (!this.autoAssign && (!this.selectedEtage || !this.selectedBloc || !this.selectedAile)) {
-      this.openDialog("Veuillez sélectionner toutes les options pour réserver.");
+    if (!this.dateFin) {
+      console.error("❌ Erreur: La date de fin du stationnement n'est pas définie.");
+      this.openDialog("❌ Erreur: La date de fin du stationnement n'est pas disponible.");
       return;
     }
 
-    // Définir l'heure actuelle
-    const now = new Date();
-
-    // Durée du stationnement (exemple : 1 heure)
-    const durationInMinutes = 60;
-    const endTime = new Date(now.getTime() + durationInMinutes * 60000);
-
-    // Programmer la notification 10 minutes avant la fin
+    const endTime = new Date(this.dateFin);
     const notificationTime = new Date(endTime.getTime() - 10 * 60000);
+    const now = new Date();
     const timeUntilNotification = notificationTime.getTime() - now.getTime();
 
-    console.log(`Notification programmée dans ${timeUntilNotification / 1000} secondes`);
-
-    setTimeout(() => {
-      this.authService.getUser().subscribe(user => {
-        if (user) {
-          this.authService.sendWebNotification("🚗 Votre stationnement se termine bientôt !");
-        }
-      });
-    }, timeUntilNotification);
-
-    this.openDialog(`✅ Votre réservation est confirmée pour ${this.selectedParking.nom}, ${this.selectedEtage}, ${this.selectedBloc}, ${this.selectedAile}`);
+    if (timeUntilNotification > 0) {
+      console.log(`📌 Notification programmée dans ${timeUntilNotification / 1000} secondes`);
+      setTimeout(() => {
+        this.authService.getUser().subscribe(user => {
+          if (user) {
+            this.authService.sendWebNotification("🚗 Votre stationnement se termine bientôt !");
+          }
+        });
+      }, timeUntilNotification);
+    }
+    
+    this.openDialog(`✅ Réservation confirmée pour ${this.selectedParking.nom}`);
   }
 
 
@@ -155,13 +159,11 @@ export class BookingComponent implements OnInit {
   // }
 
   openDialog(message: string): void {
-    this.dialog.open(DialogContentComponent, {
-      data: { message }
-    });
+    this.dialog.open(DialogContentComponent, { data: { message } });
   }
 }
 
-// Component for displaying pop-up message
+// ✅ **Ajout du composant de dialogue `DialogContentComponent`**
 @Component({
   selector: 'dialog-content',
   standalone: true,

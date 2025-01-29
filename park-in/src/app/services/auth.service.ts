@@ -41,6 +41,10 @@ export class AuthService {
     return this.http.post('http://localhost:2200/conducteur/inscription', { id });
   }
 
+  sendUserDataToBackendConnexion(id: string): Observable<any> {
+    return this.http.post('http://localhost:2200/conducteur/connexion', { id });
+  }
+
   sendWebNotification(message: string) {
     if (!("Notification" in window)) {
       console.error("Ce navigateur ne supporte pas les notifications.");

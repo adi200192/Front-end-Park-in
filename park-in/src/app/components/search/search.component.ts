@@ -1,8 +1,10 @@
+
 import {Component, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DataService} from '../../services/data.service';
 import {ParkingDTO} from '../../model/parkingDTO';
+
 
 
 @Component({
@@ -15,6 +17,7 @@ import {ParkingDTO} from '../../model/parkingDTO';
 export class SearchComponent implements OnInit {
   parkings: ParkingDTO[] = [];
   dateFin: string | null = null;
+
   dateDebut : string | null = null;
   imagePaths: string[] =
     [
@@ -23,6 +26,7 @@ export class SearchComponent implements OnInit {
       'assets/park2.jpg',
       'assets/park3.png'
     ]
+
 
   getRandomImage(): string {
     const randomIndex = Math.floor(Math.random() * this.imagePaths.length);
@@ -70,4 +74,17 @@ search(parking: ParkingDTO) {
   });
 }
 
+
+  search(parking: ParkingDTO) {
+    this.router.navigate(['/booking'], {
+      queryParams: {
+        imageUrl: parking.imageUrl,
+        nom: parking.name,
+        tarif: parking.tarif1h,
+        adresse: parking.address,
+        url: parking.url,
+        dateFin: this.dateFin // 🔹 On envoie `dateFin` à BookingComponent.
+      }
+    });
+  }
 }
