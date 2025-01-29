@@ -53,6 +53,9 @@ export class BookingComponent implements OnInit {
 
   id: string | null = null; // Store the driver ID
 
+
+
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -63,6 +66,7 @@ export class BookingComponent implements OnInit {
     private placeService: PlaceService
   ) {
   }
+
 
   ngOnInit() {
     this.id = sessionStorage.getItem('userId'); // ✅ Get driver ID
@@ -225,11 +229,24 @@ export class BookingComponent implements OnInit {
     return array[Math.floor(Math.random() * array.length)];
   }
 
+
+  bookParking() {
+    // 🔹 Vérifier si l'utilisateur est connecté
+    this.authService.getUser().subscribe(user => {
+      if (!user) {
+        console.warn("🚨 Utilisateur non connecté !");
+        this.openDialog("⚠️ Vous devez être connecté pour réserver un parking.");
+
+        this.router.navigate(['/login'], { queryParams: { returnUrl: this.router.url } });
+        return;
+      }
+
   confirmSelection() {
     if (!this.selectedBloc || !this.selectedEtage || !this.selectedAile || !this.selectedPlace) {
       console.warn("⚠️ Please select a valid place!");
       return;
     }
+
 
     if (!this.id) {
       console.error("❌ Error: No driver ID found in session!");
@@ -253,6 +270,7 @@ export class BookingComponent implements OnInit {
 
     this.reservationService.addReservation(reservationData).subscribe({
       next: (response) => {
+
         console.log("🎉 Reservation successful:", response);
       },
       error: (err) => {
@@ -265,3 +283,4 @@ export class BookingComponent implements OnInit {
 
 
 }
+
