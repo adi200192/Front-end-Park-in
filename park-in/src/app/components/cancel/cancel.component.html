@@ -8,7 +8,7 @@
       <p class="address">{{ reservation.place.parking.address}}</p>
 
       <p class="reservation-time">
-        <strong>Réservation du : </strong> {{ reservation.dateDebut| date:'dd/MM/yyyy HH:mm' }} au {{ reservation.dateFin | date:'dd/MM/yyyy HH:mm' }}<br>
+        <strong>Réservation du : </strong> {{ reservation.dateDebut| date:'dd/MM/yyyy HH:mm':'Europe/Paris'}} au {{ reservation.dateFin | date:'dd/MM/yyyy HH:mm' }}<br>
       </p>
       <div class="parking-features">
         <div *ngIf="reservation.place.pmr" class="pmr">
@@ -24,13 +24,17 @@
     <div class="parking-actions">
       <button
         class="btn btn-primary"
+        *ngIf="reservation.etat != 'CANCELLED'"
         [ngClass]="{'btn-disabled': isCancellationDisabled(reservation.dateDebut)}"
         [disabled]="isCancellationDisabled(reservation.dateDebut)"
-         (click)="cancelReservation(reservation.id)">
+         (click)="cancelReservation(reservation.id,'CANCELLED')">
         Annuler
       </button>
-      <p *ngIf="isCancellationDisabled(reservation.dateDebut)"class="error-text">
+      <p *ngIf="isCancellationDisabled(reservation.dateDebut) "class="error-text">
         La réservation ne peut pas être annulée car elle est inférieure à 48h.
+      </p>
+      <p *ngIf="reservation.etat === 'CANCELLED'" class="success-text">
+        Réservation annulée
       </p>
     </div>
   </div>
