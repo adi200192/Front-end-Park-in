@@ -74,5 +74,4 @@ search(parking: ParkingDTO) {
   });
 }
 
-
 }

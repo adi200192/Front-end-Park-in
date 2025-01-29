@@ -52,7 +52,7 @@ export class BookingComponent implements OnInit {
 
 
 
-  constructor(private route: ActivatedRoute, private router: Router,private dialog: MatDialog, private authService: AuthService, private reservationService : ReservationService, private dataService : DataService, private placeService : PlaceService) {}
+  constructor(private route: ActivatedRoute,private router: Router, private dialog: MatDialog, private authService: AuthService, private reservationService : ReservationService, private dataService : DataService, private placeService : PlaceService) {}
 
 
 
