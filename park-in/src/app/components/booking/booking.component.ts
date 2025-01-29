@@ -34,11 +34,13 @@ export class BookingComponent implements OnInit {
   selectedParking: any;
   dateFin: string | null = null;
 
+
   structuredData: any = {}; // Stores places grouped by Bloc → Étage → Aile
   blocs: string[] = [];
   etages: string[] = [];
   ailes: string[] = [];
   places: string[] = [];
+
 
   selectedBloc: string = '';
   selectedEtage: string = '';
@@ -46,6 +48,7 @@ export class BookingComponent implements OnInit {
   selectedPlace: string = '';
 
   autoAssign: boolean = false;
+
 
   id: string | null = null; // Store the driver ID
 
