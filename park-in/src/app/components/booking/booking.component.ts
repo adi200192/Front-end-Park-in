@@ -1,17 +1,17 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from "@angular/router";
-import { MatDialog, MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { CommonModule } from '@angular/common';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatSelectModule } from '@angular/material/select';
-import { MatInputModule } from '@angular/material/input';
-import { FormsModule } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
-import { ReservationService } from '../../services/reservation.service';
-import { DataService } from '../../services/data.service';
-import { PlaceService } from '../../services/place.service';
+import {Component, Inject, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {ActivatedRoute, Router} from "@angular/router";
+import {MatDialog, MatDialogModule, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {CommonModule} from '@angular/common';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatCardModule} from '@angular/material/card';
+import {MatButtonModule} from '@angular/material/button';
+import {MatSelectModule} from '@angular/material/select';
+import {MatInputModule} from '@angular/material/input';
+import {FormsModule} from '@angular/forms';
+import {AuthService} from '../../services/auth.service';
+import {ReservationService} from '../../services/reservation.service';
+import {DataService} from '../../services/data.service';
+import {PlaceService} from '../../services/place.service';
 import {ReservationRequest} from '../../model/reservationRequest';
 
 @Component({
@@ -33,6 +33,7 @@ import {ReservationRequest} from '../../model/reservationRequest';
 export class BookingComponent implements OnInit {
   selectedParking: any;
   dateFin: string | null = null;
+  @ViewChild('authDialog') authDialog!: TemplateRef<any>;
 
   structuredData: any = {}; // Stores places grouped by Bloc → Étage → Aile
   blocs: string[] = [];
@@ -57,7 +58,8 @@ export class BookingComponent implements OnInit {
     private reservationService: ReservationService,
     private dataService: DataService,
     private placeService: PlaceService
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.id = sessionStorage.getItem('userId'); // ✅ Get driver ID
@@ -183,6 +185,39 @@ export class BookingComponent implements OnInit {
     }
   }
 
+  verifierAuthentification() {
+    this.authService.getUser().subscribe(user => {
+      if (!user) {
+        console.warn("🚨 Utilisateur non connecté !");
+
+        // Ouvrir le dialogue directement sans créer un autre composant
+        this.dialog.open(this.authDialog, {
+          width: '300px',
+          data: { message: "⚠️ Veuillez vous connecter pour réserver un parking." }
+        }).afterClosed().subscribe(() => {
+          this.router.navigate(['/login'], { queryParams: { returnUrl: this.router.url } });
+        });
+
+      } else {
+        this.confirmSelection();  // Procéder à la réservation si connecté
+      }
+    });
+  }
+
+  cancelNotification() {
+    const endTime = new Date(this.dataService.getDateFin());
+    const notificationTime = new Date(endTime.getTime() - 10 * 60000);
+    const now = new Date();
+    const timeUntilNotification = notificationTime.getTime() - now.getTime();
+
+    if (timeUntilNotification > 0) {
+      console.log(`📌 Notification programmée dans ${timeUntilNotification / 1000} secondes`);
+      setTimeout(() => {
+        this.authService.sendWebNotification("🚗 Votre stationnement se termine bientôt !");
+      }, timeUntilNotification);
+    }
+  }
+
   getRandomItem(array: string[]): string {
     return array[Math.floor(Math.random() * array.length)];
   }
@@ -211,12 +246,19 @@ export class BookingComponent implements OnInit {
     };
 
     console.log("✅ Reservation Confirmed:", reservationData);
+    this.cancelNotification()
 
-    this.reservationService.addReservation(reservationData).subscribe({next: (response) => {
+    this.reservationService.addReservation(reservationData).subscribe({
+      next: (response) => {
         console.log("🎉 Reservation successful:", response);
       },
       error: (err) => {
         console.error("Error making reservation:", err);
-      }})
+      }
+    })
   }
+
+
+
+
 }

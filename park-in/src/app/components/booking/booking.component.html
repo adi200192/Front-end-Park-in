@@ -67,7 +67,18 @@
 
         <mat-checkbox [(ngModel)]="autoAssign" (change)="handleAutoAssign()">Attribution automatique de la place</mat-checkbox>
 
-        <button mat-raised-button color="primary" class="full-width" (click)="confirmSelection()">
+        <ng-template #authDialog let-data>
+          <h2 mat-dialog-title>Authentification requise</h2>
+          <mat-dialog-content>
+            <p>{{ data.message }}</p>
+          </mat-dialog-content>
+          <mat-dialog-actions align="end">
+            <button mat-button mat-dialog-close>OK</button>
+          </mat-dialog-actions>
+        </ng-template>
+
+
+        <button mat-raised-button color="primary" class="full-width" (click)="verifierAuthentification()">
           Valider et payer
         </button>
       </mat-card-content>
