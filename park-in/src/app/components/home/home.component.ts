@@ -121,16 +121,22 @@ export class HomeComponent implements AfterViewInit{
       this.parkingService.getAvailableParking(parkingRequest).subscribe({
         next: (result) => {
           console.log('Search results:', result);
+          this.dataService.setType(parkingRequest.type)
+          this.dataService.setPmr(parkingRequest.pmr)
           this.dataService.setMessage(result);
-          this.router.navigate(['/search'])
+          this.dataService.setDateDebut(new Date(this.searchForm.get('dateDebut')?.value).toISOString());
+          this.dataService.setDateFin(new Date(this.searchForm.get('dateFin')?.value).toISOString());
+          this.router.navigate(['/search'], {
+            queryParams: {
+              dateDebut : parkingRequest.dateDebut,
+              dateFin: parkingRequest.dateFin}
+          });
         },
         error: (err) => {
           console.error('Error fetching parking data', err);
         }
       });
-      console.log(this.searchForm.value)
-      //this.router.navigate(['/search'])
-
+      // console.log(this.searchForm.value)
     } else {
       console.log('Form is invalid!');
     }

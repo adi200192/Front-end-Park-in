@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {DataService} from '../../services/data.service';
 import {ParkingDTO} from '../../model/parkingDTO';
 
@@ -14,6 +14,8 @@ import {ParkingDTO} from '../../model/parkingDTO';
 })
 export class SearchComponent implements OnInit {
   parkings: ParkingDTO[] = [];
+  dateFin: string | null = null;
+  dateDebut : string | null = null;
   imagePaths: string[] =
     [
       'assets/park.jpg',
@@ -27,10 +29,14 @@ export class SearchComponent implements OnInit {
     return this.imagePaths[randomIndex];
   }
 
-  constructor(private router: Router, private dataService: DataService) {
+  constructor(private router: Router, private route : ActivatedRoute, private dataService: DataService) {
   }
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      this.dateFin = params['dateFin'] || null;
+      this.dateDebut = params['dateDebut'] || null;})
+
     this.parkings = this.dataService.getMessage();
 
     if (this.parkings.length === 0) {
@@ -52,7 +58,10 @@ export class SearchComponent implements OnInit {
 search(parking: ParkingDTO) {
   this.router.navigate(['/booking'], {
     queryParams: {
+      id : parking.id,
       imageUrl: parking.imageUrl,
+      dateFin : this.dateFin,
+      dateDebut : this.dateDebut,
       nom: parking.name,
       tarif: parking.tarif1h,
       adresse: parking.address,
