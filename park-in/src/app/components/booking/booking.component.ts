@@ -52,6 +52,9 @@ export class BookingComponent implements OnInit {
 
   id: string | null = null; // Store the driver ID
 
+
+
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -61,6 +64,7 @@ export class BookingComponent implements OnInit {
     private dataService: DataService,
     private placeService: PlaceService
   ) {}
+
 
   ngOnInit() {
     this.id = sessionStorage.getItem('userId'); // ✅ Get driver ID
