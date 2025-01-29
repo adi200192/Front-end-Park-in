@@ -37,32 +37,39 @@
       <mat-card-content>
         <div class="input-container">
           <mat-form-field appearance="outline" class="input-field">
+            <mat-label>Bloc</mat-label>
+            <mat-select [(value)]="selectedBloc" (selectionChange)="onBlocChange()">
+              <mat-option *ngFor="let bloc of blocs" [value]="bloc">{{ bloc }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="input-field">
             <mat-label>Étage</mat-label>
-            <mat-select [(value)]="selectedEtage" [disabled]="autoAssign">
+            <mat-select [(value)]="selectedEtage" [disabled]="!etages.length" (selectionChange)="onEtageChange()">
               <mat-option *ngFor="let etage of etages" [value]="etage">{{ etage }}</mat-option>
             </mat-select>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="input-field">
-            <mat-label>Bloc</mat-label>
-            <mat-select [(value)]="selectedBloc" [disabled]="autoAssign">
-              <mat-option *ngFor="let bloc of blocs" [value]="bloc">{{ bloc }}</mat-option>
+            <mat-label>Aile</mat-label>
+            <mat-select [(value)]="selectedAile" [disabled]="!ailes.length" (selectionChange)="onAileChange()">
+              <mat-option *ngFor="let aile of ailes" [value]="aile">{{ aile }}</mat-option>
             </mat-select>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="input-field">
-            <mat-label>Aile</mat-label>
-            <mat-select [(value)]="selectedAile" [disabled]="autoAssign">
-              <mat-option *ngFor="let aile of ailes" [value]="aile">{{ aile }}</mat-option>
+            <mat-label>Place</mat-label>
+            <mat-select [(value)]="selectedPlace" [disabled]="!places.length">
+              <mat-option *ngFor="let place of places" [value]="place">{{ place }}</mat-option>
             </mat-select>
           </mat-form-field>
+
         </div>
 
         <mat-checkbox [(ngModel)]="autoAssign" (change)="handleAutoAssign()">Attribution automatique de la place</mat-checkbox>
 
-        <button mat-raised-button color="primary" class="full-width" (click)="bookParking()">
+        <button mat-raised-button color="primary" class="full-width" (click)="confirmSelection()">
           Valider et payer
-        </button>      
+        </button>
       </mat-card-content>
     </mat-card>
   </div>
