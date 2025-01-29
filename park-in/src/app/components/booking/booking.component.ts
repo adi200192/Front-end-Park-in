@@ -12,6 +12,7 @@ import { AuthService } from '../../services/auth.service';
 import { ReservationService } from '../../services/reservation.service';
 import { DataService } from '../../services/data.service';
 import { PlaceService } from '../../services/place.service';
+import {ReservationRequest} from '../../model/reservationRequest';
 
 @Component({
   selector: 'app-booking',
@@ -32,9 +33,8 @@ import { PlaceService } from '../../services/place.service';
 export class BookingComponent implements OnInit {
   selectedParking: any;
   dateFin: string | null = null;
-  id : string | null = null;
 
-  structuredData: any = {}; // Stores places grouped by Bloc -> Étage -> Aile
+  structuredData: any = {}; // Stores places grouped by Bloc → Étage → Aile
   blocs: string[] = [];
   etages: string[] = [];
   ailes: string[] = [];
@@ -47,16 +47,7 @@ export class BookingComponent implements OnInit {
 
   autoAssign: boolean = false;
 
-  mockPlaces = [
-    { id: "06027-P-002_B1_E1_AA_P441", type: "ELECTRIQUE", pmr: false },
-    { id: "06027-P-002_B1_E1_AA_P442", type: "ELECTRIQUE", pmr: false },
-    { id: "06027-P-002_B1_E2_BB_P443", type: "STANDARD", pmr: false },
-    { id: "06027-P-002_B1_E2_BB_P444", type: "STANDARD", pmr: true },
-    { id: "06027-P-002_B2_E1_CC_P445", type: "ELECTRIQUE", pmr: false },
-    { id: "06027-P-002_B2_E2_CC_P446", type: "STANDARD", pmr: true },
-    { id: "06027-P-002_B3_E1_AA_P441", type: "ELECTRIQUE", pmr: false },
-
-  ];
+  id: string | null = null; // Store the driver ID
 
   constructor(
     private route: ActivatedRoute,
@@ -69,6 +60,9 @@ export class BookingComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.id = sessionStorage.getItem('userId'); // ✅ Get driver ID
+    console.log("📌 ID du conducteur récupéré:", this.id);
+
     this.route.queryParams.subscribe(params => {
       this.dateFin = params['dateFin'] || null;
       this.selectedParking = {
@@ -81,18 +75,40 @@ export class BookingComponent implements OnInit {
         dateDebut: params['dateDebut'],
         dateFin: params['dateFin']
       };
-
-      this.id = sessionStorage.getItem('userId');
     });
 
-    this.loadMockData(); // Loads and structures the mock data
+    this.getPlacesDisponibles();
   }
 
-  loadMockData() {
+  /** 🔥 Fetch places from API instead of using mock data */
+  getPlacesDisponibles() {
+    const placeRequest = {
+      parkingId: this.selectedParking.id,
+      typePlace: this.dataService.getType(),
+      pmr: this.dataService.getPmr(),
+      dateDebut: this.dataService.getDateDebut(),
+      dateFin: this.dataService.getDateFin()
+    };
+
+    console.log("🔄 Requesting places with:", placeRequest);
+
+    this.placeService.getPlacesDisponibles(placeRequest).subscribe({
+      next: (places) => {
+        console.log('✅ Places received:', places);
+        this.processPlaces(places);
+      },
+      error: (err) => {
+        console.error('❌ Error fetching places:', err);
+      }
+    });
+  }
+
+  /** 🔥 Parses and structures API response */
+  processPlaces(places: any[]) {
     this.structuredData = {};
     this.blocs = [];
 
-    this.mockPlaces.forEach(place => {
+    places.forEach(place => {
       const parsed = this.parsePlaceId(place.id);
       if (parsed) {
         if (!this.structuredData[parsed.bloc]) {
@@ -109,8 +125,7 @@ export class BookingComponent implements OnInit {
       }
     });
 
-    console.log("📌 Blocs:", this.blocs);
-    console.log("📌 Structured Data:", this.structuredData);
+    console.log("📌 Updated Structured Data:", this.structuredData);
   }
 
   parsePlaceId(placeId: string) {
@@ -126,24 +141,12 @@ export class BookingComponent implements OnInit {
         place: `Place ${match[5]}`
       };
     }
-    console.error(`Format invalide pour l'ID: ${placeId}`);
+    console.error(`❌ Invalid ID format: ${placeId}`);
     return null;
   }
 
   onBlocChange() {
-    if (!this.selectedBloc || !this.structuredData[this.selectedBloc]) {
-      this.etages = [];
-      this.selectedEtage = '';
-      this.selectedAile = '';
-      this.selectedPlace = '';
-      this.ailes = [];
-      this.places = [];
-      return;
-    }
-
-    this.etages = Object.keys(this.structuredData[this.selectedBloc]);
-    console.log("Etages disponibles:", this.etages);
-
+    this.etages = this.selectedBloc ? Object.keys(this.structuredData[this.selectedBloc] || {}) : [];
     this.selectedEtage = '';
     this.selectedAile = '';
     this.selectedPlace = '';
@@ -151,36 +154,15 @@ export class BookingComponent implements OnInit {
     this.places = [];
   }
 
-
   onEtageChange() {
-    if (!this.selectedBloc || !this.selectedEtage || !this.structuredData[this.selectedBloc][this.selectedEtage]) {
-      this.ailes = [];
-      this.selectedAile = '';
-      this.selectedPlace = '';
-      this.places = [];
-      return;
-    }
-
-    // Get available wings (ailes) for the selected floor
-    this.ailes = Object.keys(this.structuredData[this.selectedBloc][this.selectedEtage]);
-    console.log("Ailes disponibles:", this.ailes);
-
+    this.ailes = this.selectedEtage ? Object.keys(this.structuredData[this.selectedBloc][this.selectedEtage] || {}) : [];
     this.selectedAile = '';
     this.selectedPlace = '';
     this.places = [];
   }
 
   onAileChange() {
-    if (!this.selectedBloc || !this.selectedEtage || !this.selectedAile || !this.structuredData[this.selectedBloc][this.selectedEtage][this.selectedAile]) {
-      this.places = [];
-      this.selectedPlace = '';
-      return;
-    }
-
-    // Get available places for the selected aile
-    this.places = this.structuredData[this.selectedBloc][this.selectedEtage][this.selectedAile];
-    console.log("Places disponibles:", this.places);
-
+    this.places = this.selectedAile ? this.structuredData[this.selectedBloc][this.selectedEtage][this.selectedAile] || [] : [];
     this.selectedPlace = '';
   }
 
@@ -207,24 +189,34 @@ export class BookingComponent implements OnInit {
 
   confirmSelection() {
     if (!this.selectedBloc || !this.selectedEtage || !this.selectedAile || !this.selectedPlace) {
-      console.warn("⚠️ Veuillez sélectionner une place valide !");
+      console.warn("⚠️ Please select a valid place!");
       return;
     }
 
-    const parkingId = this.mockPlaces.length > 0 ? this.mockPlaces[0].id.split("_")[0] : "UNKNOWN";
+    if (!this.id) {
+      console.error("❌ Error: No driver ID found in session!");
+      return;
+    }
+
+    const parkingId = this.selectedParking.id;
 
     const placeId = `${parkingId}_${this.selectedBloc.replace("Bloc ", "B")}_${this.selectedEtage.replace("Étage ", "E")}_${this.selectedAile.replace("Aile ", "")}_${this.selectedPlace.replace("Place ", "P")}`;
 
-    // Création de l'objet de réservation
     const reservationData = {
-      place: placeId,  // L'ID formaté de la place
-      parking: this.selectedParking.nom,
+      place: placeId,
       dateDebut: this.dataService.getDateDebut(),
       dateFin: this.dataService.getDateFin(),
-      conducteur : this.id
+      conducteur: this.id,
+      facture: 0
     };
 
-    console.log("✅ Réservation Confirmée :", reservationData);
-  }
+    console.log("✅ Reservation Confirmed:", reservationData);
 
+    this.reservationService.addReservation(reservationData).subscribe({next: (response) => {
+        console.log("🎉 Reservation successful:", response);
+      },
+      error: (err) => {
+        console.error("Error making reservation:", err);
+      }})
+  }
 }
