@@ -33,12 +33,11 @@ import {PlaceService} from '../../services/place.service';
 export class BookingComponent implements OnInit {
   selectedParking: any;
   dateFin: string | null = null;
+  dateDebut : string | null = null;
   etages = ['1er étage', '2ème étage', '3ème étage'];
   blocs = ['Bloc A', 'Bloc B', 'Bloc C'];
   ailes = ['Aile 1', 'Aile 2', 'Aile 3'];
 
-  dateFin: string | null = null;
-  dateDebut : string | null = null;
 
   id  = sessionStorage.getItem('userId')
 
@@ -53,7 +52,7 @@ export class BookingComponent implements OnInit {
 
 
 
-  constructor(private route: ActivatedRoute, private dialog: MatDialog, private authService: AuthService, private reservationService : ReservationService, private dataService : DataService, private placeService : PlaceService) {}
+  constructor(private route: ActivatedRoute,private router: Router, private dialog: MatDialog, private authService: AuthService, private reservationService : ReservationService, private dataService : DataService, private placeService : PlaceService) {}
 
 
 

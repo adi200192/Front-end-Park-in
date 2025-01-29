@@ -75,16 +75,5 @@ search(parking: ParkingDTO) {
 }
 
 
-  search(parking: ParkingDTO) {
-    this.router.navigate(['/booking'], {
-      queryParams: {
-        imageUrl: parking.imageUrl,
-        nom: parking.name,
-        tarif: parking.tarif1h,
-        adresse: parking.address,
-        url: parking.url,
-        dateFin: this.dateFin
-      }
-    });
-  }
+
 }
