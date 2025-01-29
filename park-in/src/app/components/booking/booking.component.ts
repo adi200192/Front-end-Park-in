@@ -37,7 +37,6 @@ export class BookingComponent implements OnInit {
   blocs = ['Bloc A', 'Bloc B', 'Bloc C'];
   ailes = ['Aile 1', 'Aile 2', 'Aile 3'];
 
-  dateFin: string | null = null;
   dateDebut : string | null = null;
 
   id  = sessionStorage.getItem('userId')
@@ -53,7 +52,7 @@ export class BookingComponent implements OnInit {
 
 
 
-  constructor(private route: ActivatedRoute, private dialog: MatDialog, private authService: AuthService, private reservationService : ReservationService, private dataService : DataService, private placeService : PlaceService) {}
+  constructor(private route: ActivatedRoute, private router: Router,private dialog: MatDialog, private authService: AuthService, private reservationService : ReservationService, private dataService : DataService, private placeService : PlaceService) {}
 
 
 
