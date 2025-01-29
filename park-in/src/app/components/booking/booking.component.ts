@@ -9,10 +9,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import {ReservationService} from '../../services/reservation.service';
+import { ReservationService } from '../../services/reservation.service';
+import { DataService } from '../../services/data.service';
+import { PlaceService } from '../../services/place.service';
 import {ReservationRequest} from '../../model/reservationRequest';
-import {DataService} from '../../services/data.service';
-import {PlaceService} from '../../services/place.service';
 
 @Component({
   selector: 'app-booking',
@@ -33,51 +33,61 @@ import {PlaceService} from '../../services/place.service';
 export class BookingComponent implements OnInit {
   selectedParking: any;
   dateFin: string | null = null;
-  dateDebut : string | null = null;
-  etages = ['1er étage', '2ème étage', '3ème étage'];
-  blocs = ['Bloc A', 'Bloc B', 'Bloc C'];
-  ailes = ['Aile 1', 'Aile 2', 'Aile 3'];
 
 
-  id  = sessionStorage.getItem('userId')
+  structuredData: any = {}; // Stores places grouped by Bloc → Étage → Aile
+  blocs: string[] = [];
+  etages: string[] = [];
+  ailes: string[] = [];
+  places: string[] = [];
 
-  selectedEtage: string = '';
+
   selectedBloc: string = '';
+  selectedEtage: string = '';
   selectedAile: string = '';
+  selectedPlace: string = '';
+
   autoAssign: boolean = false;
 
 
-
-  availability: string = 'Disponible';
-
+  id: string | null = null; // Store the driver ID
 
 
-  constructor(private route: ActivatedRoute,private router: Router, private dialog: MatDialog, private authService: AuthService, private reservationService : ReservationService, private dataService : DataService, private placeService : PlaceService) {}
 
+
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private dialog: MatDialog,
+    private authService: AuthService,
+    private reservationService: ReservationService,
+    private dataService: DataService,
+    private placeService: PlaceService
+  ) {}
 
 
   ngOnInit() {
+    this.id = sessionStorage.getItem('userId'); // ✅ Get driver ID
+    console.log("📌 ID du conducteur récupéré:", this.id);
+
     this.route.queryParams.subscribe(params => {
       this.dateFin = params['dateFin'] || null;
-      console.log("📌 DateFin reçue dans BookingComponent:", this.dateFin);
-
       this.selectedParking = {
-        id : params['id'],
+        id: params['id'],
         imageUrl: params['imageUrl'],
         nom: params['nom'],
         tarif: params['tarif'],
         adresse: params['adresse'],
-
         url: params['url'],
-        dateDebut : params['dateDebut'],
-        dateFin : params['dateFin']
-
+        dateDebut: params['dateDebut'],
+        dateFin: params['dateFin']
       };
     });
-    console.log(this.selectedParking)
-    this.getPlacesDisponibles()
+
+    this.getPlacesDisponibles();
   }
 
+  /** 🔥 Fetch places from API instead of using mock data */
   getPlacesDisponibles() {
     const placeRequest = {
       parkingId: this.selectedParking.id,
@@ -87,33 +97,103 @@ export class BookingComponent implements OnInit {
       dateFin: this.dataService.getDateFin()
     };
 
-    console.log(placeRequest)
+    console.log("🔄 Requesting places with:", placeRequest);
 
     this.placeService.getPlacesDisponibles(placeRequest).subscribe({
       next: (places) => {
-        console.log('Places disponibles:', places);
-        // Handle available places (store in a variable or display in UI)
+        console.log('✅ Places received:', places);
+        this.processPlaces(places);
       },
       error: (err) => {
-        console.error('Erreur lors de la récupération des places:', err);
+        console.error('❌ Error fetching places:', err);
       }
     });
   }
 
+  /** 🔥 Parses and structures API response */
+  processPlaces(places: any[]) {
+    this.structuredData = {};
+    this.blocs = [];
+
+    places.forEach(place => {
+      const parsed = this.parsePlaceId(place.id);
+      if (parsed) {
+        if (!this.structuredData[parsed.bloc]) {
+          this.structuredData[parsed.bloc] = {};
+          this.blocs.push(parsed.bloc);
+        }
+        if (!this.structuredData[parsed.bloc][parsed.etage]) {
+          this.structuredData[parsed.bloc][parsed.etage] = {};
+        }
+        if (!this.structuredData[parsed.bloc][parsed.etage][parsed.aile]) {
+          this.structuredData[parsed.bloc][parsed.etage][parsed.aile] = [];
+        }
+        this.structuredData[parsed.bloc][parsed.etage][parsed.aile].push(parsed.place);
+      }
+    });
+
+    console.log("📌 Updated Structured Data:", this.structuredData);
+  }
+
+  parsePlaceId(placeId: string) {
+    const regex = /^(.+?)_B(\d+)_E(\d+)_([A-Z]+)_P(\d+)$/;
+    const match = placeId.match(regex);
+
+    if (match) {
+      return {
+        parkingId: match[1],
+        bloc: `Bloc ${match[2]}`,
+        etage: `Étage ${match[3]}`,
+        aile: `Aile ${match[4]}`,
+        place: `Place ${match[5]}`
+      };
+    }
+    console.error(`❌ Invalid ID format: ${placeId}`);
+    return null;
+  }
+
+  onBlocChange() {
+    this.etages = this.selectedBloc ? Object.keys(this.structuredData[this.selectedBloc] || {}) : [];
+    this.selectedEtage = '';
+    this.selectedAile = '';
+    this.selectedPlace = '';
+    this.ailes = [];
+    this.places = [];
+  }
+
+  onEtageChange() {
+    this.ailes = this.selectedEtage ? Object.keys(this.structuredData[this.selectedBloc][this.selectedEtage] || {}) : [];
+    this.selectedAile = '';
+    this.selectedPlace = '';
+    this.places = [];
+  }
+
+  onAileChange() {
+    this.places = this.selectedAile ? this.structuredData[this.selectedBloc][this.selectedEtage][this.selectedAile] || [] : [];
+    this.selectedPlace = '';
+  }
+
   handleAutoAssign() {
     if (this.autoAssign) {
-      this.selectedEtage = this.getRandomItem(this.etages);
       this.selectedBloc = this.getRandomItem(this.blocs);
+      this.onBlocChange();
+      this.selectedEtage = this.getRandomItem(this.etages);
+      this.onEtageChange();
       this.selectedAile = this.getRandomItem(this.ailes);
+      this.onAileChange();
+      this.selectedPlace = this.getRandomItem(this.places);
     } else {
-      this.selectedEtage = '';
       this.selectedBloc = '';
+      this.selectedEtage = '';
       this.selectedAile = '';
+      this.selectedPlace = '';
     }
   }
+
   getRandomItem(array: string[]): string {
     return array[Math.floor(Math.random() * array.length)];
   }
+
 
   bookParking() {
     // 🔹 Vérifier si l'utilisateur est connecté
@@ -126,27 +206,31 @@ export class BookingComponent implements OnInit {
         return;
       }
 
-      if (!this.dateFin) {
-        console.error("❌ Erreur: La date de fin du stationnement n'est pas définie.");
-        this.openDialog("❌ Erreur: La date de fin du stationnement n'est pas disponible.");
-        return;
-      }
+  confirmSelection() {
+    if (!this.selectedBloc || !this.selectedEtage || !this.selectedAile || !this.selectedPlace) {
+      console.warn("⚠️ Please select a valid place!");
+      return;
+    }
 
-      const endTime = new Date(this.dateFin);
-      const notificationTime = new Date(endTime.getTime() - 10 * 60000);
-      const now = new Date();
-      const timeUntilNotification = notificationTime.getTime() - now.getTime();
 
-      if (timeUntilNotification > 0) {
-        console.log(`📌 Notification programmée dans ${timeUntilNotification / 1000} secondes`);
-        setTimeout(() => {
-          this.authService.sendWebNotification("🚗 Votre stationnement se termine bientôt !");
-        }, timeUntilNotification);
-      }
+    if (!this.id) {
+      console.error("❌ Error: No driver ID found in session!");
+      return;
+    }
 
-      this.openDialog(`✅ Réservation confirmée pour ${this.selectedParking.nom}`);
-    });
-  }
+    const parkingId = this.selectedParking.id;
+
+    const placeId = `${parkingId}_${this.selectedBloc.replace("Bloc ", "B")}_${this.selectedEtage.replace("Étage ", "E")}_${this.selectedAile.replace("Aile ", "")}_${this.selectedPlace.replace("Place ", "P")}`;
+
+    const reservationData = {
+      place: placeId,
+      dateDebut: this.dataService.getDateDebut(),
+      dateFin: this.dataService.getDateFin(),
+      conducteur: this.id,
+      facture: 0
+    };
+
+    console.log("✅ Reservation Confirmed:", reservationData);
 
 
 
@@ -174,3 +258,13 @@ export class BookingComponent implements OnInit {
 export class DialogContentComponent {
   constructor(@Inject(MAT_DIALOG_DATA) public data: { message: string }) {}
 }
+
+    this.reservationService.addReservation(reservationData).subscribe({next: (response) => {
+        console.log("🎉 Reservation successful:", response);
+      },
+      error: (err) => {
+        console.error("Error making reservation:", err);
+      }})
+  }
+}
+
