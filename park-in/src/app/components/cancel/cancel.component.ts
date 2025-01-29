@@ -40,7 +40,7 @@ export class CancelComponent implements OnInit{
         ? { ...reservation, etat: reservationState } // Modify the reservation locally
         : reservation
     );
-  this.reservationService.cancelReservation(reservationId,reservationState).subscribe({
+  this.reservationService.updateReservation(reservationId,reservationState).subscribe({
     next : (updatedReservation) => {
       console.log('Réservation annulée:', updatedReservation);
     }
