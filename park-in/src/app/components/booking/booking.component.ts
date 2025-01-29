@@ -9,6 +9,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import {ReservationService} from '../../services/reservation.service';
+import {ReservationRequest} from '../../model/reservationRequest';
+import {DataService} from '../../services/data.service';
+import {PlaceService} from '../../services/place.service';
 
 @Component({
   selector: 'app-booking',
@@ -32,14 +36,26 @@ export class BookingComponent implements OnInit {
   etages = ['1er étage', '2ème étage', '3ème étage'];
   blocs = ['Bloc A', 'Bloc B', 'Bloc C'];
   ailes = ['Aile 1', 'Aile 2', 'Aile 3'];
-  availability: string = 'Disponible'; // ✅ Correction ajoutée
+
+  dateFin: string | null = null;
+  dateDebut : string | null = null;
+
+  id  = sessionStorage.getItem('userId')
 
   selectedEtage: string = '';
   selectedBloc: string = '';
   selectedAile: string = '';
   autoAssign: boolean = false;
 
-  constructor(private route: ActivatedRoute, private router: Router, private dialog: MatDialog, private authService: AuthService) {}
+
+
+  availability: string = 'Disponible';
+
+
+
+  constructor(private route: ActivatedRoute, private dialog: MatDialog, private authService: AuthService, private reservationService : ReservationService, private dataService : DataService, private placeService : PlaceService) {}
+
+
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -47,12 +63,41 @@ export class BookingComponent implements OnInit {
       console.log("📌 DateFin reçue dans BookingComponent:", this.dateFin);
 
       this.selectedParking = {
+        id : params['id'],
         imageUrl: params['imageUrl'],
         nom: params['nom'],
         tarif: params['tarif'],
         adresse: params['adresse'],
-        url: params['url']
+
+        url: params['url'],
+        dateDebut : params['dateDebut'],
+        dateFin : params['dateFin']
+
       };
+    });
+    console.log(this.selectedParking)
+    this.getPlacesDisponibles()
+  }
+
+  getPlacesDisponibles() {
+    const placeRequest = {
+      parkingId: this.selectedParking.id,
+      typePlace: this.dataService.getType(),
+      pmr: this.dataService.getPmr(),
+      dateDebut: this.dataService.getDateDebut(),
+      dateFin: this.dataService.getDateFin()
+    };
+
+    console.log(placeRequest)
+
+    this.placeService.getPlacesDisponibles(placeRequest).subscribe({
+      next: (places) => {
+        console.log('Places disponibles:', places);
+        // Handle available places (store in a variable or display in UI)
+      },
+      error: (err) => {
+        console.error('Erreur lors de la récupération des places:', err);
+      }
     });
   }
 
@@ -67,7 +112,6 @@ export class BookingComponent implements OnInit {
       this.selectedAile = '';
     }
   }
-
   getRandomItem(array: string[]): string {
     return array[Math.floor(Math.random() * array.length)];
   }
@@ -105,6 +149,23 @@ export class BookingComponent implements OnInit {
       this.openDialog(`✅ Réservation confirmée pour ${this.selectedParking.nom}`);
     });
   }
+
+
+  // addReservation(){
+  //   const reservationRequest = {
+  //     dateDebut : this.selectedParking.dateDebut,
+  //     dateFin : this.selectedParking.dateFin,
+  //     facture : 0,
+  //     place : {
+  //       id : "PLACE123",
+  //       type : "STANDARD",
+  //       pmr : false,
+  //       parking : {name : 'VICTOR HUGO', address : ''}
+  //     },
+  //     conducteur : this.id
+  //   }
+  //   this.reservationService.addReservation(reservationRequest)
+  // }
 
   openDialog(message: string): void {
     this.dialog.open(DialogContentComponent, { data: { message } });
