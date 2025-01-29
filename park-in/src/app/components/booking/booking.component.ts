@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog, MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -36,12 +36,11 @@ export class BookingComponent implements OnInit {
   etages = ['1er étage', '2ème étage', '3ème étage'];
   blocs = ['Bloc A', 'Bloc B', 'Bloc C'];
   ailes = ['Aile 1', 'Aile 2', 'Aile 3'];
+
   dateFin: string | null = null;
   dateDebut : string | null = null;
 
   id  = sessionStorage.getItem('userId')
-
-
 
   selectedEtage: string = '';
   selectedBloc: string = '';
@@ -49,11 +48,13 @@ export class BookingComponent implements OnInit {
   autoAssign: boolean = false;
 
 
+
   availability: string = 'Disponible';
 
 
 
   constructor(private route: ActivatedRoute, private dialog: MatDialog, private authService: AuthService, private reservationService : ReservationService, private dataService : DataService, private placeService : PlaceService) {}
+
 
 
   ngOnInit() {
@@ -116,29 +117,37 @@ export class BookingComponent implements OnInit {
   }
 
   bookParking() {
-    if (!this.dateFin) {
-      console.error("❌ Erreur: La date de fin du stationnement n'est pas définie.");
-      this.openDialog("❌ Erreur: La date de fin du stationnement n'est pas disponible.");
-      return;
-    }
+    // 🔹 Vérifier si l'utilisateur est connecté
+    this.authService.getUser().subscribe(user => {
+      if (!user) {
+        console.warn("🚨 Utilisateur non connecté !");
+        this.openDialog("⚠️ Vous devez être connecté pour réserver un parking.");
 
-    const endTime = new Date(this.dateFin);
-    const notificationTime = new Date(endTime.getTime() - 10 * 60000);
-    const now = new Date();
-    const timeUntilNotification = notificationTime.getTime() - now.getTime();
+        // 🔹 Rediriger vers la connexion en gardant la page actuelle en mémoire
+        this.router.navigate(['/login'], { queryParams: { returnUrl: this.router.url } });
+        return;
+      }
 
-    if (timeUntilNotification > 0) {
-      console.log(`📌 Notification programmée dans ${timeUntilNotification / 1000} secondes`);
-      setTimeout(() => {
-        this.authService.getUser().subscribe(user => {
-          if (user) {
-            this.authService.sendWebNotification("🚗 Votre stationnement se termine bientôt !");
-          }
-        });
-      }, timeUntilNotification);
-    }
-    
-    this.openDialog(`✅ Réservation confirmée pour ${this.selectedParking.nom}`);
+      if (!this.dateFin) {
+        console.error("❌ Erreur: La date de fin du stationnement n'est pas définie.");
+        this.openDialog("❌ Erreur: La date de fin du stationnement n'est pas disponible.");
+        return;
+      }
+
+      const endTime = new Date(this.dateFin);
+      const notificationTime = new Date(endTime.getTime() - 10 * 60000);
+      const now = new Date();
+      const timeUntilNotification = notificationTime.getTime() - now.getTime();
+
+      if (timeUntilNotification > 0) {
+        console.log(`📌 Notification programmée dans ${timeUntilNotification / 1000} secondes`);
+        setTimeout(() => {
+          this.authService.sendWebNotification("🚗 Votre stationnement se termine bientôt !");
+        }, timeUntilNotification);
+      }
+
+      this.openDialog(`✅ Réservation confirmée pour ${this.selectedParking.nom}`);
+    });
   }
 
 

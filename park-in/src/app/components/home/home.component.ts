@@ -136,9 +136,11 @@ export class HomeComponent implements AfterViewInit {
           this.dataService.setDateDebut(new Date(this.searchForm.get('dateDebut')?.value).toISOString());
           this.dataService.setDateFin(new Date(this.searchForm.get('dateFin')?.value).toISOString());
           this.router.navigate(['/search'], {
+
             queryParams: {
               dateDebut : parkingRequest.dateDebut,
               dateFin: parkingRequest.dateFin}
+
 
           });
         },

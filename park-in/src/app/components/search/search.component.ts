@@ -83,7 +83,7 @@ search(parking: ParkingDTO) {
         tarif: parking.tarif1h,
         adresse: parking.address,
         url: parking.url,
-        dateFin: this.dateFin // 🔹 On envoie `dateFin` à BookingComponent.
+        dateFin: this.dateFin
       }
     });
   }
