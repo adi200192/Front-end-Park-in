@@ -64,9 +64,11 @@ export class HomeComponent implements AfterViewInit {
     this.searchForm = new FormGroup({
       location: new FormControl('', Validators.required),
       dateDebut: new FormControl(null, Validators.required),
+      timeDebut: new FormControl('', Validators.required), // ✅ Correction ici (initialisation correcte)
       latitude: new FormControl(null),
       longitude: new FormControl(null),
       dateFin: new FormControl(null, Validators.required),
+      timeFin: new FormControl('', Validators.required), // ✅ Correction ici
       pmr: new FormControl(false),
       type: new FormControl('STANDARD'),
       typeOuvrage: new FormControl('ouvrage'),
@@ -108,48 +110,81 @@ export class HomeComponent implements AfterViewInit {
   }
 
   async onSearch() {
-    if (this.searchForm.valid) {
-      this.formSubmitted = true;
+    console.log("🔍 Vérification des valeurs du formulaire avant validation :", this.searchForm.value);
 
-      // Convertir les valeurs en `ParkingRequest`
-      const parkingRequest: ParkingRequest = {
-        latitude: this.searchForm.get('latitude')?.value,
-        longitude: this.searchForm.get('longitude')?.value,
-        dateDebut: new Date(this.searchForm.get('dateDebut')?.value).toISOString(),
-        dateFin: new Date(this.searchForm.get('dateFin')?.value).toISOString(),
-        pmr: this.searchForm.get('pmr')?.value,
-        type: this.searchForm.get('type')?.value,
-        hauteur: this.searchForm.get('hauteur')?.value,
-        typeOuvrage: this.searchForm.get('typeOuvrage')?.value
-      };
-
-      console.log('Search ParkingRequest:', parkingRequest);
-
-      // Appel du service API pour récupérer les parkings disponibles
-      this.parkingService.getAvailableParking(parkingRequest).subscribe({
-        next: (result) => {
-          console.log('Search results:', result);
-          this.dataService.setType(parkingRequest.type)
-          this.dataService.setPmr(parkingRequest.pmr)
-          this.dataService.setMessage(result);
-          this.dataService.setDateDebut(new Date(this.searchForm.get('dateDebut')?.value).toISOString());
-          this.dataService.setDateFin(new Date(this.searchForm.get('dateFin')?.value).toISOString());
-          this.router.navigate(['/search'], {
-
-            queryParams: {
-              dateDebut : parkingRequest.dateDebut,
-              dateFin: parkingRequest.dateFin}
-
-
-          });
-        },
-        error: (err) => {
-          console.error('Error fetching parking data', err);
-        }
-      });
-
-    } else {
-      console.log('Form is invalid!');
+    if (this.searchForm.invalid) {
+      console.error('⚠️ Formulaire invalide :', this.searchForm.errors);
+      return;
     }
+
+    this.formSubmitted = true;
+
+    const dateDebut = this.combineDateAndTime(
+      this.searchForm.get('dateDebut')?.value,
+      this.searchForm.get('timeDebut')?.value
+    );
+    const dateFin = this.combineDateAndTime(
+      this.searchForm.get('dateFin')?.value,
+      this.searchForm.get('timeFin')?.value
+    );
+    console.log("📌 Valeur actuelle de time:", this.searchForm.get('timeDebut')?.value);
+
+
+    const parkingRequest: ParkingRequest = {
+      latitude: this.searchForm.get('latitude')?.value,
+      longitude: this.searchForm.get('longitude')?.value,
+      dateDebut: dateDebut,
+      dateFin: dateFin,
+      pmr: this.searchForm.get('pmr')?.value,
+      type: this.searchForm.get('type')?.value,
+      hauteur: this.searchForm.get('hauteur')?.value,
+      typeOuvrage: this.searchForm.get('typeOuvrage')?.value
+    };
+
+    console.log('✅ Demande de recherche envoyée :', parkingRequest);
+
+    this.parkingService.getAvailableParking(parkingRequest).subscribe({
+      next: (result) => {
+        console.log('🚀 Résultats de la recherche :', result);
+        this.dataService.setType(parkingRequest.type);
+        this.dataService.setPmr(parkingRequest.pmr);
+        this.dataService.setMessage(result);
+        this.dataService.setDateDebut(parkingRequest.dateDebut);
+        this.dataService.setDateFin(parkingRequest.dateFin);
+        this.router.navigate(['/search'], {
+          queryParams: {
+            dateDebut: parkingRequest.dateDebut,
+            dateFin: parkingRequest.dateFin
+          }
+        });
+      },
+      error: (err) => {
+        console.error('❌ Erreur lors de la récupération des parkings :', err);
+      }
+    });
   }
+
+  combineDateAndTime(date: any, time: any): string {
+    if (!date || !time) {
+      console.error("❌ Erreur: date ou time invalide", { date, time });
+      return ''; // Retourne une valeur vide en cas d'erreur
+    }
+  
+    let dateTime = new Date(date);
+  
+    // Vérifier si `time` est bien une chaîne avant d'appliquer split
+    if (typeof time === 'string') {
+      const [hours, minutes] = time.split(':').map(Number);
+      dateTime.setHours(hours, minutes, 0);
+    } else if (time instanceof Date) {
+      // Si `time` est un objet Date, prendre directement les heures et minutes
+      dateTime.setHours(time.getHours(), time.getMinutes(), 0);
+    } else {
+      console.error("❌ Erreur: format d'heure non reconnu", time);
+      return '';
+    }
+  
+    return dateTime.toISOString(); // Format ISO corrigé
+  }
+  
 }
