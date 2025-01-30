@@ -12,7 +12,12 @@ import {AuthService} from '../../services/auth.service';
 import {ReservationService} from '../../services/reservation.service';
 import {DataService} from '../../services/data.service';
 import {PlaceService} from '../../services/place.service';
+
 import {async} from 'rxjs';
+
+import {ReservationRequest} from '../../model/reservationRequest';
+import { SpotBookComponent } from "../spot-book/spot-book.component";
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 @Component({
@@ -26,16 +31,22 @@ import {async} from 'rxjs';
     MatCheckboxModule,
     MatSelectModule,
     MatInputModule,
-    MatDialogModule
-  ],
+    MatDialogModule,
+    SpotBookComponent,
+    MatProgressSpinnerModule
+],
   templateUrl: './booking.component.html',
   styleUrl: './booking.component.css'
 })
 export class BookingComponent implements OnInit {
   selectedParking: any;
   dateFin: string | null = null;
+
   reservationId : number = 0;
   facture : number = 0;
+
+  isLoading = false;
+
   @ViewChild('authDialog') authDialog!: TemplateRef<any>;
   @ViewChild('paymentFailedDialog') paymentFailedDialog!: TemplateRef<any>;
   @ViewChild('paymentSuccessDialog') paymentSuccessDialog!: TemplateRef<any>;
@@ -67,8 +78,11 @@ export class BookingComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.id = sessionStorage.getItem('userId');
-    console.log("ID du conducteur récupéré:", this.id);
+
+    this.isLoading = true;
+    this.id = sessionStorage.getItem('userId'); 
+    console.log("📌 ID du conducteur récupéré:", this.id);
+
 
     this.route.queryParams.subscribe(params => {
       this.dateFin = params['dateFin'] || null;
@@ -153,11 +167,15 @@ export class BookingComponent implements OnInit {
 
     this.placeService.getPlacesDisponibles(placeRequest).subscribe({
       next: (places) => {
+
+        this.isLoading = false;
         console.log('Places received:', places);
         this.processPlaces(places);
       },
       error: (err) => {
-        console.error('Error fetching places:', err);
+        this.isLoading = false;
+        console.error(' Error fetching places:', err);
+
       }
     });
   }
@@ -241,6 +259,23 @@ export class BookingComponent implements OnInit {
     }
   }
 
+ /* //oth
+  onPlaceSelected(placeData: any) {
+    this.selectedBloc = placeData.bloc.replace('Bloc ', '');
+    this.selectedEtage = placeData.etage.replace('Étage ', '');
+    this.selectedAile = placeData.aile.replace('Aile ', '');
+    this.selectedPlace = placeData.place.replace('Place ', '');
+  }
+  //oth*/
+  onPlaceSelected(placeData: any) {
+    console.log("📌 Place selected from SpotBookComponent:", placeData);
+    this.selectedBloc = `Bloc ${placeData.bloc.replace('Bloc ', '')}`;
+    this.selectedEtage = `Étage ${placeData.etage.replace('Étage ', '')}`;
+    this.selectedAile = `Aile ${placeData.aile.replace('Aile ', '')}`;
+    this.selectedPlace = `Place ${placeData.place.replace('Place ', '')}`;
+  }
+
+
   verifierAuthentification() {
     this.authService.getUser().subscribe(user => {
       if (!user) {
@@ -279,6 +314,7 @@ export class BookingComponent implements OnInit {
     this.router.navigate(['/home']);
   }
 
+
   simulerPaiement(reservationId: number) {
     const paiementSuccess = Math.random() < 0.5;
     const statut = paiementSuccess ? "CONFIRMED" : "CANCELLED";
@@ -311,6 +347,7 @@ export class BookingComponent implements OnInit {
     return array[Math.floor(Math.random() * array.length)];
   }
 
+
   confirmSelection() {
     if (!this.selectedBloc || !this.selectedEtage || !this.selectedAile || !this.selectedPlace) {
       console.warn(" Please select a valid place!");
@@ -337,10 +374,12 @@ export class BookingComponent implements OnInit {
 
     this.reservationService.addReservation(reservationData).subscribe({
       next: (response) => {
+
         console.log("Reservation successful:", response);
         this.reservationId = response.id;
 
         this.simulerPaiement(this.reservationId);
+
       },
       error: (err) => {
         console.error("Error making reservation:", err);

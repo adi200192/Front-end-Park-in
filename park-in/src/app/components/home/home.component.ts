@@ -14,6 +14,7 @@ import { ParkingRequest } from '../../model/parkingRequest';
 import { ParkingService } from '../../services/parking.service';
 import { DataService } from '../../services/data.service';
 import { MatTimepickerModule } from '@angular/material/timepicker';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-home',
@@ -29,7 +30,8 @@ import { MatTimepickerModule } from '@angular/material/timepicker';
     MatFormFieldModule,
     MatInputModule,
     MatOptionModule,
-    MatTimepickerModule
+    MatTimepickerModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
@@ -39,6 +41,9 @@ export class HomeComponent implements AfterViewInit {
   searchForm: FormGroup;
   formSubmitted: boolean = false;
   ListeParking: boolean = false;
+
+  isLoading = false;
+
   minDate: Date = new Date();
 
   @ViewChild('autoCompleteInput') autoCompleteInput!: ElementRef;
@@ -63,11 +68,14 @@ export class HomeComponent implements AfterViewInit {
     private dataService: DataService
   ) {
     this.searchForm = new FormGroup({
-      location: new FormControl('', ), //Validators.required
-      dateDebut: new FormControl(null, ), //Validators.required
+
+      location: new FormControl('', Validators.required),
+      dateDebut: new FormControl(null, Validators.required),
+      timeDebut: new FormControl('', Validators.required), // ✅ Correction ici (initialisation correcte)
       latitude: new FormControl(null),
       longitude: new FormControl(null),
-      dateFin: new FormControl(null, ), //Validators.required
+      dateFin: new FormControl(null, Validators.required),
+      timeFin: new FormControl('', Validators.required), // ✅ Correction ici
       pmr: new FormControl(false),
       type: new FormControl('STANDARD'),
       typeOuvrage: new FormControl('ouvrage'),
@@ -109,6 +117,7 @@ export class HomeComponent implements AfterViewInit {
   }
 
   async onSearch() {
+
     if (this.searchForm.valid) {
       this.formSubmitted = true;
 
@@ -152,9 +161,92 @@ export class HomeComponent implements AfterViewInit {
           console.error('Error fetching parking data', err);
         }
       });
+    this.isLoading = true;
+    
+    console.log("🔍 Vérification des valeurs du formulaire avant validation :", this.searchForm.value);
 
-    } else {
-      console.log('Form is invalid!');
+
+    if (this.searchForm.invalid) {
+      console.error('⚠️ Formulaire invalide :', this.searchForm.errors);
+      return;
     }
+
+    this.formSubmitted = true;
+
+    const dateDebut = this.combineDateAndTime(
+      this.searchForm.get('dateDebut')?.value,
+      this.searchForm.get('timeDebut')?.value
+    );
+    const dateFin = this.combineDateAndTime(
+      this.searchForm.get('dateFin')?.value,
+      this.searchForm.get('timeFin')?.value
+    );
+    console.log("📌 Valeur actuelle de time:", this.searchForm.get('timeDebut')?.value);
+
+
+    const parkingRequest: ParkingRequest = {
+      latitude: this.searchForm.get('latitude')?.value,
+      longitude: this.searchForm.get('longitude')?.value,
+      dateDebut: dateDebut,
+      dateFin: dateFin,
+      pmr: this.searchForm.get('pmr')?.value,
+      type: this.searchForm.get('type')?.value,
+      hauteur: this.searchForm.get('hauteur')?.value,
+      typeOuvrage: this.searchForm.get('typeOuvrage')?.value
+    };
+
+    console.log('✅ Demande de recherche envoyée :', parkingRequest);
+
+    this.parkingService.getAvailableParking(parkingRequest).subscribe({
+      next: (result) => {
+        this.isLoading = false;
+        console.log('🚀 Résultats de la recherche :', result);
+        this.dataService.setType(parkingRequest.type);
+        this.dataService.setPmr(parkingRequest.pmr);
+        this.dataService.setMessage(result);
+        this.dataService.setDateDebut(parkingRequest.dateDebut);
+        this.dataService.setDateFin(parkingRequest.dateFin);
+        this.router.navigate(['/search'], {
+          queryParams: {
+            dateDebut: parkingRequest.dateDebut,
+            dateFin: parkingRequest.dateFin
+          }
+        });
+      },
+      error: (err) => {
+        this.isLoading = false;
+        console.error('❌ Erreur lors de la récupération des parkings :', err);
+      }
+    });
   }
+
+  combineDateAndTime(date: any, time: any): string {
+    if (!date || !time) {
+      console.error("❌ Erreur: date ou time invalide", { date, time });
+      return '';
+    }
+  
+    let dateTime = new Date(date);
+  
+    if (typeof time === 'string') {
+      const [hours, minutes] = time.split(':').map(Number);
+      dateTime.setHours(hours, minutes, 0);
+    } else if (time instanceof Date) {
+      dateTime.setHours(time.getHours(), time.getMinutes(), 0);
+    } else {
+      console.error("❌ Erreur: format d'heure non reconnu", time);
+      return '';
+    }
+  
+    // ✅ Nouvelle correction : Convertir en chaîne sans perte de fuseau horaire
+    const year = dateTime.getFullYear();
+    const month = (dateTime.getMonth() + 1).toString().padStart(2, '0'); // Mois commence à 0
+    const day = dateTime.getDate().toString().padStart(2, '0');
+    const hours = dateTime.getHours().toString().padStart(2, '0');
+    const minutes = dateTime.getMinutes().toString().padStart(2, '0');
+    const seconds = dateTime.getSeconds().toString().padStart(2, '0');
+  
+    return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+  }
+  
 }

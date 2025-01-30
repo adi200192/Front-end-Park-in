@@ -1,6 +1,7 @@
 <div class="search-container">
-  <h2>Trouver votre Parking !</h2>
+  <h1>Trouver votre Parking !</h1>
   <form [formGroup]="searchForm" class="search-form">
+    
     <div class="form-row">
       <mat-form-field class="input-medium" appearance="outline">
         <mat-label>Lieu de stationnement</mat-label>
@@ -8,7 +9,7 @@
       </mat-form-field>
     </div>
 
-    <!-- Date et heure de début -->
+    <!-- ✅ Date et heure de début (Séparés) -->
     <div class="form-row">
       <mat-form-field class="input-small" appearance="outline">
         <mat-label>Date début</mat-label>
@@ -19,13 +20,13 @@
 
       <mat-form-field class="input-small" appearance="outline">
         <mat-label>Heure début</mat-label>
-        <input matInput [matTimepicker]="startTime" formControlName="dateDebut">
+        <input matInput [matTimepicker]="startTime" formControlName="timeDebut">
         <mat-timepicker-toggle matIconSuffix [for]="startTime"></mat-timepicker-toggle>
         <mat-timepicker #startTime interval="10m"></mat-timepicker>
       </mat-form-field>
     </div>
 
-    <!-- Date et heure de fin -->
+    <!-- ✅ Date et heure de fin (Séparés) -->
     <div class="form-row">
       <mat-form-field class="input-small" appearance="outline">
         <mat-label>Date fin</mat-label>
@@ -36,13 +37,13 @@
 
       <mat-form-field class="input-small" appearance="outline">
         <mat-label>Heure fin</mat-label>
-        <input matInput [matTimepicker]="endTime" formControlName="dateFin">
+        <input matInput [matTimepicker]="endTime" formControlName="timeFin">
         <mat-timepicker-toggle matIconSuffix [for]="endTime"></mat-timepicker-toggle>
         <mat-timepicker #endTime interval="10m"></mat-timepicker>
       </mat-form-field>
     </div>
 
-    <!-- Autres options -->
+    <!-- ✅ Autres options -->
     <div class="form-row">
       <mat-form-field style="width: 150px;" appearance="outline">
         <mat-label>Hauteur(m)</mat-label>
@@ -58,7 +59,7 @@
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field  style="width: 250px;"appearance="outline">
+      <mat-form-field style="width: 250px;" appearance="outline">
         <mat-label>Type de parking</mat-label>
         <mat-select formControlName="typeOuvrage">
           <mat-option *ngFor="let parking of typeParkings" [value]="parking.value">
@@ -75,3 +76,6 @@
   </form>
 </div>
 
+<div *ngIf="isLoading" class="spinner-overlay">
+  <mat-spinner></mat-spinner>
+</div>

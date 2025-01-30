@@ -1,0 +1,34 @@
+<div class="seat-container">
+
+    <div class="pagination">
+      <button (click)="previousBloc()" [disabled]="currentBlocIndex === 0">‹</button>
+      <h3>{{ currentBloc }}</h3>
+      <button (click)="nextBloc()" [disabled]="currentBlocIndex === blocs.length - 1">›</button>
+    </div>
+  
+    <div class="floor-pagination">
+      <button *ngFor="let etage of etages; let i = index"
+              [class.selected]="currentEtageIndex === i"
+              (click)="onEtageSelect(i)">
+        {{ etage }}
+      </button>
+    </div>
+    <div class="aile-pagination">
+      <button *ngFor="let aile of ailes; let j = index"
+              [class.selected]="currentAileIndex === j"
+              (click)="currentAileIndex = j">
+        {{ aile }}
+      </button>
+    </div>
+
+    <div class="seats-grid">
+      <button 
+        *ngFor="let place of getPlaces(etages[currentEtageIndex], ailes[currentAileIndex])"
+        class="spot"
+        [class.selected]="selectedPlace === place"
+        (click)="selectPlace(currentBloc, etages[currentEtageIndex], ailes[currentAileIndex], place)"
+      >
+        {{ place.replace('Place ', '') }}
+      </button>
+    </div>
+  </div>

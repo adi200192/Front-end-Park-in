@@ -2,7 +2,7 @@
   <div class="left-section">
     <img [src]="selectedParking.imageUrl" alt="Parking image" class="parking-image">
     <div class="parking-info">
-      <h1 class="parking-title">{{ selectedParking.nom }}</h1>
+      <p class="parking-title"><strong>{{ selectedParking.nom }}</strong></p>
       <p class="parking-address"><i class="fas fa-map-marker-alt"></i> {{ selectedParking.adresse }}</p>
       <div class="parking-prices">
         <h3>Tarifs :</h3>
@@ -12,6 +12,7 @@
         <p><i class="fas fa-clock"></i> 4 heures : <strong>{{ selectedParking.tarif4h }} €</strong></p>
         <p><i class="fas fa-calendar-day"></i> 24 heures : <strong>{{ selectedParking.tarif24h }} €</strong></p>
       </div>
+
       <p class="parking-website">
         <i class="fas fa-link"></i> Site web:
         <a [href]="selectedParking.url" target="_blank">{{ selectedParking.url }}</a>
@@ -28,19 +29,21 @@
   <div class="right-section">
     <mat-card class="recapitulatif-selection">
       <mat-card-header>
-        <mat-card-title>📝 Récapitulatif de votre sélection</mat-card-title>
+        <mat-card-title>Récapitulatif de votre sélection</mat-card-title>
       </mat-card-header>
       <mat-card-content>
+
         <p>Parking: <strong>{{ selectedParking.nom }}</strong></p>
         <p>Date réservation : Du {{selectedParking.dateDebut | date:'dd/MM/yyyy HH:mm':'Europe/Paris'}} Au {{selectedParking.dateFin | date:'dd/MM/yyyy HH:mm':'Europe/Paris'}}</p>
         <p>Total à payer: <strong>{{ facture }} €</strong></p>
         <p>Adresse: <strong>{{ selectedParking.adresse }}</strong></p>
+
       </mat-card-content>
     </mat-card>
 
     <mat-card class="booking-card">
       <mat-card-header>
-        <mat-card-title>📍 Sélectionnez votre place</mat-card-title>
+        <mat-card-title>Sélectionnez votre place</mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <div class="input-container">
@@ -85,6 +88,7 @@
           </mat-dialog-actions>
         </ng-template>
 
+
         <!-- Payment Success Dialog -->
         <ng-template #paymentSuccessDialog let-data>
           <h2 mat-dialog-title>✅ Paiement Réussi</h2>
@@ -105,10 +109,19 @@
           </mat-dialog-actions>
         </ng-template>
 
+        <app-spot-book 
+          [structuredData]="structuredData"
+          (placeSelected)="onPlaceSelected($event)">
+        </app-spot-book>
+
+
         <button mat-raised-button color="primary" class="full-width" (click)="verifierAuthentification()">
           Valider et payer
         </button>
       </mat-card-content>
     </mat-card>
   </div>
+</div>
+<div *ngIf="isLoading" class="spinner-overlay">
+  <mat-spinner></mat-spinner>
 </div>

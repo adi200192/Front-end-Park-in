@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&display=swap');
 
+
+
 body {
     font-family: 'Open Sans', sans-serif;
     font-weight : 600;
@@ -14,5 +16,29 @@ body {
 .home-container {
     text-align: center;
     padding: 50px;
+}
+
+
+/* ✅ Appliquer Open Sans SemiBold (11pt, majuscules) aux titres */
+h1, h2, h3, h4, h5, h6,
+.mat-typography h1, .mat-typography h2, .mat-typography h3,
+.mat-typography h4, .mat-typography h5, .mat-typography h6 {
+    font-family: 'Open Sans', sans-serif !important;
+    font-weight: 600;
+    font-size: 11pt;
+    text-transform: uppercase;
+}
+
+/* ✅ Appliquer Arial (11pt, majuscule en début de phrase) au texte normal */
+body, p, span, li, a, button, input, textarea,
+.p-component, .mat-typography, .mat-button, .mat-card, .mat-input {
+    font-family: Arial, sans-serif !important;
+    font-size: 11pt;
+    text-transform: none;
+}
+
+/* ✅ Assurer que les paragraphes commencent par une majuscule */
+p::first-letter {
+    text-transform: uppercase;
 }
 
