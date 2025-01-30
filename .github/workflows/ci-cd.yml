@@ -64,6 +64,7 @@ jobs:
           echo "${{ secrets.VPN_PASSWORD }}" | sudo openconnect --user=${{ secrets.VPN_USERNAME }} --passwd-on-stdin --authgroup="Etudiants de l' UGA" ${{ secrets.VPN_URL }} &
           sleep 10 # Attendez que le VPN soit pleinement connecté
 
+
       - name: Deploy Angular app to VM
         run: |
           sshpass -p "$VM_PASSWORD" ssh -o StrictHostKeyChecking=no $VM_USERNAME@129.88.210.194 << 'EOF'
