@@ -26,7 +26,7 @@ export class ReservationService {
       {headers});
   }
 
-  cancelReservation(reservationId: number, reservationState: string): Observable<ReservationDTO> {
+  updateReservation(reservationId: number, reservationState: string): Observable<ReservationDTO> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });

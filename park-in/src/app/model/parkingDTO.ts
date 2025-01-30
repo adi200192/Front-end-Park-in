@@ -9,7 +9,11 @@ export interface ParkingDTO {
   typeOuvrage: string;
   hauteurMax : number;
   nbPMR : number;
-  tarif1h : number;
+  tarif1h: number;
+  tarif2h : number;
+  tarif3h : number;
+  tarif4h : number;
+  tarif24h : number;
   url : string;
   imageUrl : string;
 }

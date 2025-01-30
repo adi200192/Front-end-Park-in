@@ -35,6 +35,20 @@
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
+.parking-prices p {
+  font-size: 11pt; /* Texte en Arial 11 pts */
+  color: #555; /* Texte légèrement gris */
+  display: flex;
+  align-items: center; /* Aligner l'icône et le texte */
+  margin: 5px 0;
+  font-family : Arial;
+}
+
+.parking-prices i {
+  color: #007bff; /* Icônes en bleu */
+  margin-right: 8px; /* Espacement entre l'icône et le texte */
+  font-size: 14px; /* Taille de l'icône légèrement plus grande */
+}
 /* Parking image adjustments */
 .parking-image {
   width: 100%;

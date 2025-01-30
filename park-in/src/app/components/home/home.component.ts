@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -40,7 +40,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 export class HomeComponent implements AfterViewInit {
   searchForm: FormGroup;
   formSubmitted: boolean = false;
+  ListeParking: boolean = false;
+
   isLoading = false;
+
   minDate: Date = new Date();
 
   @ViewChild('autoCompleteInput') autoCompleteInput!: ElementRef;
@@ -65,6 +68,7 @@ export class HomeComponent implements AfterViewInit {
     private dataService: DataService
   ) {
     this.searchForm = new FormGroup({
+
       location: new FormControl('', Validators.required),
       dateDebut: new FormControl(null, Validators.required),
       timeDebut: new FormControl('', Validators.required), // ✅ Correction ici (initialisation correcte)
@@ -113,9 +117,54 @@ export class HomeComponent implements AfterViewInit {
   }
 
   async onSearch() {
+
+    if (this.searchForm.valid) {
+      this.formSubmitted = true;
+
+      const parkingRequest: ParkingRequest = {
+        latitude: this.searchForm.get('latitude')?.value,
+        longitude: this.searchForm.get('longitude')?.value,
+        dateDebut: new Date(this.searchForm.get('dateDebut')?.value).toISOString(),
+        dateFin: new Date(this.searchForm.get('dateFin')?.value).toISOString(),
+        pmr: this.searchForm.get('pmr')?.value,
+        type: this.searchForm.get('type')?.value,
+        hauteur: this.searchForm.get('hauteur')?.value,
+        typeOuvrage: this.searchForm.get('typeOuvrage')?.value
+      };
+
+      console.log('Search ParkingRequest:', parkingRequest);
+
+      // Appel du service API pour récupérer les parkings disponibles
+      this.parkingService.getAvailableParking(parkingRequest).subscribe({
+        next: (result) => {
+          console.log('Search results:', result);
+          this.dataService.setType(parkingRequest.type)
+          this.dataService.setPmr(parkingRequest.pmr)
+          this.dataService.setMessage(result);
+          this.dataService.setDateDebut(new Date(this.searchForm.get('dateDebut')?.value).toISOString());
+          this.dataService.setDateFin(new Date(this.searchForm.get('dateFin')?.value).toISOString());
+          if(result.length == 0){
+            this.ListeParking = true;
+          }else{
+            this.router.navigate(['/search'], {
+
+              queryParams: {
+                dateDebut : parkingRequest.dateDebut,
+                dateFin: parkingRequest.dateFin}
+
+
+            });
+          }
+
+        },
+        error: (err) => {
+          console.error('Error fetching parking data', err);
+        }
+      });
     this.isLoading = true;
     
     console.log("🔍 Vérification des valeurs du formulaire avant validation :", this.searchForm.value);
+
 
     if (this.searchForm.invalid) {
       console.error('⚠️ Formulaire invalide :', this.searchForm.errors);

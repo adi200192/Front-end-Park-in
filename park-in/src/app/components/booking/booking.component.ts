@@ -12,9 +12,13 @@ import {AuthService} from '../../services/auth.service';
 import {ReservationService} from '../../services/reservation.service';
 import {DataService} from '../../services/data.service';
 import {PlaceService} from '../../services/place.service';
+
+import {async} from 'rxjs';
+
 import {ReservationRequest} from '../../model/reservationRequest';
 import { SpotBookComponent } from "../spot-book/spot-book.component";
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 
 @Component({
   selector: 'app-booking',
@@ -37,9 +41,15 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 export class BookingComponent implements OnInit {
   selectedParking: any;
   dateFin: string | null = null;
-  isLoading = false;
-  @ViewChild('authDialog') authDialog!: TemplateRef<any>;
 
+  reservationId : number = 0;
+  facture : number = 0;
+
+  isLoading = false;
+
+  @ViewChild('authDialog') authDialog!: TemplateRef<any>;
+  @ViewChild('paymentFailedDialog') paymentFailedDialog!: TemplateRef<any>;
+  @ViewChild('paymentSuccessDialog') paymentSuccessDialog!: TemplateRef<any>;
 
   structuredData: any = {}; // Stores places grouped by Bloc → Étage → Aile
   blocs: string[] = [];
@@ -68,9 +78,11 @@ export class BookingComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this.isLoading = true;
-    this.id = sessionStorage.getItem('userId'); // ✅ Get driver ID
+    this.id = sessionStorage.getItem('userId'); 
     console.log("📌 ID du conducteur récupéré:", this.id);
+
 
     this.route.queryParams.subscribe(params => {
       this.dateFin = params['dateFin'] || null;
@@ -78,43 +90,96 @@ export class BookingComponent implements OnInit {
         id: params['id'],
         imageUrl: params['imageUrl'],
         nom: params['nom'],
-        tarif: params['tarif'],
+        tarif1h: params['tarif1h'],
+        tarif2h : params['tarif2h'],
+        tarif3h : params['tarif3h'],
+        tarif4h : params['tarif4h'],
+        tarif24h : params['tarif24h'],
         adresse: params['adresse'],
         url: params['url'],
         dateDebut: params['dateDebut'],
         dateFin: params['dateFin']
       };
     });
-
+    console.log(this.selectedParking)
     this.getPlacesDisponibles();
+    this.facture = this.calculerFacture();
   }
 
-  /** 🔥 Fetch places from API instead of using mock data */
+  calculerFacture(): number {
+
+    let total = 0;
+
+    const dateDebut = new Date(this.selectedParking.dateDebut);
+    const dateFin = new Date(this.selectedParking.dateFin);
+
+    // Calculate duration in hours
+    const durationInMs = dateFin.getTime() - dateDebut.getTime();
+    const durationInHours = durationInMs / (1000 * 60 * 60); // Convert milliseconds to hours
+
+    console.log(`Durée de réservation : ${durationInHours} heures`);
+
+
+    if (durationInHours <= 1) {
+      total = this.selectedParking.tarif1h;
+    } else if (durationInHours <= 2) {
+      total = this.selectedParking.tarif2h;
+    } else if (durationInHours <= 3) {
+      total = this.selectedParking.tarif3h;
+    } else if (durationInHours <= 4) {
+      total = this.selectedParking.tarif4h;
+    } else if (durationInHours > 4 && durationInHours <= 24) {
+      total = this.selectedParking.tarif24h;
+    } else {
+      // If duration exceeds 24h, apply 24h tariff for each full day + hourly tariff for remaining hours
+      const fullDays = Math.floor(durationInHours / 24);
+      const remainingHours = durationInHours % 24;
+
+      total = fullDays * this.selectedParking.tarif24h;
+
+      if (remainingHours > 4) {
+        total += this.selectedParking.tarif24h; // Charge another full day if remaining hours exceed 4
+      } else if (remainingHours > 3) {
+        total += this.selectedParking.tarif4h;
+      } else if (remainingHours > 2) {
+        total += this.selectedParking.tarif3h;
+      } else if (remainingHours > 1) {
+        total += this.selectedParking.tarif2h;
+      } else if (remainingHours > 0) {
+        total += this.selectedParking.tarif1h;
+      }
+    }
+    console.log(`Montant total à payer : ${total} €`);
+    return total;
+  }
+
   getPlacesDisponibles() {
     const placeRequest = {
       parkingId: this.selectedParking.id,
       typePlace: this.dataService.getType(),
       pmr: this.dataService.getPmr(),
+      facture : this.facture,
       dateDebut: this.dataService.getDateDebut(),
       dateFin: this.dataService.getDateFin()
     };
 
-    console.log("🔄 Requesting places with:", placeRequest);
+    console.log("Requesting places with:", placeRequest);
 
     this.placeService.getPlacesDisponibles(placeRequest).subscribe({
       next: (places) => {
+
         this.isLoading = false;
-        console.log('✅ Places received:', places);
+        console.log('Places received:', places);
         this.processPlaces(places);
       },
       error: (err) => {
         this.isLoading = false;
-        console.error('❌ Error fetching places:', err);
+        console.error(' Error fetching places:', err);
+
       }
     });
   }
 
-  /** 🔥 Parses and structures API response */
   processPlaces(places: any[]) {
     this.structuredData = {};
     this.blocs = [];
@@ -136,7 +201,7 @@ export class BookingComponent implements OnInit {
       }
     });
 
-    console.log("📌 Updated Structured Data:", this.structuredData);
+    console.log("Updated Structured Data:", this.structuredData);
   }
 
   parsePlaceId(placeId: string) {
@@ -152,7 +217,7 @@ export class BookingComponent implements OnInit {
         place: `Place ${match[5]}`
       };
     }
-    console.error(`❌ Invalid ID format: ${placeId}`);
+    console.error(`Invalid ID format: ${placeId}`);
     return null;
   }
 
@@ -214,18 +279,18 @@ export class BookingComponent implements OnInit {
   verifierAuthentification() {
     this.authService.getUser().subscribe(user => {
       if (!user) {
-        console.warn("🚨 Utilisateur non connecté !");
+        console.warn("Utilisateur non connecté !");
 
         // Ouvrir le dialogue directement sans créer un autre composant
         this.dialog.open(this.authDialog, {
           width: '300px',
-          data: { message: "⚠️ Veuillez vous connecter pour réserver un parking." }
+          data: { message: "Veuillez vous connecter pour réserver un parking." }
         }).afterClosed().subscribe(() => {
           this.router.navigate(['/login'], { queryParams: { returnUrl: this.router.url } });
         });
 
       } else {
-        this.confirmSelection();  // Procéder à la réservation si connecté
+        this.confirmSelection();
       }
     });
   }
@@ -237,30 +302,64 @@ export class BookingComponent implements OnInit {
     const timeUntilNotification = notificationTime.getTime() - now.getTime();
 
     if (timeUntilNotification > 0) {
-      console.log(`📌 Notification programmée dans ${timeUntilNotification / 1000} secondes`);
+      console.log(`Notification programmée dans ${timeUntilNotification / 1000} secondes`);
       setTimeout(() => {
-        this.authService.sendWebNotification("🚗 Votre stationnement se termine bientôt !");
+        this.authService.sendWebNotification("Votre stationnement se termine bientôt !");
       }, timeUntilNotification);
     }
+  }
+
+  retryPayment() {
+    this.dialog.closeAll();
+    this.router.navigate(['/home']);
+  }
+
+
+  simulerPaiement(reservationId: number) {
+    const paiementSuccess = Math.random() < 0.5;
+    const statut = paiementSuccess ? "CONFIRMED" : "CANCELLED";
+    console.log(statut);
+
+    this.reservationService.updateReservation(reservationId, statut).subscribe({
+      next: (response) => {
+        console.log("Confirmation :", response);
+        if (statut === "CANCELLED") {
+          this.dialog.open(this.paymentFailedDialog, {
+            width: '350px',
+            data: { message: "Le paiement a échoué. Veuillez réessayer." }
+          }).afterClosed().subscribe(() => {
+            this.router.navigate(['/home']); // Redirect to home page after closing
+          });
+        } else {
+          this.dialog.open(this.paymentSuccessDialog, {
+            width: '350px',
+            data: { message: "Le paiement a été effectué avec succès ! 🎉" }
+          }).afterClosed().subscribe(() => {
+            this.router.navigate(['/home']); // Redirect to home after success
+          });
+        }
+
+      }
+    });
   }
 
   getRandomItem(array: string[]): string {
     return array[Math.floor(Math.random() * array.length)];
   }
 
+
   confirmSelection() {
     if (!this.selectedBloc || !this.selectedEtage || !this.selectedAile || !this.selectedPlace) {
-      console.warn("⚠️ Please select a valid place!");
+      console.warn(" Please select a valid place!");
       return;
     }
 
     if (!this.id) {
-      console.error("❌ Error: No driver ID found in session!");
+      console.error("Error: No driver ID found in session!");
       return;
     }
 
     const parkingId = this.selectedParking.id;
-
     const placeId = `${parkingId}_${this.selectedBloc.replace("Bloc ", "B")}_${this.selectedEtage.replace("Étage ", "E")}_${this.selectedAile.replace("Aile ", "")}_${this.selectedPlace.replace("Place ", "P")}`;
 
     const reservationData = {
@@ -271,20 +370,24 @@ export class BookingComponent implements OnInit {
       facture: 0
     };
 
-    console.log("✅ Reservation Confirmed:", reservationData);
-    this.cancelNotification()
+    console.log("Reservation Confirmed:", reservationData);
 
     this.reservationService.addReservation(reservationData).subscribe({
       next: (response) => {
-        console.log("🎉 Reservation successful:", response);
+
+        console.log("Reservation successful:", response);
+        this.reservationId = response.id;
+
+        this.simulerPaiement(this.reservationId);
+
       },
       error: (err) => {
         console.error("Error making reservation:", err);
       }
-    })
+    });
+
+    this.cancelNotification();
   }
-
-
 
 
 }
