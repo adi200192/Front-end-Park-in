@@ -63,11 +63,11 @@ export class HomeComponent implements AfterViewInit {
     private dataService: DataService
   ) {
     this.searchForm = new FormGroup({
-      location: new FormControl('', Validators.required),
-      dateDebut: new FormControl(null, Validators.required),
+      location: new FormControl('', ), //Validators.required
+      dateDebut: new FormControl(null, ), //Validators.required
       latitude: new FormControl(null),
       longitude: new FormControl(null),
-      dateFin: new FormControl(null, Validators.required),
+      dateFin: new FormControl(null, ), //Validators.required
       pmr: new FormControl(false),
       type: new FormControl('STANDARD'),
       typeOuvrage: new FormControl('ouvrage'),

@@ -4,7 +4,14 @@
     <div class="parking-info">
       <h1 class="parking-title">{{ selectedParking.nom }}</h1>
       <p class="parking-address"><i class="fas fa-map-marker-alt"></i> {{ selectedParking.adresse }}</p>
-      <p class="parking-price"><i class="fas fa-euro-sign"></i> Tarif: <strong>{{ selectedParking.tarif }} €/heure</strong></p>
+      <div class="parking-prices">
+        <h3>Tarifs :</h3>
+        <p><i class="fas fa-clock"></i> 1 heure : <strong>{{ selectedParking.tarif1h }} €</strong></p>
+        <p><i class="fas fa-clock"></i> 2 heures : <strong>{{ selectedParking.tarif2h }} €</strong></p>
+        <p><i class="fas fa-clock"></i> 3 heures : <strong>{{ selectedParking.tarif3h }} €</strong></p>
+        <p><i class="fas fa-clock"></i> 4 heures : <strong>{{ selectedParking.tarif4h }} €</strong></p>
+        <p><i class="fas fa-calendar-day"></i> 24 heures : <strong>{{ selectedParking.tarif24h }} €</strong></p>
+      </div>
       <p class="parking-website">
         <i class="fas fa-link"></i> Site web:
         <a [href]="selectedParking.url" target="_blank">{{ selectedParking.url }}</a>
@@ -25,7 +32,8 @@
       </mat-card-header>
       <mat-card-content>
         <p>Parking: <strong>{{ selectedParking.nom }}</strong></p>
-        <p>Tarif: <strong>{{ selectedParking.tarif }} €/heure</strong></p>
+        <p>Date réservation : Du {{selectedParking.dateDebut | date:'dd/MM/yyyy HH:mm':'Europe/Paris'}} Au {{selectedParking.dateFin | date:'dd/MM/yyyy HH:mm':'Europe/Paris'}}</p>
+        <p>Total à payer: <strong>{{ facture }} €</strong></p>
         <p>Adresse: <strong>{{ selectedParking.adresse }}</strong></p>
       </mat-card-content>
     </mat-card>
@@ -77,6 +85,25 @@
           </mat-dialog-actions>
         </ng-template>
 
+        <!-- Payment Success Dialog -->
+        <ng-template #paymentSuccessDialog let-data>
+          <h2 mat-dialog-title>✅ Paiement Réussi</h2>
+          <mat-dialog-content>
+            <p>{{ data.message }}</p>
+          </mat-dialog-content>
+          <mat-dialog-actions align="end">
+            <button mat-button mat-dialog-close>OK</button>
+          </mat-dialog-actions>
+        </ng-template>
+        <ng-template #paymentFailedDialog let-data>
+          <h2 mat-dialog-title> Échec du paiement</h2>
+          <mat-dialog-content>
+            <p>{{ data.message }}</p>
+          </mat-dialog-content>
+          <mat-dialog-actions align="end">
+            <button mat-button (click)="retryPayment()">Réessayer</button>
+          </mat-dialog-actions>
+        </ng-template>
 
         <button mat-raised-button color="primary" class="full-width" (click)="verifierAuthentification()">
           Valider et payer

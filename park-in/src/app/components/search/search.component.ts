@@ -67,7 +67,11 @@ search(parking: ParkingDTO) {
       dateFin : this.dateFin,
       dateDebut : this.dateDebut,
       nom: parking.name,
-      tarif: parking.tarif1h,
+      tarif1h: parking.tarif1h,
+      tarif2h : parking.tarif2h,
+      tarif3h : parking.tarif3h,
+      tarif4h : parking.tarif4h,
+      tarif24h : parking.tarif24h,
       adresse: parking.address,
       url : parking.url,
     }

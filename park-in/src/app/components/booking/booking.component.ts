@@ -35,7 +35,10 @@ export class BookingComponent implements OnInit {
   selectedParking: any;
   dateFin: string | null = null;
   reservationId : number = 0;
+  facture : number = 0;
   @ViewChild('authDialog') authDialog!: TemplateRef<any>;
+  @ViewChild('paymentFailedDialog') paymentFailedDialog!: TemplateRef<any>;
+  @ViewChild('paymentSuccessDialog') paymentSuccessDialog!: TemplateRef<any>;
 
   structuredData: any = {}; // Stores places grouped by Bloc → Étage → Aile
   blocs: string[] = [];
@@ -73,15 +76,67 @@ export class BookingComponent implements OnInit {
         id: params['id'],
         imageUrl: params['imageUrl'],
         nom: params['nom'],
-        tarif: params['tarif'],
+        tarif1h: params['tarif1h'],
+        tarif2h : params['tarif2h'],
+        tarif3h : params['tarif3h'],
+        tarif4h : params['tarif4h'],
+        tarif24h : params['tarif24h'],
         adresse: params['adresse'],
         url: params['url'],
         dateDebut: params['dateDebut'],
         dateFin: params['dateFin']
       };
     });
-
+    console.log(this.selectedParking)
     this.getPlacesDisponibles();
+    this.facture = this.calculerFacture();
+  }
+
+  calculerFacture(): number {
+
+    let total = 0;
+
+    const dateDebut = new Date(this.selectedParking.dateDebut);
+    const dateFin = new Date(this.selectedParking.dateFin);
+
+    // Calculate duration in hours
+    const durationInMs = dateFin.getTime() - dateDebut.getTime();
+    const durationInHours = durationInMs / (1000 * 60 * 60); // Convert milliseconds to hours
+
+    console.log(`Durée de réservation : ${durationInHours} heures`);
+
+
+    if (durationInHours <= 1) {
+      total = this.selectedParking.tarif1h;
+    } else if (durationInHours <= 2) {
+      total = this.selectedParking.tarif2h;
+    } else if (durationInHours <= 3) {
+      total = this.selectedParking.tarif3h;
+    } else if (durationInHours <= 4) {
+      total = this.selectedParking.tarif4h;
+    } else if (durationInHours > 4 && durationInHours <= 24) {
+      total = this.selectedParking.tarif24h;
+    } else {
+      // If duration exceeds 24h, apply 24h tariff for each full day + hourly tariff for remaining hours
+      const fullDays = Math.floor(durationInHours / 24);
+      const remainingHours = durationInHours % 24;
+
+      total = fullDays * this.selectedParking.tarif24h;
+
+      if (remainingHours > 4) {
+        total += this.selectedParking.tarif24h; // Charge another full day if remaining hours exceed 4
+      } else if (remainingHours > 3) {
+        total += this.selectedParking.tarif4h;
+      } else if (remainingHours > 2) {
+        total += this.selectedParking.tarif3h;
+      } else if (remainingHours > 1) {
+        total += this.selectedParking.tarif2h;
+      } else if (remainingHours > 0) {
+        total += this.selectedParking.tarif1h;
+      }
+    }
+    console.log(`Montant total à payer : ${total} €`);
+    return total;
   }
 
   getPlacesDisponibles() {
@@ -89,6 +144,7 @@ export class BookingComponent implements OnInit {
       parkingId: this.selectedParking.id,
       typePlace: this.dataService.getType(),
       pmr: this.dataService.getPmr(),
+      facture : this.facture,
       dateDebut: this.dataService.getDateDebut(),
       dateFin: this.dataService.getDateFin()
     };
@@ -218,15 +274,38 @@ export class BookingComponent implements OnInit {
     }
   }
 
-  simulerPaiement(reservationId : number){
-      const paiementSuccess = Math.random() < 0.5;
-      const statut = paiementSuccess ? "CONFIRMED" : "CANCELLED";
-      console.log(statut)
-      this.reservationService.updateReservation(reservationId,statut).subscribe({
-        next: (response) => {
-          console.log("Confirmation :", response);}
-      })
-    }
+  retryPayment() {
+    this.dialog.closeAll();
+    this.router.navigate(['/home']);
+  }
+
+  simulerPaiement(reservationId: number) {
+    const paiementSuccess = Math.random() < 0.5;
+    const statut = paiementSuccess ? "CONFIRMED" : "CANCELLED";
+    console.log(statut);
+
+    this.reservationService.updateReservation(reservationId, statut).subscribe({
+      next: (response) => {
+        console.log("Confirmation :", response);
+        if (statut === "CANCELLED") {
+          this.dialog.open(this.paymentFailedDialog, {
+            width: '350px',
+            data: { message: "Le paiement a échoué. Veuillez réessayer." }
+          }).afterClosed().subscribe(() => {
+            this.router.navigate(['/home']); // Redirect to home page after closing
+          });
+        } else {
+          this.dialog.open(this.paymentSuccessDialog, {
+            width: '350px',
+            data: { message: "Le paiement a été effectué avec succès ! 🎉" }
+          }).afterClosed().subscribe(() => {
+            this.router.navigate(['/home']); // Redirect to home after success
+          });
+        }
+
+      }
+    });
+  }
 
   getRandomItem(array: string[]): string {
     return array[Math.floor(Math.random() * array.length)];
