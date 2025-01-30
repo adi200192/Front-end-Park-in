@@ -67,16 +67,16 @@ jobs:
 
       - name: Deploy Angular app to VM
         run: |
-          sshpass -p "$VM_PASSWORD" ssh -o StrictHostKeyChecking=no $VM_USERNAME@129.88.210.194 << 'EOF'
-          sudo mkdir -p /var/www/html/angular-app
-          sudo rm -rf /var/www/html/angular-app/*
-          sudo cp -r $GITHUB_WORKSPACE/dist/* /var/www/html/angular-app/
-          sudo apt-get update
-          sudo apt-get install -y npm
-          sudo npm install -g http-server
-          cd /var/www/html/angular-app
-          nohup http-server -p 4200 -a 0.0.0.0 &  # Lancer l'application en arrière-plan
-          EOF
+           sshpass -p "$VM_PASSWORD" ssh -o StrictHostKeyChecking=no $VM_USERNAME@129.88.210.194 << 'EOF'
+           sudo mkdir -p /var/www/html/angular-app
+           sudo rm -rf /var/www/html/angular-app/*
+           sudo cp -r $GITHUB_WORKSPACE/dist/* /var/www/html/angular-app/
+           sudo apt-get update
+           sudo apt-get install -y npm
+           cd /var/www/html/angular-app
+           sudo npm install
+           nohup sudo npm run start -- --host 0.0.0.0 --port 4200 &
+           EOF
         env:
           VM_USERNAME: ${{ secrets.VM_USERNAME }}
           VM_PASSWORD: ${{ secrets.VM_PASSWORD }}
