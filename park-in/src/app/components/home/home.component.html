@@ -72,6 +72,7 @@
     </div>
 
     <button mat-raised-button class="custom-button" type="submit" (click)="onSearch()">Rechercher</button>
+    <div *ngIf="ListeParking" class="error-message"> <p>Aucun parking disponible pour la période sélectionnée.</p> </div>
   </form>
 </div>
 
