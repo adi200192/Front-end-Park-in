@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -38,6 +38,7 @@ import { MatTimepickerModule } from '@angular/material/timepicker';
 export class HomeComponent implements AfterViewInit {
   searchForm: FormGroup;
   formSubmitted: boolean = false;
+  ListeParking: boolean = false;
   minDate: Date = new Date();
 
   @ViewChild('autoCompleteInput') autoCompleteInput!: ElementRef;
@@ -111,7 +112,6 @@ export class HomeComponent implements AfterViewInit {
     if (this.searchForm.valid) {
       this.formSubmitted = true;
 
-      // Convertir les valeurs en `ParkingRequest`
       const parkingRequest: ParkingRequest = {
         latitude: this.searchForm.get('latitude')?.value,
         longitude: this.searchForm.get('longitude')?.value,
@@ -134,14 +134,19 @@ export class HomeComponent implements AfterViewInit {
           this.dataService.setMessage(result);
           this.dataService.setDateDebut(new Date(this.searchForm.get('dateDebut')?.value).toISOString());
           this.dataService.setDateFin(new Date(this.searchForm.get('dateFin')?.value).toISOString());
-          this.router.navigate(['/search'], {
+          if(result.length == 0){
+            this.ListeParking = true;
+          }else{
+            this.router.navigate(['/search'], {
 
-            queryParams: {
-              dateDebut : parkingRequest.dateDebut,
-              dateFin: parkingRequest.dateFin}
+              queryParams: {
+                dateDebut : parkingRequest.dateDebut,
+                dateFin: parkingRequest.dateFin}
 
 
-          });
+            });
+          }
+
         },
         error: (err) => {
           console.error('Error fetching parking data', err);

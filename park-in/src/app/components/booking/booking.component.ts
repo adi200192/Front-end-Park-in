@@ -65,7 +65,7 @@ export class BookingComponent implements OnInit {
 
   ngOnInit() {
     this.id = sessionStorage.getItem('userId');
-    console.log("📌 ID du conducteur récupéré:", this.id);
+    console.log("ID du conducteur récupéré:", this.id);
 
     this.route.queryParams.subscribe(params => {
       this.dateFin = params['dateFin'] || null;
@@ -84,7 +84,6 @@ export class BookingComponent implements OnInit {
     this.getPlacesDisponibles();
   }
 
-  /** 🔥 Fetch places from API instead of using mock data */
   getPlacesDisponibles() {
     const placeRequest = {
       parkingId: this.selectedParking.id,
@@ -94,20 +93,19 @@ export class BookingComponent implements OnInit {
       dateFin: this.dataService.getDateFin()
     };
 
-    console.log("🔄 Requesting places with:", placeRequest);
+    console.log("Requesting places with:", placeRequest);
 
     this.placeService.getPlacesDisponibles(placeRequest).subscribe({
       next: (places) => {
-        console.log('✅ Places received:', places);
+        console.log('Places received:', places);
         this.processPlaces(places);
       },
       error: (err) => {
-        console.error('❌ Error fetching places:', err);
+        console.error('Error fetching places:', err);
       }
     });
   }
 
-  /** 🔥 Parses and structures API response */
   processPlaces(places: any[]) {
     this.structuredData = {};
     this.blocs = [];
@@ -129,7 +127,7 @@ export class BookingComponent implements OnInit {
       }
     });
 
-    console.log("📌 Updated Structured Data:", this.structuredData);
+    console.log("Updated Structured Data:", this.structuredData);
   }
 
   parsePlaceId(placeId: string) {
@@ -145,7 +143,7 @@ export class BookingComponent implements OnInit {
         place: `Place ${match[5]}`
       };
     }
-    console.error(`❌ Invalid ID format: ${placeId}`);
+    console.error(`Invalid ID format: ${placeId}`);
     return null;
   }
 
@@ -190,18 +188,18 @@ export class BookingComponent implements OnInit {
   verifierAuthentification() {
     this.authService.getUser().subscribe(user => {
       if (!user) {
-        console.warn("🚨 Utilisateur non connecté !");
+        console.warn("Utilisateur non connecté !");
 
         // Ouvrir le dialogue directement sans créer un autre composant
         this.dialog.open(this.authDialog, {
           width: '300px',
-          data: { message: "⚠️ Veuillez vous connecter pour réserver un parking." }
+          data: { message: "Veuillez vous connecter pour réserver un parking." }
         }).afterClosed().subscribe(() => {
           this.router.navigate(['/login'], { queryParams: { returnUrl: this.router.url } });
         });
 
       } else {
-        this.confirmSelection();  // Procéder à la réservation si connecté
+        this.confirmSelection();
       }
     });
   }
@@ -213,9 +211,9 @@ export class BookingComponent implements OnInit {
     const timeUntilNotification = notificationTime.getTime() - now.getTime();
 
     if (timeUntilNotification > 0) {
-      console.log(`📌 Notification programmée dans ${timeUntilNotification / 1000} secondes`);
+      console.log(`Notification programmée dans ${timeUntilNotification / 1000} secondes`);
       setTimeout(() => {
-        this.authService.sendWebNotification("🚗 Votre stationnement se termine bientôt !");
+        this.authService.sendWebNotification("Votre stationnement se termine bientôt !");
       }, timeUntilNotification);
     }
   }
@@ -236,12 +234,12 @@ export class BookingComponent implements OnInit {
 
   confirmSelection() {
     if (!this.selectedBloc || !this.selectedEtage || !this.selectedAile || !this.selectedPlace) {
-      console.warn("⚠️ Please select a valid place!");
+      console.warn(" Please select a valid place!");
       return;
     }
 
     if (!this.id) {
-      console.error("❌ Error: No driver ID found in session!");
+      console.error("Error: No driver ID found in session!");
       return;
     }
 
@@ -256,11 +254,11 @@ export class BookingComponent implements OnInit {
       facture: 0
     };
 
-    console.log("✅ Reservation Confirmed:", reservationData);
+    console.log("Reservation Confirmed:", reservationData);
 
     this.reservationService.addReservation(reservationData).subscribe({
       next: (response) => {
-        console.log("🎉 Reservation successful:", response);
+        console.log("Reservation successful:", response);
         this.reservationId = response.id;
 
         this.simulerPaiement(this.reservationId);
