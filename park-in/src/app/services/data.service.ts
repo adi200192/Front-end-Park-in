@@ -32,6 +32,7 @@ export class DataService {
   }
 
   setDateDebut(dateDebut : string){
+    console.log("date debut ",dateDebut);
     this.dateDebut = dateDebut
   }
   getDateDebut(){
@@ -39,6 +40,7 @@ export class DataService {
   }
 
   setDateFin(dateFin : string){
+    console.log("date Fin ",dateFin);
     this.dateFin =  dateFin
   }
   getDateFin(){
@@ -48,4 +50,5 @@ export class DataService {
   getMessage(): ParkingDTO[] {
     return this.parkings;
   }
+
 }

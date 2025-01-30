@@ -103,12 +103,12 @@ export class HomeComponent implements AfterViewInit {
     this.apiService.getCoordinates(testAddress).subscribe(
       (response) => {
         const {lat, lng} = response.results[0].geometry.location;
-        console.log(response);
+        //console.log(response);
         this.searchForm.patchValue({
           latitude: lat,
           longitude: lng
         });
-        console.log(this.searchForm.value);
+        //console.log(this.searchForm.value);
       },
       (error) => {
         console.error('Error calling Geocoding API:', error);
@@ -167,21 +167,20 @@ export class HomeComponent implements AfterViewInit {
         typeOuvrage: this.searchForm.get('typeOuvrage')?.value
       };
 
-      console.log('Search ParkingRequest:', parkingRequest);
+      //console.log('Search ParkingRequest:', parkingRequest);
 
       // Appel du service API pour récupérer les parkings disponibles
       this.parkingService.getAvailableParking(parkingRequest).subscribe({
         next: (result) => {
-          console.log('Search results:', result);
+          //console.log('Search results:', result);
           this.isLoading = false;
           this.dataService.setType(parkingRequest.type)
           this.dataService.setPmr(parkingRequest.pmr)
           this.dataService.setMessage(result);
-          this.dataService.setDateDebut(new Date(this.searchForm.get('dateDebut')?.value).toISOString());
-          this.dataService.setDateFin(new Date(this.searchForm.get('dateFin')?.value).toISOString());
+          this.dataService.setDateDebut(parkingRequest.dateDebut);
+          this.dataService.setDateFin(parkingRequest.dateFin);
           if (result.length == 0) {
             this.ListeParking = true;
-            console.log("IM HERE")
             this.isLoading = false;
           } else {
             this.router.navigate(['/search'], {
@@ -200,7 +199,7 @@ export class HomeComponent implements AfterViewInit {
       });
       this.isLoading = true;
 
-      console.log("🔍 Vérification des valeurs du formulaire avant validation :", this.searchForm.value);
+      //console.log("🔍 Vérification des valeurs du formulaire avant validation :", this.searchForm.value);
 
 
       if (this.searchForm.invalid) {

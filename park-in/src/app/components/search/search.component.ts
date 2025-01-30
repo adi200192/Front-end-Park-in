@@ -42,8 +42,8 @@ export class SearchComponent implements OnInit {
   ngOnInit(): void {
     this.isLoading = true;
     this.route.queryParams.subscribe(params => {
-      this.dateFin = params['dateFin'] || null;
-      this.dateDebut = params['dateDebut'] || null;})
+      this.dateFin = this.dataService.getDateFin();
+      this.dateDebut = this.dataService.getDateDebut();})
 
     this.parkings = this.dataService.getMessage();
 

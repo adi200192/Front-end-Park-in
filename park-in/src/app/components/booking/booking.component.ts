@@ -51,7 +51,7 @@ export class BookingComponent implements OnInit {
   @ViewChild('paymentFailedDialog') paymentFailedDialog!: TemplateRef<any>;
   @ViewChild('paymentSuccessDialog') paymentSuccessDialog!: TemplateRef<any>;
 
-  structuredData: any = {}; // Stores places grouped by Bloc → Étage → Aile
+  structuredData: any = {}; 
   blocs: string[] = [];
   etages: string[] = [];
   ailes: string[] = [];
@@ -62,12 +62,11 @@ export class BookingComponent implements OnInit {
   selectedAile: string = '';
   selectedPlace: string = '';
 
-
+  
 
   autoAssign: boolean = false;
 
-  id: string | null = null; // Store the driver ID
-
+  id: string | null = null; 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -80,14 +79,14 @@ export class BookingComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    // const dateDebut = new Date(this.dataService.getDateDebut());
+    // const dateFin = new Date(this.dataService.getDateFin());
+    //console.log("hamza",dateDebut)
     this.isLoading = true;
-    this.id = sessionStorage.getItem('userId');
-    // Stocker les dates correctement avant la navigation
-    sessionStorage.setItem('dateDebut', new Date(this.dataService.getDateDebut()).toISOString());
-    sessionStorage.setItem('dateFin', new Date(this.dataService.getDateFin()).toISOString());
+    this.id = sessionStorage.getItem('userId'); 
 
-    console.log("📌 ID du conducteur récupéré:", this.id);
+    // sessionStorage.setItem('dateDebut', dateDebut.toISOString());
+    // sessionStorage.setItem('dateFin', dateFin.toISOString());
 
 
     this.route.queryParams.subscribe(params => {
@@ -103,11 +102,12 @@ export class BookingComponent implements OnInit {
         tarif24h : params['tarif24h'],
         adresse: params['adresse'],
         url: params['url'],
-        dateDebut: sessionStorage.getItem('dateDebut'),
-        dateFin: sessionStorage.getItem('dateFin')
+        dateDebut: this.dataService.getDateDebut(),
+        dateFin: this.dataService.getDateFin()
 
       };
     });
+
     console.log(this.selectedParking)
     this.getPlacesDisponibles();
     this.facture = this.calculerFacture();
@@ -119,11 +119,11 @@ export class BookingComponent implements OnInit {
 
     const dateDebut = new Date(this.selectedParking.dateDebut);
     const dateFin = new Date(this.selectedParking.dateFin);
+    console.log("rachid",dateDebut)
+    console.log("rachid",dateFin)
 
-    // Calculate duration in hours
     const durationInMs = dateFin.getTime() - dateDebut.getTime();
-    const durationInHours = durationInMs / (1000 * 60 * 60); // Convert milliseconds to hours
-
+    const durationInHours = durationInMs / (1000 * 60 * 60); 
     console.log(`Durée de réservation : ${durationInHours} heures`);
 
 
@@ -138,14 +138,13 @@ export class BookingComponent implements OnInit {
     } else if (durationInHours > 4 && durationInHours <= 24) {
       total = this.selectedParking.tarif24h;
     } else {
-      // If duration exceeds 24h, apply 24h tariff for each full day + hourly tariff for remaining hours
       const fullDays = Math.floor(durationInHours / 24);
       const remainingHours = durationInHours % 24;
 
       total = fullDays * this.selectedParking.tarif24h;
 
       if (remainingHours > 4) {
-        total += this.selectedParking.tarif24h; // Charge another full day if remaining hours exceed 4
+        total += this.selectedParking.tarif24h; 
       } else if (remainingHours > 3) {
         total += this.selectedParking.tarif4h;
       } else if (remainingHours > 2) {
@@ -161,13 +160,14 @@ export class BookingComponent implements OnInit {
   }
 
   getPlacesDisponibles() {
+
     const placeRequest = {
       parkingId: this.selectedParking.id,
       typePlace: this.dataService.getType(),
       pmr: this.dataService.getPmr(),
       facture : this.facture,
-      dateDebut: this.dataService.getDateDebut(),
-      dateFin: this.dataService.getDateFin()
+      dateDebut: new Date(this.selectedParking.dateDebut).toISOString(),
+      dateFin: new Date(this.selectedParking.dateFin).toISOString()
     };
 
     console.log("Requesting places with:", placeRequest);
@@ -275,7 +275,7 @@ export class BookingComponent implements OnInit {
   }
   //oth*/
   onPlaceSelected(placeData: any) {
-    console.log("📌 Place selected from SpotBookComponent:", placeData);
+    //console.log("📌 Place selected from SpotBookComponent:", placeData);
     this.selectedBloc = `Bloc ${placeData.bloc.replace('Bloc ', '')}`;
     this.selectedEtage = `Étage ${placeData.etage.replace('Étage ', '')}`;
     this.selectedAile = `Aile ${placeData.aile.replace('Aile ', '')}`;
@@ -288,7 +288,6 @@ export class BookingComponent implements OnInit {
       if (!user) {
         console.warn("Utilisateur non connecté !");
 
-        // Ouvrir le dialogue directement sans créer un autre composant
         this.dialog.open(this.authDialog, {
           width: '300px',
           data: { message: "Veuillez vous connecter pour réserver un parking." }
@@ -318,11 +317,12 @@ export class BookingComponent implements OnInit {
 
   retryPayment() {
     this.dialog.closeAll();
+    this.router.navigate(['/home']);
   }
 
 
   simulerPaiement(reservationId: number) {
-    const paiementSuccess = Math.random() < 0.2;
+    const paiementSuccess = Math.random() < 0.5;
     const statut = paiementSuccess ? "CONFIRMED" : "CANCELLED";
     console.log(statut);
 
@@ -334,14 +334,14 @@ export class BookingComponent implements OnInit {
             width: '350px',
             data: { message: "Le paiement a échoué. Veuillez réessayer." }
           }).afterClosed().subscribe(() => {
-            //this.router.navigate(['/home']); // Redirect to home page after closing
+            this.router.navigate(['/home']);
           });
         } else {
           this.dialog.open(this.paymentSuccessDialog, {
             width: '350px',
-            data: { message: "Le paiement a été effectué avec succès ! 🎉" }
+            data: { message: "Le paiement a été effectué avec succès ! " }
           }).afterClosed().subscribe(() => {
-            this.router.navigate(['/home']); // Redirect to home after success
+            this.router.navigate(['/home']); 
           });
         }
 
