@@ -37,9 +37,10 @@ export class AuthService {
    * @param uid Identifiant unique Firebase de l'utilisateur
    * @returns Observable pour gérer la réponse du serveur
    */
-  sendUserDataToBackend(id: string): Observable<any> {
-    return this.http.post('http://localhost:2200/conducteur/inscription', { id });
-  }
+  sendUserDataToBackend(id: string, abonne: boolean): Observable<any> {
+    return this.http.post('http://localhost:2200/conducteur/inscription', { id, abonne });
+}
+
 
   sendUserDataToBackendConnexion(id: string): Observable<any> {
     return this.http.post('http://localhost:2200/conducteur/connexion', { id });

@@ -50,6 +50,7 @@ export class SearchComponent implements OnInit {
     if (this.parkings.length === 0) {
       this.isLoading = false;
       console.warn('No parking data found');
+      this.router.navigate(['/**']);
     } else {
       this.isLoading = false;
       console.log('Received parking data:', this.parkings);

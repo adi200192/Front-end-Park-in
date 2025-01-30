@@ -113,7 +113,7 @@ export class HomeComponent implements AfterViewInit {
   }
 
   async onSearch() {
-    this.isLoading = true;
+    
     
     console.log("🔍 Vérification des valeurs du formulaire avant validation :", this.searchForm.value);
 
@@ -145,6 +145,7 @@ export class HomeComponent implements AfterViewInit {
       hauteur: this.searchForm.get('hauteur')?.value,
       typeOuvrage: this.searchForm.get('typeOuvrage')?.value
     };
+    this.isLoading = true;
 
     console.log('✅ Demande de recherche envoyée :', parkingRequest);
 

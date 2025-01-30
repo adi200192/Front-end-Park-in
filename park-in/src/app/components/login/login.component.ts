@@ -54,7 +54,6 @@ export class LoginComponent {
 
         sessionStorage.setItem('userId', user.uid);
 
-
         this.authService.sendUserDataToBackendConnexion(user.uid).subscribe({
           next: (response) => {
             alert('Connexion réussie !');

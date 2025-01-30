@@ -46,23 +46,24 @@ export class RegisterComponent {
 
   async Sinscrire() {
     if (this.inscription.valid) {
-      const { email, password } = this.inscription.value;
+      const { name, email, password } = this.inscription.value;
       try {
         const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
         const user = userCredential.user;
   
-        this.authService.sendUserDataToBackend(user.uid).subscribe({
+        const userId = user.uid; // ✅ Récupération de l'ID utilisateur
+        const abonne = false;
+        console.log(userId);
+        this.authService.sendUserDataToBackend(userId, abonne).subscribe({
           next: (response) => {
-            alert('insctiption réussie !');
+            alert('Inscription réussie !');
             this.router.navigate(['/']);
           },
           error: (error) => {
             alert('Erreur lors de l\'envoi des données au backend: ' + error.message);
           }
         });
-  
-        alert('Inscription réussie ! Vous pouvez maintenant vous connecter.');
-        this.router.navigate(['/login']);
+
       } catch (error: any) {
         alert(`Erreur lors de l'inscription : ${error.message}`);
       }
@@ -75,7 +76,14 @@ export class RegisterComponent {
       const result = await signInWithPopup(this.auth, provider);
       const user = result.user;
 
-      this.http.post('http://localhost:2200/conducteur/inscription', { uid: user.uid })
+      const userData = {
+        uid: user.uid,
+        name: user.displayName,
+        email: user.email,
+        abonne: false  // ✅ Ajout de l'attribut abonne
+      };
+
+      this.http.post('http://localhost:2200/conducteur/inscription', userData)
         .subscribe(response => {
           console.log('Inscription Google backend:', response);
           alert('Inscription réussie avec Google !');
@@ -92,7 +100,14 @@ export class RegisterComponent {
       const result = await signInWithPopup(this.auth, provider);
       const user = result.user;
 
-      this.http.post('http://localhost:2200/inscription', { uid: user.uid })
+      const userData = {
+        uid: user.uid,
+        name: user.displayName,
+        email: user.email,
+        abonne: false  // ✅ Ajout de l'attribut abonne
+      };
+
+      this.http.post('http://localhost:2200/conducteur/inscription', userData)
         .subscribe(response => {
           console.log('Inscription Facebook backend:', response);
           alert('Inscription réussie avec Facebook !');
