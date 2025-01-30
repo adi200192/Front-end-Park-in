@@ -1,30 +1,40 @@
-<h1>Liste de parking</h1>
-<div class="parking-list">
-  <div *ngFor="let parking of parkings" class="parking-card">
-    <img [src]="parking.imageUrl" alt="Parking image" class="parking-image">
 
-    <div class="parking-info">
-      <h2>{{ parking.name }} <span class="parking-type">({{ parking.typeOuvrage.replaceAll('_',' ')}})</span></h2>
-      <p class="address">{{ parking.address }}</p>
-      <div class="distance">
-        Distance : {{ parking.distance }}m
+<div class="parking-container">
+  <div class="parking-list">
+    <h1>Liste de parking</h1>
+    <div *ngFor="let parking of parkings" class="parking-card">
+      <img [src]="parking.imageUrl" alt="Parking image" class="parking-image">
+
+      <div class="parking-info">
+        <h2>{{ parking.name }} <span class="parking-type">({{ parking.typeOuvrage.replaceAll('_',' ')}})</span></h2>
+        <p class="address">{{ parking.address }}</p>
+        <div class="distance">
+          Distance: {{ parking.distance }}m
+        </div>
+
+        <div class="parking-features">
+          <div *ngIf="parking.nbPMR>0" class="pmr">
+            <img src="../../../assets/icons/pmr.jpg" class="icon" alt="Handicap accessible">
+          </div>
+          <div class="height">
+            <img src="../../../assets/icons/height.png" class="icon" alt="Height restriction">
+            <span>{{ parking.hauteurMax }} m</span>
+          </div>
+        </div>
+
       </div>
 
-      <div class="parking-features">
-        <div *ngIf="parking.nbPMR>0" class="pmr">
-          <img src="../../../assets/icons/pmr.jpg" class="icon" alt="Handicap accessible">
-        </div>
-        <div class="height">
-          <img src="../../../assets/icons/height.png" class="icon" alt="Height restriction">
-          <span>{{ parking.hauteurMax }} m</span>
-        </div>
+      <div class="parking-actions">
+        <p class="price">{{ parking.tarif1h }} €/heure</p>
+        <button class="btn btn-primary" (click)="search(parking)">LOUER</button>
       </div>
-
-    </div>
-
-    <div class="parking-actions">
-      <p class="price">{{ parking.tarif1h }} €/heure</p>
-      <button class="btn btn-primary" (click)="search(parking)">LOUER</button>
     </div>
   </div>
-</div>
+
+  <div *ngIf="isLoading" class="spinner-overlay">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <div class="parking-map">
+    <app-map [parkings]="parkings"></app-map>
+  </div>

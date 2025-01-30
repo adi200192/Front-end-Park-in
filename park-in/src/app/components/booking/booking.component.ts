@@ -13,6 +13,8 @@ import {ReservationService} from '../../services/reservation.service';
 import {DataService} from '../../services/data.service';
 import {PlaceService} from '../../services/place.service';
 import {ReservationRequest} from '../../model/reservationRequest';
+import { SpotBookComponent } from "../spot-book/spot-book.component";
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-booking',
@@ -25,15 +27,19 @@ import {ReservationRequest} from '../../model/reservationRequest';
     MatCheckboxModule,
     MatSelectModule,
     MatInputModule,
-    MatDialogModule
-  ],
+    MatDialogModule,
+    SpotBookComponent,
+    MatProgressSpinnerModule
+],
   templateUrl: './booking.component.html',
   styleUrl: './booking.component.css'
 })
 export class BookingComponent implements OnInit {
   selectedParking: any;
   dateFin: string | null = null;
+  isLoading = false;
   @ViewChild('authDialog') authDialog!: TemplateRef<any>;
+
 
   structuredData: any = {}; // Stores places grouped by Bloc → Étage → Aile
   blocs: string[] = [];
@@ -62,6 +68,7 @@ export class BookingComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.isLoading = true;
     this.id = sessionStorage.getItem('userId'); // ✅ Get driver ID
     console.log("📌 ID du conducteur récupéré:", this.id);
 
@@ -96,10 +103,12 @@ export class BookingComponent implements OnInit {
 
     this.placeService.getPlacesDisponibles(placeRequest).subscribe({
       next: (places) => {
+        this.isLoading = false;
         console.log('✅ Places received:', places);
         this.processPlaces(places);
       },
       error: (err) => {
+        this.isLoading = false;
         console.error('❌ Error fetching places:', err);
       }
     });
@@ -184,6 +193,23 @@ export class BookingComponent implements OnInit {
       this.selectedPlace = '';
     }
   }
+
+ /* //oth
+  onPlaceSelected(placeData: any) {
+    this.selectedBloc = placeData.bloc.replace('Bloc ', '');
+    this.selectedEtage = placeData.etage.replace('Étage ', '');
+    this.selectedAile = placeData.aile.replace('Aile ', '');
+    this.selectedPlace = placeData.place.replace('Place ', '');
+  }
+  //oth*/
+  onPlaceSelected(placeData: any) {
+    console.log("📌 Place selected from SpotBookComponent:", placeData);
+    this.selectedBloc = `Bloc ${placeData.bloc.replace('Bloc ', '')}`;
+    this.selectedEtage = `Étage ${placeData.etage.replace('Étage ', '')}`;
+    this.selectedAile = `Aile ${placeData.aile.replace('Aile ', '')}`;
+    this.selectedPlace = `Place ${placeData.place.replace('Place ', '')}`;
+  }
+
 
   verifierAuthentification() {
     this.authService.getUser().subscribe(user => {

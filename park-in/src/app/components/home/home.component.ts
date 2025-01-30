@@ -14,6 +14,7 @@ import { ParkingRequest } from '../../model/parkingRequest';
 import { ParkingService } from '../../services/parking.service';
 import { DataService } from '../../services/data.service';
 import { MatTimepickerModule } from '@angular/material/timepicker';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-home',
@@ -29,7 +30,8 @@ import { MatTimepickerModule } from '@angular/material/timepicker';
     MatFormFieldModule,
     MatInputModule,
     MatOptionModule,
-    MatTimepickerModule
+    MatTimepickerModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
@@ -38,6 +40,7 @@ import { MatTimepickerModule } from '@angular/material/timepicker';
 export class HomeComponent implements AfterViewInit {
   searchForm: FormGroup;
   formSubmitted: boolean = false;
+  isLoading = false;
   minDate: Date = new Date();
 
   @ViewChild('autoCompleteInput') autoCompleteInput!: ElementRef;
@@ -110,6 +113,8 @@ export class HomeComponent implements AfterViewInit {
   }
 
   async onSearch() {
+    this.isLoading = true;
+    
     console.log("🔍 Vérification des valeurs du formulaire avant validation :", this.searchForm.value);
 
     if (this.searchForm.invalid) {
@@ -145,6 +150,7 @@ export class HomeComponent implements AfterViewInit {
 
     this.parkingService.getAvailableParking(parkingRequest).subscribe({
       next: (result) => {
+        this.isLoading = false;
         console.log('🚀 Résultats de la recherche :', result);
         this.dataService.setType(parkingRequest.type);
         this.dataService.setPmr(parkingRequest.pmr);
@@ -159,6 +165,7 @@ export class HomeComponent implements AfterViewInit {
         });
       },
       error: (err) => {
+        this.isLoading = false;
         console.error('❌ Erreur lors de la récupération des parkings :', err);
       }
     });
@@ -167,24 +174,30 @@ export class HomeComponent implements AfterViewInit {
   combineDateAndTime(date: any, time: any): string {
     if (!date || !time) {
       console.error("❌ Erreur: date ou time invalide", { date, time });
-      return ''; // Retourne une valeur vide en cas d'erreur
+      return '';
     }
   
     let dateTime = new Date(date);
   
-    // Vérifier si `time` est bien une chaîne avant d'appliquer split
     if (typeof time === 'string') {
       const [hours, minutes] = time.split(':').map(Number);
       dateTime.setHours(hours, minutes, 0);
     } else if (time instanceof Date) {
-      // Si `time` est un objet Date, prendre directement les heures et minutes
       dateTime.setHours(time.getHours(), time.getMinutes(), 0);
     } else {
       console.error("❌ Erreur: format d'heure non reconnu", time);
       return '';
     }
   
-    return dateTime.toISOString(); // Format ISO corrigé
+    // ✅ Nouvelle correction : Convertir en chaîne sans perte de fuseau horaire
+    const year = dateTime.getFullYear();
+    const month = (dateTime.getMonth() + 1).toString().padStart(2, '0'); // Mois commence à 0
+    const day = dateTime.getDate().toString().padStart(2, '0');
+    const hours = dateTime.getHours().toString().padStart(2, '0');
+    const minutes = dateTime.getMinutes().toString().padStart(2, '0');
+    const seconds = dateTime.getSeconds().toString().padStart(2, '0');
+  
+    return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
   }
   
 }

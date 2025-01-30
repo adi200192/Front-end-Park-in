@@ -1,22 +1,25 @@
 
 import {Component, OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {CommonModule, NgFor} from '@angular/common';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DataService} from '../../services/data.service';
 import {ParkingDTO} from '../../model/parkingDTO';
-
+import parkingsData from './parkings.json'
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MapComponent } from '../map/map.component';
 
 
 @Component({
   selector: 'app-search',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,MapComponent,MatProgressSpinnerModule],
   templateUrl: './search.component.html',
   styleUrl: './search.component.css'
 })
 export class SearchComponent implements OnInit {
   parkings: ParkingDTO[] = [];
   dateFin: string | null = null;
+  isLoading = false;
 
   dateDebut : string | null = null;
   imagePaths: string[] =
@@ -37,6 +40,7 @@ export class SearchComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.isLoading = true;
     this.route.queryParams.subscribe(params => {
       this.dateFin = params['dateFin'] || null;
       this.dateDebut = params['dateDebut'] || null;})
@@ -44,8 +48,10 @@ export class SearchComponent implements OnInit {
     this.parkings = this.dataService.getMessage();
 
     if (this.parkings.length === 0) {
+      this.isLoading = false;
       console.warn('No parking data found');
     } else {
+      this.isLoading = false;
       console.log('Received parking data:', this.parkings);
     }
 
@@ -56,9 +62,23 @@ export class SearchComponent implements OnInit {
      distance : parseFloat((parking.distance * 1000).toFixed(2))
     };
   })
+ //this.loadParkingsFromJson();
     console.log(this.parkings)
 }
+loadParkingsFromJson() {
+  try {
 
+    this.parkings = parkingsData.map(parking => ({
+      ...parking,
+      imageUrl: this.getRandomImage(),
+      distance: parseFloat((parking.distance * 1000).toFixed(2))
+    }));
+    console.log('Loaded parkings:', this.parkings);
+  } catch (error) {
+    console.error('Error loading parkings:', error);
+    this.parkings = [];
+  }
+}
 search(parking: ParkingDTO) {
   this.router.navigate(['/booking'], {
     queryParams: {
@@ -73,5 +93,6 @@ search(parking: ParkingDTO) {
     }
   });
 }
+
 
 }
