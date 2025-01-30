@@ -11,7 +11,7 @@ import {ReservationRequest} from '../model/reservationRequest';
 })
 export class ReservationService {
 
-  private baseUrl = 'http://localhost:2200/reservation';
+  private baseUrl = 'http://129.88.210.194:8080/reservation';
 
   constructor(private http: HttpClient) {
   }

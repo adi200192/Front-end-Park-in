@@ -8,7 +8,7 @@ import { PlaceRequest } from '../model/placeRequest';
   providedIn: 'root'
 })
 export class PlaceService {
-  private baseUrl = 'http://localhost:2200/api/places';
+  private baseUrl = 'http://129.88.210.194:8080/api/places';
 
   constructor(private http: HttpClient) {}
 

@@ -38,12 +38,12 @@ export class AuthService {
    * @returns Observable pour gérer la réponse du serveur
    */
   sendUserDataToBackend(id: string, abonne: boolean): Observable<any> {
-    return this.http.post('http://localhost:2200/conducteur/inscription', { id, abonne });
+    return this.http.post('http://129.88.210.194:8080/conducteur/inscription', { id, abonne });
 }
 
 
   sendUserDataToBackendConnexion(id: string): Observable<any> {
-    return this.http.post('http://localhost:2200/conducteur/connexion', { id });
+    return this.http.post('http://129.88.210.194:8080/conducteur/connexion', { id });
   }
 
   sendWebNotification(message: string) {

@@ -62,6 +62,8 @@ export class BookingComponent implements OnInit {
   selectedAile: string = '';
   selectedPlace: string = '';
 
+  
+
   autoAssign: boolean = false;
 
   id: string | null = null; // Store the driver ID
@@ -81,6 +83,10 @@ export class BookingComponent implements OnInit {
 
     this.isLoading = true;
     this.id = sessionStorage.getItem('userId'); 
+    // Stocker les dates correctement avant la navigation
+    sessionStorage.setItem('dateDebut', new Date(this.dataService.getDateDebut()).toISOString());
+    sessionStorage.setItem('dateFin', new Date(this.dataService.getDateFin()).toISOString());
+
     console.log("📌 ID du conducteur récupéré:", this.id);
 
 
@@ -97,8 +103,9 @@ export class BookingComponent implements OnInit {
         tarif24h : params['tarif24h'],
         adresse: params['adresse'],
         url: params['url'],
-        dateDebut: params['dateDebut'],
-        dateFin: params['dateFin']
+        dateDebut: sessionStorage.getItem('dateDebut'), 
+        dateFin: sessionStorage.getItem('dateFin')
+
       };
     });
     console.log(this.selectedParking)

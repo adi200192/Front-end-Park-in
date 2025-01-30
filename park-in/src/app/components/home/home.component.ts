@@ -180,6 +180,7 @@ export class HomeComponent implements AfterViewInit {
           this.dataService.setDateDebut(new Date(this.searchForm.get('dateDebut')?.value).toISOString());
           this.dataService.setDateFin(new Date(this.searchForm.get('dateFin')?.value).toISOString());
           if (result.length == 0) {
+            this.isLoading = false;
             this.ListeParking = true;
           } else {
             this.router.navigate(['/search'], {
