@@ -44,7 +44,7 @@ jobs:
       - name: Build Angular project
         run: |
          cd park-in
-         npm install -g @angular/cli
+         npm install --force
          npm run build --prod  
 
   deploy-to-vm:
