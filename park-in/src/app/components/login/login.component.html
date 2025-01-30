@@ -13,10 +13,9 @@
                 <input matInput type="password" formControlName="mdp" name="password" required>
             </mat-form-field>
 
-            <button mat-raised-button class="black-button full-width" type="submit">
+            <button mat-raised-button class="black-button full-width" type="submit" mat-button (click)="Seconnecter()">
                 <div class="button-content">
-                    <img src="assets/lock-icon.jpg" alt="lock" class="social-icon">
-                    <a mat-button (click)="Seconnecter()">Se connecter</a>
+                    <a>Se connecter</a>
                 </div>
             </button>
         </form>
