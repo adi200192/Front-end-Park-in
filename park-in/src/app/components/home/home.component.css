@@ -1,6 +1,12 @@
 .search-container h2{
   padding-top : 20px;
 }
+
+h1 {
+  font-size : 36px;
+  margin-top :  20px;
+  margin-bottom : 20px;
+}
 .search-container {
   max-width: 1200px;
   margin: 0 auto; /* Center the form */

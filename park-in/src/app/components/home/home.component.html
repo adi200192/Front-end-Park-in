@@ -1,7 +1,7 @@
 <div class="search-container">
   <h1>Trouver votre Parking !</h1>
   <form [formGroup]="searchForm" class="search-form">
-    
+
     <div class="form-row">
       <mat-form-field class="input-medium" appearance="outline">
         <mat-label>Lieu de stationnement</mat-label>
@@ -70,7 +70,6 @@
 
       <mat-checkbox class="custom-checkbox" formControlName="pmr">Places PMR</mat-checkbox>
     </div>
-
     <button mat-raised-button class="custom-button" type="submit" (click)="onSearch()">Rechercher</button>
     <div *ngIf="ListeParking" class="error-message"> <p>Aucun parking disponible pour la période sélectionnée.</p> </div>
   </form>

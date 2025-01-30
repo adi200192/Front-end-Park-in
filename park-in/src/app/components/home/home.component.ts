@@ -134,7 +134,6 @@ export class HomeComponent implements AfterViewInit {
       return '';
     }
 
-    // ✅ Nouvelle correction : Convertir en chaîne sans perte de fuseau horaire
     const year = dateTime.getFullYear();
     const month = (dateTime.getMonth() + 1).toString().padStart(2, '0'); // Mois commence à 0
     const day = dateTime.getDate().toString().padStart(2, '0');
@@ -174,14 +173,16 @@ export class HomeComponent implements AfterViewInit {
       this.parkingService.getAvailableParking(parkingRequest).subscribe({
         next: (result) => {
           console.log('Search results:', result);
+          this.isLoading = false;
           this.dataService.setType(parkingRequest.type)
           this.dataService.setPmr(parkingRequest.pmr)
           this.dataService.setMessage(result);
           this.dataService.setDateDebut(new Date(this.searchForm.get('dateDebut')?.value).toISOString());
           this.dataService.setDateFin(new Date(this.searchForm.get('dateFin')?.value).toISOString());
           if (result.length == 0) {
-            this.isLoading = false;
             this.ListeParking = true;
+            console.log("IM HERE")
+            this.isLoading = false;
           } else {
             this.router.navigate(['/search'], {
 
@@ -209,43 +210,6 @@ export class HomeComponent implements AfterViewInit {
 
       this.formSubmitted = true;
 
-      console.log("📌 Valeur actuelle de time:", this.searchForm.get('timeDebut')?.value);
-
-
-      // const parkingRequest: ParkingRequest = {
-      //   latitude: this.searchForm.get('latitude')?.value,
-      //   longitude: this.searchForm.get('longitude')?.value,
-      //   dateDebut: dateDebut,
-      //   dateFin: dateFin,
-      //   pmr: this.searchForm.get('pmr')?.value,
-      //   type: this.searchForm.get('type')?.value,
-      //   hauteur: this.searchForm.get('hauteur')?.value,
-      //   typeOuvrage: this.searchForm.get('typeOuvrage')?.value
-      // };
-
-      console.log('✅ Demande de recherche envoyée :', parkingRequest);
-
-      this.parkingService.getAvailableParking(parkingRequest).subscribe({
-        next: (result) => {
-          this.isLoading = false;
-          console.log('🚀 Résultats de la recherche :', result);
-          this.dataService.setType(parkingRequest.type);
-          this.dataService.setPmr(parkingRequest.pmr);
-          this.dataService.setMessage(result);
-          this.dataService.setDateDebut(parkingRequest.dateDebut);
-          this.dataService.setDateFin(parkingRequest.dateFin);
-          this.router.navigate(['/search'], {
-            queryParams: {
-              dateDebut: parkingRequest.dateDebut,
-              dateFin: parkingRequest.dateFin
-            }
-          });
-        },
-        error: (err) => {
-          this.isLoading = false;
-          console.error('❌ Erreur lors de la récupération des parkings :', err);
-        }
-      });
     }
 
 

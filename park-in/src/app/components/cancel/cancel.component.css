@@ -5,6 +5,13 @@
   padding: 20px;
 }
 
+h1{
+  font-size : 36px;
+  margin-top :  20px;
+  margin-bottom : 20px;
+  padding-left : 20px;
+}
+
 .parking-card {
   display: flex;
   align-items: center;

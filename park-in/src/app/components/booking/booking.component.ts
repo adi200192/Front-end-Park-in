@@ -62,7 +62,7 @@ export class BookingComponent implements OnInit {
   selectedAile: string = '';
   selectedPlace: string = '';
 
-  
+
 
   autoAssign: boolean = false;
 
@@ -82,7 +82,7 @@ export class BookingComponent implements OnInit {
   ngOnInit() {
 
     this.isLoading = true;
-    this.id = sessionStorage.getItem('userId'); 
+    this.id = sessionStorage.getItem('userId');
     // Stocker les dates correctement avant la navigation
     sessionStorage.setItem('dateDebut', new Date(this.dataService.getDateDebut()).toISOString());
     sessionStorage.setItem('dateFin', new Date(this.dataService.getDateFin()).toISOString());
@@ -103,7 +103,7 @@ export class BookingComponent implements OnInit {
         tarif24h : params['tarif24h'],
         adresse: params['adresse'],
         url: params['url'],
-        dateDebut: sessionStorage.getItem('dateDebut'), 
+        dateDebut: sessionStorage.getItem('dateDebut'),
         dateFin: sessionStorage.getItem('dateFin')
 
       };
@@ -318,12 +318,11 @@ export class BookingComponent implements OnInit {
 
   retryPayment() {
     this.dialog.closeAll();
-    this.router.navigate(['/home']);
   }
 
 
   simulerPaiement(reservationId: number) {
-    const paiementSuccess = Math.random() < 0.5;
+    const paiementSuccess = Math.random() < 0.2;
     const statut = paiementSuccess ? "CONFIRMED" : "CANCELLED";
     console.log(statut);
 
@@ -335,7 +334,7 @@ export class BookingComponent implements OnInit {
             width: '350px',
             data: { message: "Le paiement a échoué. Veuillez réessayer." }
           }).afterClosed().subscribe(() => {
-            this.router.navigate(['/home']); // Redirect to home page after closing
+            //this.router.navigate(['/home']); // Redirect to home page after closing
           });
         } else {
           this.dialog.open(this.paymentSuccessDialog, {

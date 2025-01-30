@@ -25,6 +25,10 @@
   align-items: center;
 }
 
+.parking-title{
+  font-size : 30px;
+  padding-top : 20px;
+}
 /* Right section styles */
 .right-section {
   flex: 1;
@@ -38,17 +42,12 @@
 .parking-prices p {
   font-size: 11pt; /* Texte en Arial 11 pts */
   color: #555; /* Texte légèrement gris */
-  display: flex;
   align-items: center; /* Aligner l'icône et le texte */
   margin: 5px 0;
   font-family : Arial;
 }
 
-.parking-prices i {
-  color: #007bff; /* Icônes en bleu */
-  margin-right: 8px; /* Espacement entre l'icône et le texte */
-  font-size: 14px; /* Taille de l'icône légèrement plus grande */
-}
+
 /* Parking image adjustments */
 .parking-image {
   width: 100%;
@@ -79,6 +78,16 @@
   max-width: 200px;
 }
 
+mat-card-title{
+    color: #2B77C4;
+    font-size: 24px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #2B77C4;
+}
+
+mat-card-content{
+  padding-top : 10px;
+}
 /* Button styling */
 .full-width {
   width: 100%;

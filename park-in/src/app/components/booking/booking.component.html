@@ -2,15 +2,15 @@
   <div class="left-section">
     <img [src]="selectedParking.imageUrl" alt="Parking image" class="parking-image">
     <div class="parking-info">
-      <p class="parking-title"><strong>{{ selectedParking.nom }}</strong></p>
-      <p class="parking-address"><i class="fas fa-map-marker-alt"></i> {{ selectedParking.adresse }}</p>
+      <p class="parking-title">{{ selectedParking.nom }}</p>
+      <p class="parking-address"><i class="fas fa-map-marker-alt"></i> Address : {{ selectedParking.adresse }}</p>
       <div class="parking-prices">
         <h3>Tarifs :</h3>
-        <p><i class="fas fa-clock"></i> 1 heure : <strong>{{ selectedParking.tarif1h }} €</strong></p>
-        <p><i class="fas fa-clock"></i> 2 heures : <strong>{{ selectedParking.tarif2h }} €</strong></p>
-        <p><i class="fas fa-clock"></i> 3 heures : <strong>{{ selectedParking.tarif3h }} €</strong></p>
-        <p><i class="fas fa-clock"></i> 4 heures : <strong>{{ selectedParking.tarif4h }} €</strong></p>
-        <p><i class="fas fa-calendar-day"></i> 24 heures : <strong>{{ selectedParking.tarif24h }} €</strong></p>
+        <p>1 heure : {{ selectedParking.tarif1h }} €</p>
+        <p>2 heures : {{ selectedParking.tarif2h }} €</p>
+        <p>3 heures : {{ selectedParking.tarif3h }} €</p>
+        <p>4 heures : {{ selectedParking.tarif4h }} €</p>
+        <p>24 heures : {{ selectedParking.tarif24h }} €</p>
       </div>
 
       <p class="parking-website">
@@ -32,12 +32,8 @@
         <mat-card-title>Récapitulatif de votre sélection</mat-card-title>
       </mat-card-header>
       <mat-card-content>
-
-        <p>Parking: <strong>{{ selectedParking.nom }}</strong></p>
-        <p>Date réservation : Du {{selectedParking.dateDebut | date:'dd/MM/yyyy HH:mm':'Europe/Paris'}} Au {{selectedParking.dateFin | date:'dd/MM/yyyy HH:mm':'Europe/Paris'}}</p>
-        <p>Total à payer: <strong>{{ facture }} €</strong></p>
-        <p>Adresse: <strong>{{ selectedParking.adresse }}</strong></p>
-
+        <p>Date deréservation : Du {{selectedParking.dateDebut | date:'dd/MM/yyyy HH:mm'}} Au {{selectedParking.dateFin | date:'dd/MM/yyyy HH:mm':'Europe/Paris'}}</p>
+        <p>Total à payer: {{ facture }} €</p>
       </mat-card-content>
     </mat-card>
 
@@ -109,7 +105,7 @@
           </mat-dialog-actions>
         </ng-template>
 
-        <app-spot-book 
+        <app-spot-book
           [structuredData]="structuredData"
           (placeSelected)="onPlaceSelected($event)">
         </app-spot-book>
