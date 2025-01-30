@@ -75,7 +75,7 @@ jobs:
           sudo apt-get install -y npm
           sudo npm install -g http-server
           cd /var/www/html/angular-app
-          nohup http-server -p 80 -a 0.0.0.0 &  # Lancer l'application en arrière-plan
+          nohup http-server -p 4200 -a 0.0.0.0 &  # Lancer l'application en arrière-plan
           EOF
         env:
           VM_USERNAME: ${{ secrets.VM_USERNAME }}
