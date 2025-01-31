@@ -44,7 +44,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
 
       const bounds: L.LatLngBoundsExpression = [];
       const customIcon = L.icon({
-        iconUrl: 'assets/marker-icon.png', // Replace with the actual image path 7it 3arfinga makaynach hahiya hna dir nichan path dyalha .
+        iconUrl: 'assets/marker-icon.png', 
         iconSize: [16, 24],
         iconAnchor: [8, 16],
         popupAnchor: [0, -16]

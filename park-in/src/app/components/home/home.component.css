@@ -9,8 +9,8 @@ h1 {
 }
 .search-container {
   max-width: 1200px;
-  margin: 0 auto; /* Center the form */
-  text-align: center; /* Center heading text */
+  margin: 0 auto; 
+  text-align: center; 
 
 }
 .search-form {
@@ -22,19 +22,16 @@ h1 {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* Define row layout */
 .form-row {
   display: flex;
-  gap: 20px; /* Space between elements */
-  margin-bottom: 15px; /* Space between rows */
+  gap: 20px; 
+  margin-bottom: 15px; 
 }
 
-/* Center the button row */
 .center {
   justify-content: center;
 }
 
-/* Flexible input sizes */
 .input-large {
   flex: 2;
   min-width: 300px;
@@ -61,16 +58,15 @@ h1 {
 
 @media (max-width: 768px) {
   .form-row {
-    flex-direction: column; /* Stack inputs on smaller screens */
+    flex-direction: column; 
   }
   .input-large, .input-medium, .input-small {
-    width: 100%; /* Full width for mobile view */
+    width: 100%;
   }
 }
 
-/* Custom button styles */
 .custom-button {
-  background-color: #2B77C4 !important; /* Custom blue color */
+  background-color: #2B77C4 !important; 
   color: white !important;
   padding: 12px 30px !important;
   border-radius: 8px !important;
@@ -80,7 +76,7 @@ h1 {
 }
 
 .custom-button:hover {
-  background-color: #2B77C4 !important; /* Darker on hover */
+  background-color: #2B77C4 !important;
 }
 
 

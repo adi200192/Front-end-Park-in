@@ -71,11 +71,11 @@ export class HomeComponent implements AfterViewInit {
 
       location: new FormControl('', Validators.required),
       dateDebut: new FormControl(null, Validators.required),
-      timeDebut: new FormControl('', Validators.required), // ✅ Correction ici (initialisation correcte)
+      timeDebut: new FormControl('', Validators.required), 
       latitude: new FormControl(null),
       longitude: new FormControl(null),
       dateFin: new FormControl(null, Validators.required),
-      timeFin: new FormControl('', Validators.required), // ✅ Correction ici
+      timeFin: new FormControl('', Validators.required), 
       pmr: new FormControl(false),
       type: new FormControl('STANDARD'),
       typeOuvrage: new FormControl('ouvrage'),
@@ -103,12 +103,10 @@ export class HomeComponent implements AfterViewInit {
     this.apiService.getCoordinates(testAddress).subscribe(
       (response) => {
         const {lat, lng} = response.results[0].geometry.location;
-        //console.log(response);
         this.searchForm.patchValue({
           latitude: lat,
           longitude: lng
         });
-        //console.log(this.searchForm.value);
       },
       (error) => {
         console.error('Error calling Geocoding API:', error);
@@ -118,7 +116,7 @@ export class HomeComponent implements AfterViewInit {
 
   combineDateAndTime(date:any, time:any):string{
     if (!date || !time) {
-      console.error("❌ Erreur: date ou time invalide", {date, time});
+      console.error("Erreur: date ou time invalide", {date, time});
       return '';
     }
 
@@ -130,12 +128,12 @@ export class HomeComponent implements AfterViewInit {
     } else if (time instanceof Date) {
       dateTime.setHours(time.getHours(), time.getMinutes(), 0);
     } else {
-      console.error("❌ Erreur: format d'heure non reconnu", time);
+      console.error("Erreur: format d'heure non reconnu", time);
       return '';
     }
 
     const year = dateTime.getFullYear();
-    const month = (dateTime.getMonth() + 1).toString().padStart(2, '0'); // Mois commence à 0
+    const month = (dateTime.getMonth() + 1).toString().padStart(2, '0');
     const day = dateTime.getDate().toString().padStart(2, '0');
     const hours = dateTime.getHours().toString().padStart(2, '0');
     const minutes = dateTime.getMinutes().toString().padStart(2, '0');
@@ -167,12 +165,8 @@ export class HomeComponent implements AfterViewInit {
         typeOuvrage: this.searchForm.get('typeOuvrage')?.value
       };
 
-      //console.log('Search ParkingRequest:', parkingRequest);
-
-      // Appel du service API pour récupérer les parkings disponibles
       this.parkingService.getAvailableParking(parkingRequest).subscribe({
         next: (result) => {
-          //console.log('Search results:', result);
           this.isLoading = false;
           this.dataService.setType(parkingRequest.type)
           this.dataService.setPmr(parkingRequest.pmr)
@@ -199,11 +193,9 @@ export class HomeComponent implements AfterViewInit {
       });
       this.isLoading = true;
 
-      //console.log("🔍 Vérification des valeurs du formulaire avant validation :", this.searchForm.value);
-
 
       if (this.searchForm.invalid) {
-        console.error('⚠️ Formulaire invalide :', this.searchForm.errors);
+        console.error('Formulaire invalide :', this.searchForm.errors);
         return;
       }
 

@@ -51,7 +51,7 @@ export class RegisterComponent {
         const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
         const user = userCredential.user;
   
-        const userId = user.uid; // ✅ Récupération de l'ID utilisateur
+        const userId = user.uid;
         const abonne = false;
         console.log(userId);
         this.authService.sendUserDataToBackend(userId, abonne).subscribe({
@@ -80,7 +80,7 @@ export class RegisterComponent {
         uid: user.uid,
         name: user.displayName,
         email: user.email,
-        abonne: false  // ✅ Ajout de l'attribut abonne
+        abonne: false 
       };
 
       this.http.post('http://localhost:2200/conducteur/inscription', userData)
@@ -104,7 +104,7 @@ export class RegisterComponent {
         uid: user.uid,
         name: user.displayName,
         email: user.email,
-        abonne: false  // ✅ Ajout de l'attribut abonne
+        abonne: false 
       };
 
       this.http.post('http://localhost:2200/conducteur/inscription', userData)

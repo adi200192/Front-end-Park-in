@@ -64,7 +64,6 @@ h2 {
   margin-bottom: 10px;
 }
 
-/* Handicap and height row - stays under distance */
 .parking-features {
   display: flex;
   align-items: center;
@@ -88,7 +87,6 @@ h2 {
   margin-left: 5px;
 }
 
-/* Actions area (price and button) */
 .parking-actions {
   text-align: right;
 }

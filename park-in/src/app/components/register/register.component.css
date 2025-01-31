@@ -1,4 +1,3 @@
-/* Ajouter un background sur toute la page sauf le footer et la navbar */
 .register-page {
     background-size: cover;
     background-position: center;
@@ -10,36 +9,31 @@
     justify-content: center;
 }
 
-/* Conteneur du formulaire */
 .register-container {
     max-width: 400px;
     padding: 20px;
     text-align: center;
-    background: rgba(255, 255, 255, 0.9); /* Arrière-plan blanc semi-transparent */
+    background: rgba(255, 255, 255, 0.9); 
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
-/* Champs de formulaire pleine largeur */
 .full-width {
     width: 100%;
     margin-top: 10px;
 }
 
-/* Centrage des textes */
 .text-center {
     text-align: center;
     margin-top: 15px;
 }
 
-/* Style des icônes sociales */
 .social-icon {
     width: 24px;
     height: 24px;
     margin-right: 10px;
 }
 
-/* Contenu du bouton */
 .button-content {
     display: flex;
     align-items: center;
@@ -47,7 +41,6 @@
     width: 100%;
 }
 
-/* Bouton d'inscription standard */
 .black-button {
     background-color: #3e9247 !important;
     color: white !important;
@@ -57,7 +50,6 @@
     text-transform: uppercase;
 }
 
-/* Bouton Google rouge */
 .google-button {
     background-color: #DB4437 !important;
     color: white !important;
@@ -67,7 +59,6 @@
     text-transform: uppercase;
 }
 
-/* Bouton Facebook bleu */
 .facebook-button {
     background-color: #2B77C4 !important;
     color: white !important;

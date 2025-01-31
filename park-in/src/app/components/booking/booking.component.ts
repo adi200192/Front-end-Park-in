@@ -12,10 +12,6 @@ import {AuthService} from '../../services/auth.service';
 import {ReservationService} from '../../services/reservation.service';
 import {DataService} from '../../services/data.service';
 import {PlaceService} from '../../services/place.service';
-
-import {async} from 'rxjs';
-
-import {ReservationRequest} from '../../model/reservationRequest';
 import { SpotBookComponent } from "../spot-book/spot-book.component";
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
@@ -275,7 +271,6 @@ export class BookingComponent implements OnInit {
   }
   //oth*/
   onPlaceSelected(placeData: any) {
-    //console.log("📌 Place selected from SpotBookComponent:", placeData);
     this.selectedBloc = `Bloc ${placeData.bloc.replace('Bloc ', '')}`;
     this.selectedEtage = `Étage ${placeData.etage.replace('Étage ', '')}`;
     this.selectedAile = `Aile ${placeData.aile.replace('Aile ', '')}`;
@@ -317,7 +312,6 @@ export class BookingComponent implements OnInit {
 
   retryPayment() {
     this.dialog.closeAll();
-    this.router.navigate(['/home']);
   }
 
 
@@ -334,7 +328,7 @@ export class BookingComponent implements OnInit {
             width: '350px',
             data: { message: "Le paiement a échoué. Veuillez réessayer." }
           }).afterClosed().subscribe(() => {
-            this.router.navigate(['/home']);
+        
           });
         } else {
           this.dialog.open(this.paymentSuccessDialog, {
